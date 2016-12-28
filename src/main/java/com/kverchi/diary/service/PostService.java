@@ -6,7 +6,8 @@ import com.kverchi.diary.domain.Post;
 
 public interface PostService {
 	public List<Post> getAllPosts();
-	public Post getPost(int post_id);
-	public boolean updatePost(Post post);
-	public boolean deletePost(int post_id);
+	public Post getPostById(int post_id);
+	public void addPost(Post post);
+	public void updatePost(Post post);
+	public void deletePost(int post_id);
 }

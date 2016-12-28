@@ -3,17 +3,20 @@ package com.kverchi.diary.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.domain.Post;
 
 public class PostDaoImpl implements PostDao {
-	/*private SessionFactory sessionFactory; 
-	
+	private SessionFactory sessionFactory; 
+	final static Logger logger = Logger.getLogger(PostDaoImpl.class);
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}*/
+	}
 
 	private List<Post> all_posts;
 	public PostDaoImpl() {
@@ -23,52 +26,37 @@ public class PostDaoImpl implements PostDao {
 		all_posts.add(city);
 		all_posts.add(nature);
 	}
+	@Transactional
 	public List<Post> getAllPosts() {
-		return all_posts;
+		Session session = this.sessionFactory.getCurrentSession();
+		logger.debug("is session connected? : " + session.isConnected());
+		List<Post> postsList = session.createQuery("from Post").list();
+		logger.debug("posts list: " + postsList);
+		return postsList;
 	}
 
-	public Post getPost(int post_id) {
-		Post res = null;
-		for(Post p : all_posts) {
-			if(p.getPost_id() == post_id) {
-				res = p;
-			}
-		}
-		return res;
+	public Post getPostById(int post_id) {
+		Session session = sessionFactory.getCurrentSession();
+		Post post = (Post)session.load(Post.class, new Integer(post_id));
+		logger.debug("Post loaded successfully, details="+post);
+		return post;
+	}
+	public void addPost(Post post) {
+		Session session = sessionFactory.getCurrentSession();
+		session.persist(post);
+	}
+	public void updatePost(Post post) {
+		Session session = sessionFactory.getCurrentSession();
+		session.update(post);
+		logger.info("Post updated successfully, Post Details="+post);
 	}
 
-	public boolean updatePost(Post post) {
-		int postIndex = -1;
-		for(int i=0; i<all_posts.size(); i++) {
-			Post iPost = all_posts.get(i);
-			if(iPost.getPost_id() == post.getPost_id()) {
-				postIndex = i;
-				break;
-			}
+	public void deletePost(int post_id) {
+		Session session = sessionFactory.getCurrentSession();
+		Post postToDel = (Post)session.load(Post.class, new Integer(post_id));
+		if(postToDel != null) {
+			session.delete(postToDel);
 		}
-		if(postIndex != -1) {
-			all_posts.set(postIndex, post);
-			return true;
-		}
-		else
-			return false;
-	}
-
-	public boolean deletePost(int post_id) {
-		int postIndex = -1;
-		for(int i=0; i<all_posts.size(); i++) {
-			Post iPost = all_posts.get(i);
-			if(iPost.getPost_id() == post_id) {
-				postIndex = i;
-				break;
-			}
-		}
-		if(postIndex != -1) {
-			all_posts.remove(postIndex);
-			return true;
-		}
-		else
-			return false;
 	}
 
 }
