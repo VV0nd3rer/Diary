@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+      
+<ui:composition template="/WEB-INF/templates/maintemplate.xhtml">
+
+	 <ui:define name="title">Posts</ui:define>
+
+	  <ui:define name="content">
+	 	<h1>All posts:</h1>
+	 	<table class="tg">
+			<tr>
+				<th width="80">Post ID</th>
+				<th width="120">Title</th>
+				<th width="120">Text</th>
+				<!-- <th width="60">Edit</th>
+				<th width="60">Delete</th> -->
+			</tr>
+			<ui:repeat var="post" value="${all_posts}">
+			<tr>
+				<td>${post.post_id}</td>
+				<td>${post.title}</td>
+				<td>${post.text}</td>
+			</tr>
+			</ui:repeat>
+		</table>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+ 
+    <h:head>
+		<title><ui:insert name="title" >Default title</ui:insert></title>
+    </h:head>
+ 
+    <h:body>
+		<header> 
+			<hgroup> 
+				<h2>Facelets demo</h2> 
+			</hgroup> 
+		</header>
+
+		<article>
+			<ui:insert name="content"/>
+		</article>
+		
+		<ui:insert name="sidebar">
+			<section>
+				<h1>Some menu:</h1>
+			    <ul>
+			        <li><a href="#">Where to go</a></li>
+			        <li><a href="#">What to read </a></li>
+			        <li><a href="#">What to listen/watch</a></li>
+			    </ul>
+			</section>
+		</ui:insert>
+		<ui:insert name="footer">
+			<footer>
+				<p>&copy; 2017 </p>
+			</footer>
+		</ui:insert>
+</h:body>
+</html>
