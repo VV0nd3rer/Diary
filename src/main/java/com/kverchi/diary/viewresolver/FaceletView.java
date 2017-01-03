@@ -1,4 +1,10 @@
-﻿package com.kverchi.diary.viewresolver;
+﻿/*
+ * Thanks to acichon89 for clear example of using Facelets with Spring MVC
+ * https://github.com/acichon89/springmvcfacelets
+ */
+
+
+package com.kverchi.diary.viewresolver;
 
 import java.io.IOException;
 import java.util.Iterator;
