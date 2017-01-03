@@ -1,0 +1,34 @@
+What is the best view technology to use with Spring MVC?
+
+1. Spring MVC + JSP + JQuery UI
+2. Facelets
+3. Velocity
+4. Freemarker
+5. Thymeleaf
+
+More about view technologies in Spring MVC:
+https://docs.spring.io/spring/docs/current/spring-framework-reference/html/view.html
+
+JavaServer Pages (JSP) technology, previously used as the presentation technology for JavaServer Faces, does not support all the new features available in JavaServer Faces 2.0. JSP technology is considered to be a deprecated presentation technology for JavaServer Faces 2.0. Facelets is a part of the JavaServer Faces specification and also the preferred presentation technology for building JavaServer Faces technology-based applications.
+(http://docs.oracle.com/javaee/6/tutorial/doc/giepx.html)
+
+But Spring MVC and JSF are two different MVC frameworks.
+Spring MVC is request based MVC 
+JSF is component based MVC
+
+And JSP as standalone technology is not considered as depricated.
+
+Thanks to BalusC for clear answers in these topics:
+http://stackoverflow.com/questions/18744910/using-jsf-as-view-technology-of-spring-mvc
+http://stackoverflow.com/questions/4845032/wheres-the-official-jsp-tutorial
+
+Request based MVC vs component based MVC:
+http://stackoverflow.com/questions/4801891/difference-between-request-mvc-and-component-mvc
+http://stackoverflow.com/questions/1247627/java-component-based-vs-request-based-frameworks
+
+Component based MVC
++ less code
+- need to know "traditional" web development (under the hood of component based MVC) and understand how component-based MVC use it for developing custom component
+Request based MVC
++ fine grained control
+- more code
