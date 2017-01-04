@@ -12,18 +12,19 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 
 	<context:component-scan base-package="com.kverchi.diary.controller" />
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
-
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<property name="cache" value="false" />
-		<property name="viewClass"
-			value="com.kverchi.diary.viewresolver.FaceletView" />
-		<property name="prefix" value="/pages/" />
-		<property name="suffix" value=".xhtml" />
+	<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" />
 	</bean>
 
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+	</bean>
+	<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+	  <property name="templateEngine" ref="templateEngine" />
+	  <property name="order" value="1" />
+	</bean>
 	<bean id="hibernate5AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />

@@ -26,14 +26,20 @@ public class DiaryController {
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}
-	@RequestMapping("/main")
+	/*@RequestMapping("/main")
 	public ModelAndView showMain(
 			@RequestParam(value="name", required=false, defaultValue="Guest") String name) {
 		ModelAndView mv = new ModelAndView("main");
 		mv.addObject("message", message);
 		mv.addObject("name", name);
 		return mv;
-	}
+	}*/
+	@RequestMapping("/main")
+    public String showMain(@RequestParam(value="name", required=false, defaultValue="Guest") String name, Model model){
+        model.addAttribute("message", message);
+        model.addAttribute("name", name);
+        return "main";
+    }
 	@RequestMapping("/posts")
 	public ModelAndView showPosts() {
 		List<Post> all_posts = postService.getAllPosts();

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>Spring Thyme Seed Starter Manager</title>
+  </head>
+
+  <body>
+    <div>
+		<table>
+			<thead>
+				<tr>
+					<th width="80">Post ID</th>
+					<th width="120">Title</th>
+					<th width="120">Text</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="post: ${all_posts}">
+					<td th:text="${post.post_id}"></td>
+					<td th:text="${post.title}"></td>
+					<td th:text="${post.text}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+  </body>
+</html>
