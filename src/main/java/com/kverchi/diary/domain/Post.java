@@ -15,6 +15,7 @@ public class Post {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int post_id;
 	private String title;
+	private String description;
 	private String text;
 	public Post() {};
 	public Post(int post_id, String title, String text) {
@@ -33,6 +34,12 @@ public class Post {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public String getText() {
 		return text;

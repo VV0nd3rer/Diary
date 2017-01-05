@@ -3,12 +3,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
   <head>
-    <title>Spring Thyme Seed Starter Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Posts</title>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/diary.css" rel="stylesheet" media="screen" th:href="@{/resources/css/diary.css}"/>
+  	<script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/css/bootstrap.min.css}"></script>
   </head>
 
   <body>
-    <div>
-		<table>
+    <div th:replace="header :: header">&nbsp;</div>
+    <div class="container">
+     <div class="blog-header">
+   		<p class="lead blog-description">Posts</p>
+   	  </div>
+   	  <p>This is example of table with data </p>
+      <table class="table table-striped">
 			<thead>
 				<tr>
 					<th width="80">Post ID</th>
@@ -24,6 +33,24 @@
 				</tr>
 			</tbody>
 		</table>
+     <hr>
+     <p>This is example of "post" style </p>
+   	  <div class="row">
+   	   <div class="col-sm-8 blog-main">
+		
+		<div class="blog-post" th:each="post: ${all_posts}">
+		  <h2 class="blog-post-title" th:text="${post.title}"></h2>
+		  <p class="blog-post-meta" th:text="${post.post_id}"></p>
+		  <blockquote>
+		  	<p th:text="${post.description}"></p>
+		  </blockquote>
+		  <!-- <p th:text="${post.text}"></p> -->
+		   <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+		</div>
+	   </div>
+	  </div>
 	</div>
+		 <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+
   </body>
 </html>
