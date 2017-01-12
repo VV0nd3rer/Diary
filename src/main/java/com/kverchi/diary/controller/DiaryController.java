@@ -6,18 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.PostService;
 import com.kverchi.diary.service.impl.PostServiceImpl;
 
-@Controller
+@RestController
 public class DiaryController {
 	String message = "Welcome";
 	PostService postService;
@@ -48,7 +50,31 @@ public class DiaryController {
 		mv.addObject("all_posts", all_posts);
 		return mv;
 	}
-	
+	@RequestMapping(value = "/first-post", /*method = RequestMethod.GET,*/ produces = "application/json")
+	public List<Post> firstPost() {
+		List<Post> all_posts = postService.getAllPosts();
+		return all_posts;
+	}
+	@RequestMapping("/media")
+	public ModelAndView showMedia() {
+		List<Post> all_posts = postService.getAllPosts();
+		ModelAndView mv = new ModelAndView("media");
+		mv.addObject("all_posts", all_posts);
+		return mv;
+	}
+	@RequestMapping("/books")
+	public ModelAndView showBooks() {
+		List<Post> all_posts = postService.getAllPosts();
+		ModelAndView mv = new ModelAndView("books");
+		mv.addObject("all_posts", all_posts);
+		return mv;
+	}
+	@RequestMapping(value="/new-post") 
+	public ModelAndView newPost() {
+		ModelAndView mv = new ModelAndView("new-post");
+		mv.addObject("post", new Post());
+		return mv;
+	}
 	@RequestMapping(value="/post/add", method=RequestMethod.POST)
 	public String addPost(@ModelAttribute("post") Post post) {
 		if(post.getPost_id() == 0) {

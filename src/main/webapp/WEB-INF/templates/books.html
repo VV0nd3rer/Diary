@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="include-res::links">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Books</title>
+    
+    
+    
+    <!-- <script src="../../../resources/DataTables/js/dataTables.jqueryui.min.js" th:src="@{/resources/DataTables/js/dataTables.jqueryui.min.js}"></script>
+    <script src="../../../resources/DataTables/buttons/js/dataTables.buttons.min.js" th:src="@{/resources/DataTables/buttons/js/dataTables.buttons.min.js}"></script>
+    <script src="../../../resources/DataTables/buttons/js/buttons.jqueryui.min.js" th:src="@{/resources/DataTables/buttons/js/buttons.jqueryui.min.js}"></script>
+    <script src="../../../resources/DataTables/select/js/dataTables.select.min.js" th:src="@{/resources/DataTables/select/js/dataTables.select.min.js}"></script>
+    <script src="../../../resources/DataTables/buttons/js/buttons.jqueryui.min.js" th:src="@{/resources/DataTables/buttons/js/buttons.jqueryui.min.js}"></script>
+    
+    <link href="../../../resources/jquery-ui/jquery-ui.min.css" rel="stylesheet" media="screen" th:href="@{/resources/jquery-ui/jquery-ui.min.css}"/>
+    <script src="../../../resources/jquery-ui/jquery-ui.min.js" th:src="@{/resources/jquery-ui/jquery-ui.min.js}"></script> -->
+  </head>
+
+  <body>
+    <div th:replace="header :: header">&nbsp;</div>
+    
+      <div class="container" th:if="${not #lists.isEmpty(all_posts)}">
+     
+     <div class="blog-header">
+   		<p class="lead blog-description">Books</p>
+   	  </div>
+   	  <p>This is example of table with data </p>
+   	  <input class="ui-button ui-widget ui-corner-all" type="submit" value="New">
+   	  <input class="ui-button ui-widget ui-corner-all" type="submit" value="Update">
+   	  <input class="ui-button ui-widget ui-corner-all" type="submit" value="Delete">
+      <table id="crudTable" class="table table-striped">
+			<thead>
+				<tr>
+					<th width="80">Post ID</th>
+					<th width="120">Title</th>
+					<th width="120">Text</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="post: ${all_posts}">
+					<td th:text="${post.post_id}"></td>
+					<td th:text="${post.title}"></td>
+					<td th:if="${not #lists.isEmpty(post.description)}" th:text="${post.description}"></td>
+				</tr>
+			</tbody>
+		</table>
+    </div>
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+
+  </body>
+</html>

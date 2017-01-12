@@ -2,17 +2,16 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+  <head th:include="include-res::links">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Posts</title>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/diary.css" rel="stylesheet" media="screen" th:href="@{/resources/css/diary.css}"/>
-  	<script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/css/bootstrap.min.css}"></script>
+   
   </head>
 
   <body>
     <div th:replace="header :: header">&nbsp;</div>
-    <div class="container">
+    <div class="container" th:if="${not #lists.isEmpty(all_posts)}">
+     
      <div class="blog-header">
    		<p class="lead blog-description">Posts</p>
    	  </div>
@@ -29,11 +28,11 @@
 				<tr th:each="post: ${all_posts}">
 					<td th:text="${post.post_id}"></td>
 					<td th:text="${post.title}"></td>
-					<td th:text="${post.text}"></td>
+					<td th:if="${not #lists.isEmpty(post.description)}" th:text="${post.description}"></td>
 				</tr>
 			</tbody>
 		</table>
-     <hr>
+     <hr class="black-curl">
      <p>This is example of "post" style </p>
    	  <div class="row">
    	   <div class="col-sm-8 blog-main">
@@ -49,7 +48,14 @@
 		</div>
 	   </div>
 	  </div>
+	  <hr class="black-curl">
+ 	  
 	</div>
+	<div class="container">
+        <h1>Share your feelings!</h1>
+        <p>Do you like to discover new places on Earth? Are you happy to learn something new?</p>
+        <p><a class="btn btn-primary btn-lg" href="new-post" role="button">Create great post &raquo;</a></p>
+      </div>
 		 <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
 
   </body>
