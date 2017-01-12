@@ -25,6 +25,25 @@
 	<artifactId>log4j</artifactId>
 	<version>1.2.17</version>
   </dependency>
+  <dependency>
+      <groupId>org.thymeleaf</groupId>
+      <artifactId>thymeleaf-spring4</artifactId>
+      <version>3.0.2.RELEASE</version>
+      <scope>compile</scope>
+	</dependency>
+	<!-- For freemarker -->
+	<dependency>
+	  <groupId>org.freemarker</groupId>
+	  <artifactId>freemarker</artifactId>
+	  <version>2.3.25-incubating</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context-support</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	<!-- end for freemarker -->
+	
 	<!-- Spring dependencies -->
 	<dependency>
 		<groupId>org.springframework</groupId>
@@ -125,6 +144,29 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
+	<!-- <dependency>
+	    <groupId>javax.faces</groupId>
+	    <artifactId>jsf-api</artifactId>
+	    <version>2.0</version>
+	</dependency> -->
+	 <!-- JSF -->
+	 <dependency>
+	    <groupId>com.sun.faces</groupId>
+	    <artifactId>jsf-api</artifactId>
+	    <version>2.2.6</version>
+	 </dependency>
+
+    <dependency>
+	    <groupId>com.sun.faces</groupId>
+	    <artifactId>jsf-impl</artifactId>
+	    <version>2.2.6</version>
+	</dependency>
+    <dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.7.5</version>
+	</dependency>
+	
   </dependencies>
   <build>
     <finalName>Diary</finalName>

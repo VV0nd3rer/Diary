@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+ 
 <title>Diary posts</title>
 </head>
 <body>
