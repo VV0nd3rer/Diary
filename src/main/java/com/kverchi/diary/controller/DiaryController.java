@@ -2,13 +2,12 @@ package com.kverchi.diary.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,10 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.PostService;
-import com.kverchi.diary.service.impl.PostServiceImpl;
 
 @RestController
 public class DiaryController {
+	final static Logger logger = Logger.getLogger(DiaryController.class);
 	String message = "Welcome";
 	PostService postService;
 	@Autowired(required=true)
@@ -28,20 +27,20 @@ public class DiaryController {
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}
-	/*@RequestMapping("/main")
+	@RequestMapping("/main")
 	public ModelAndView showMain(
 			@RequestParam(value="name", required=false, defaultValue="Guest") String name) {
 		ModelAndView mv = new ModelAndView("main");
 		mv.addObject("message", message);
 		mv.addObject("name", name);
 		return mv;
-	}*/
-	@RequestMapping("/main")
-    public String showMain(@RequestParam(value="name", required=false, defaultValue="Guest") String name, Model model){
-        model.addAttribute("message", message);
-        model.addAttribute("name", name);
-        return "main";
-    }
+	}
+	
+	@RequestMapping("/test-bootstrap-modal")
+	public ModelAndView showTestBootstrapModal() {
+		ModelAndView mv = new ModelAndView("test-bootstrap-modal");
+		return mv;
+	}
 	@RequestMapping("/posts")
 	public ModelAndView showPosts() {
 		List<Post> all_posts = postService.getAllPosts();
@@ -50,11 +49,18 @@ public class DiaryController {
 		mv.addObject("all_posts", all_posts);
 		return mv;
 	}
-	@RequestMapping(value = "/first-post", /*method = RequestMethod.GET,*/ produces = "application/json")
+	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")
 	public List<Post> firstPost() {
 		List<Post> all_posts = postService.getAllPosts();
 		return all_posts;
 	}
+	@RequestMapping(value="/add-post", method = RequestMethod.POST)
+	public Post addPost(@RequestBody Post post) {
+		Post added_post = postService.addPost(post);
+		logger.debug("added post: " + added_post.getTitle());
+		return added_post;
+	}
+	
 	@RequestMapping("/media")
 	public ModelAndView showMedia() {
 		List<Post> all_posts = postService.getAllPosts();
@@ -75,7 +81,7 @@ public class DiaryController {
 		mv.addObject("post", new Post());
 		return mv;
 	}
-	@RequestMapping(value="/post/add", method=RequestMethod.POST)
+	/*@RequestMapping(value="/post/add", method=RequestMethod.POST)
 	public String addPost(@ModelAttribute("post") Post post) {
 		if(post.getPost_id() == 0) {
 			postService.addPost(post);
@@ -84,7 +90,7 @@ public class DiaryController {
 			postService.updatePost(post);
 		}
 		return "redirect:/posts";
-	}
+	}*/
 	@RequestMapping("/posts/remove/{post_id}")
 	public String removePost(@PathVariable("post_id") int post_id) {
 		postService.deletePost(post_id);

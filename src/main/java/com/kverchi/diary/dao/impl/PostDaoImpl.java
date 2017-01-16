@@ -37,13 +37,15 @@ public class PostDaoImpl implements PostDao {
 
 	public Post getPostById(int post_id) {
 		Session session = sessionFactory.getCurrentSession();
-		Post post = (Post)session.load(Post.class, new Integer(post_id));
+		Post post = (Post)session.get(Post.class, new Integer(post_id));
 		logger.debug("Post loaded successfully, details="+post);
 		return post;
 	}
-	public void addPost(Post post) {
+	public int addPost(Post post) {
 		Session session = sessionFactory.getCurrentSession();
-		session.persist(post);
+		Integer id = (Integer)session.save(post);
+		logger.debug("hibernate save returned id: " + id);
+		return id;
 	}
 	public void updatePost(Post post) {
 		Session session = sessionFactory.getCurrentSession();

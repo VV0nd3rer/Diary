@@ -15,6 +15,9 @@
 	  <li>
 		<a href="media">Media</a>
 	  </li>
+	  <li>
+	    <a href="test-bootstrap-modal">Test bootstrap modal</a>
+	  </li>
 	</ul>
 </h3>
 </body>

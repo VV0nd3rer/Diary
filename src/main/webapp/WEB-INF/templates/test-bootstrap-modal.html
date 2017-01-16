@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include-res::links">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Posts</title>
+   
+  <style>
+  .modal-header, h4, .close {
+      background-color: #5cb85c;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+  }
+  .modal-footer {
+      background-color: #f9f9f9;
+  }
+  </style>
+</head>
+<body>
+<div th:replace="header :: header">&nbsp;</div>
+
+<div class="modal fade" id="bookModal" role="dialog">
+ <div class="modal-dialog">
+  <div class="modal-content">
+   <div class="modal-body" style="padding:40px 50px;">
+	 <div class="row">
+	    <div class="col-md-4 col-md-offset-4">
+	      <form class="form-horizontal" role="form">
+	        <fieldset>
+	
+	          <!-- Form Name -->
+	          <legend>Book Details</legend>
+			  <p class="validateTips">All form fields are required.</p> 
+	          <!-- Text input-->
+	          <div class="form-group">
+	            <label class="col-sm-2 control-label" for="textinput">Title</label>
+	            <div class="col-sm-10">
+	              <input type="text" id="title" placeholder="Title" class="form-control">
+	            </div>
+	          </div>
+	
+	          <!-- Text input-->
+	          <div class="form-group">
+	            <label class="col-sm-2 control-label" for="textinput">Description</label>
+	            <div class="col-sm-10">
+	              <input type="text" id="description" placeholder="Description" class="form-control">
+	            </div>
+	          </div>
+	
+	          <!-- Text input-->
+	          <div class="form-group">
+	            <label class="col-sm-2 control-label" for="textinput">Text</label>
+	            <div class="col-sm-10">
+	              <input type="text" id="text" placeholder="Text" class="form-control">
+	            </div>
+	          </div>
+	          
+	          <div class="form-group">
+	            <div class="col-sm-offset-2 col-sm-10">
+	              <div class="pull-right">
+	                <button type="submit" class="btn btn-default">Cancel</button>
+	                <button type="submit" class="btn btn-primary" id="addBook">Save</button>
+	              </div>
+	            </div>
+	          </div>
+	
+	        </fieldset>
+	      </form>
+	    </div><!-- /.col-lg-12 -->
+	 </div><!-- /.row -->
+	</div>
+   </div>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal fade -->
+
+<div class="container">
+ <button type="button" class="btn btn-default btn-lg" id="myBtn">Add</button>
+</div>
+
+ 
+<script>
+$(document).ready(function(){
+    $("#myBtn").click(function(){
+        //$("#myModal").modal();
+        $("#bookModal").modal();
+    });
+    //$("#add").click(function(){
+    $("#addBook").click(function(){
+    	event.preventDefault();
+    	var data = {}
+    	data["title"] = $("#title").val();
+        data["description"] = $("#description").val();
+        data["text"] = $("#text").val();
+        console.log("title: ",  $("#title").val());
+        console.log("text: " + $("#text").val());
+        tips = $( ".validateTips" );
+        var valid = true;
+        valid = valid && checkLength( $("#title"), "title", 3, 16 );
+        valid = valid && checkLength( $("#description"), "description", 3, 80 );
+        valid = valid && checkLength( $("#text"), "text", 3, 80 );
+        
+        if(valid) {
+	        $.ajax({
+	     	   url:"add-post",
+	     	   type:"POST",
+	     	   data: JSON.stringify(data),
+	     	   contentType:"application/json; charset=utf-8",
+	     	   dataType:"json",
+	     	   success: function(obj){
+	     	    alert("OK");
+	     	   //$("#myModal").modal("hide");
+	     	   $("#bookModal").modal("hide");
+	     	     //$("#crudTable tbody").append("<tr><td>"+obj.post_id+"</td><td>"+obj.title+"</td><td>"+obj.text+"</td></tr>");   
+	     	   },
+	     	   error : function(e) {
+	     		    console.log("Error: ", e);
+	    			display(e);
+	 	   		},
+	 	   		done : function(e) {
+	 	   			alert("DONE");
+	 	   		}
+	     	 });
+        }
+    });
+});
+function updateTips( t ) {
+    tips
+      .text( t )
+      .addClass( "alert alert-danger" );
+    setTimeout(function() {
+      tips.removeClass( "alert alert-danger", 1500 );
+    }, 500 );
+  }
+function checkLength( o, n, min, max ) {
+    if ( o.val().length > max || o.val().length < min ) {
+      o.addClass( "alert alert-danger" );
+      updateTips( "Length of " + n + " must be between " +
+        min + " and " + max + "." );
+      return false;
+    } else {
+      return true;
+    }
+  }
+</script>
+
+</body>
+</html>
