@@ -54,9 +54,27 @@ public class DiaryController {
 		List<Post> all_posts = postService.getAllPosts();
 		return all_posts;
 	}
+	@RequestMapping("/posts/edit/{post_id}")
+    public Post editPost(@PathVariable("post_id") int post_id, Model model){
+       Post post = postService.getPostById(post_id);
+       return post;
+    }
+	@RequestMapping("/posts/remove/{post_id}")
+	public String removePost(@PathVariable("post_id") int post_id) {
+		postService.deletePost(post_id);
+		String res = "OK";
+		return res;
+	}
 	@RequestMapping(value="/add-post", method = RequestMethod.POST)
 	public Post addPost(@RequestBody Post post) {
-		Post added_post = postService.addPost(post);
+		Post added_post;
+		logger.debug("post ID: " + post.getPost_id());
+		if(post.getPost_id() == -1) {
+		   added_post = postService.addPost(post);
+		}
+		else {
+		   added_post = postService.updatePost(post);
+		}
 		logger.debug("added post: " + added_post.getTitle());
 		return added_post;
 	}
@@ -91,15 +109,11 @@ public class DiaryController {
 		}
 		return "redirect:/posts";
 	}*/
-	@RequestMapping("/posts/remove/{post_id}")
-	public String removePost(@PathVariable("post_id") int post_id) {
-		postService.deletePost(post_id);
-		return "redirect:/posts";
-	}
-	@RequestMapping("/posts/edit/{post_id}")
+	
+	/*@RequestMapping("/posts/edit/{post_id}")
     public String editPost(@PathVariable("post_id") int post_id, Model model){
         model.addAttribute("post", this.postService.getPostById(post_id));
         model.addAttribute("all_posts", this.postService.getAllPosts());
         return "posts";
-    }
+    }*/
 }

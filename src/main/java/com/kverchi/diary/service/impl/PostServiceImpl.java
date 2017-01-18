@@ -31,8 +31,10 @@ public class PostServiceImpl implements PostService {
 		return added_post;
 	}
 	@Transactional
-	public void updatePost(Post post) {
+	public Post updatePost(Post post) {
 		postDao.updatePost(post);
+		Post updated_post = postDao.getPostById(post.getPost_id());
+		return updated_post;
 	}
 	@Transactional
 	public void deletePost(int post_id) {

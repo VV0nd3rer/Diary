@@ -8,6 +8,6 @@ public interface PostService {
 	public List<Post> getAllPosts();
 	public Post getPostById(int post_id);
 	public Post addPost(Post post);
-	public void updatePost(Post post);
+	public Post updatePost(Post post);
 	public void deletePost(int post_id);
 }
