@@ -2,6 +2,8 @@ package com.kverchi.diary.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kverchi.diary.dao.PostDao;
@@ -9,36 +11,39 @@ import com.kverchi.diary.dao.impl.PostDaoImpl;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.PostService;
 
+@Service
 public class PostServiceImpl implements PostService {
+	@Autowired
 	private PostDao postDao;
 	
-	public void setPostDao(PostDao postDao) {
+	/*public void setPostDao(PostDao postDao) {
 		this.postDao = postDao;
-	}
-	@Transactional
+	}*/
+	
 	public List<Post> getAllPosts() {
-		return postDao.getAllPosts();
+		return postDao.getAllRecords();
 		//murrr
 	}
-	@Transactional
+	
 	public Post getPostById(int post_id) {
-		return postDao.getPostById(post_id);
+		return postDao.getById(post_id);
 	}
-	@Transactional
+	
 	public Post addPost(Post post) {
-		int added_id = postDao.addPost(post);
-		Post added_post = postDao.getPostById(added_id);
+		int added_id = postDao.create(post);
+		Post added_post = postDao.getById(added_id);
 		return added_post;
 	}
-	@Transactional
+
 	public Post updatePost(Post post) {
-		postDao.updatePost(post);
-		Post updated_post = postDao.getPostById(post.getPost_id());
+		postDao.update(post);
+		Post updated_post = postDao.getById(post.getPost_id());
 		return updated_post;
 	}
-	@Transactional
+	
 	public void deletePost(int post_id) {
-	    postDao.deletePost(post_id);
+		Post postToDel = postDao.getById(post_id);
+	    postDao.delete(postToDel);
 	}
 
 }

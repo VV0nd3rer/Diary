@@ -12,7 +12,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<context:component-scan base-package="com.kverchi.diary.controller" />
+	<context:component-scan base-package="com.kverchi.diary" />
 
 	<!-- Thymeleaf -->
 	<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
@@ -32,10 +32,16 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	<bean id="hibernate5AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="annotatedClasses">
+		<!-- <property name="annotatedClasses">
 			<list>
 				<value>com.kverchi.diary.domain.Post</value>
+				<value>com.kverchi.diary.domain.Book</value>
 			</list>
+		</property> -->
+		<property name="packagesToScan">
+			<array>
+				<value>com.kverchi.diary.domain</value>
+			</array>
 		</property>
 		<property name="hibernateProperties">
 			<props>
@@ -51,19 +57,29 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 		<property name="username" value="root" />
 		<property name="password" value="" />
 	</bean>
-	<bean id="postDao" class="com.kverchi.diary.dao.impl.PostDaoImpl">
+	
+	<!-- <bean id="postDao" class="com.kverchi.diary.dao.impl.PostDaoImpl">
 		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
 	<bean id="postService" class="com.kverchi.diary.service.impl.PostServiceImpl">
 		<property name="postDao" ref="postDao" />
+	</bean> -->
+	
+	<!-- <bean id="bookDao" class="com.kverchi.diary.dao.impl.BookDaoImpl">
+		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
+	<bean id="bookService" class="com.kverchi.diary.service.impl.BookServiceImpl">
+		<property name="bookDao" ref="bookDao" />
+	</bean> -->
+	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</bean>
-	<mvc:resources mapping="/resources/**" location="/resources/"
-	cache-period="31556926"/>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
+	
 	<mvc:annotation-driven />
 </beans>

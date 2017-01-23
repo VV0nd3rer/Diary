@@ -7,12 +7,12 @@ $(document).ready(function(){
     $("#update-book-btn").click(function() {   	   	
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log(id); 
-    	$.get( "posts/edit/"+id, function(data) {
+    	$.get( "books/edit/"+id, function(data) {
     		event.preventDefault();
     		$("#id").val(id);
-    		$("#title").val(data.title);
-    		$("#description").val(data.description);
-    		$("#text").val(data.text);
+    		$("#title").val(data.book_title);
+    		$("#description").val(data.book_description);
+    		$("#author").val(data.author);
         	$("#modal-form").modal();
     	});
     });
@@ -25,9 +25,17 @@ $(document).ready(function(){
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
-    	$.get( "posts/remove/"+id, function(data) {
+    	$.get( "books/remove/"+id, function(data) {
     		console.log(data);
-    	});
+    		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
+    	})
+    	  .done(function() {
+		    console.log("done");
+		  })
+		  .fail(function(e) {
+		    console.log( "error" + e );
+		  })
+
     	$("#modal-dialog").modal("hide");
     });
     $("#modal-dialog-cancel-btn").click(function() {
@@ -44,23 +52,23 @@ $(document).ready(function(){
     	var id = $("#id");
     	var title = $("#title");
     	var description = $("#description");
-    	var text = $("#text");
+    	var author = $("#author");
     	
     	var data = {}
-    	data["post_id"] = id.val();
-    	data["title"] = title.val();
-        data["description"] = description.val();
-        data["text"] = text.val();
+    	data["book_id"] = id.val();
+    	data["book_title"] = title.val();
+        data["book_description"] = description.val();
+        data["author"] = author.val();
         
         tips = $( ".validateTips" );
         var valid = true;
         valid = valid && checkLength( title, "title", 3, 16 );
         valid = valid && checkLength( description, "description", 3, 80 );
-        valid = valid && checkLength( text, "text", 3, 80 );
+        valid = valid && checkLength( author, "author", 3, 80 );
       
         if(valid) {
 	        $.ajax({
-	     	   url:"add-post",
+	     	   url:"add-book",
 	     	   type:"POST",
 	     	   data: JSON.stringify(data),
 	     	   contentType:"application/json; charset=utf-8",
@@ -68,9 +76,9 @@ $(document).ready(function(){
 	     	   success: function(obj){
 	     		    hideModalDialog();
 	     		   if(id != -1) {   
-	     		        $("#crud-tbl tr:contains('" + obj.post_id + "')").remove();  		    
+	     		        $("#crud-tbl tr:contains('" + obj.book_id + "')").remove();  		    
 	     		    }
-	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.post_id+"</td><td>"+obj.title+"</td><td>"+obj.text+"</td></tr>");  		  		
+	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.book_id+"</td><td>"+obj.book_title+"</td><td>"+obj.author+"</td></tr>");  		  		
 	     	   },
 	     	   error : function(e) {
 	     		    console.log("Error: ", e);
@@ -129,14 +137,13 @@ function checkLength( o, n, min, max ) {
   }
   
   //
-function loadTable(table_id, data_url) {
+/*function loadTable(table_id, data_url) {
 	var myTable = $('#crud-tbl > tbody');
 	var jqresp = $.get( "list-posts", function(data) {
 		$.each(data, function(i, obj) {
 			//alert(obj.title);
 		    myTable.append("<tr><td>"+obj.post_id+"</td><td>"+obj.title+"</td><td>"+obj.text+"</td></tr>");                                
 		});
-		//alert( "Data Loaded: " + data.title );
 	});
-}
+}*/
 

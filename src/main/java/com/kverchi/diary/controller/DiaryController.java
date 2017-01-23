@@ -21,12 +21,13 @@ import com.kverchi.diary.service.PostService;
 public class DiaryController {
 	final static Logger logger = Logger.getLogger(DiaryController.class);
 	String message = "Welcome";
+	@Autowired
 	PostService postService;
-	@Autowired(required=true)
+	/*@Autowired(required=true)
 	@Qualifier(value="postService")
 	public void setPostService(PostService postService) {
 		this.postService = postService;
-	}
+	}*/
 	@RequestMapping("/main")
 	public ModelAndView showMain(
 			@RequestParam(value="name", required=false, defaultValue="Guest") String name) {
@@ -86,13 +87,7 @@ public class DiaryController {
 		mv.addObject("all_posts", all_posts);
 		return mv;
 	}
-	@RequestMapping("/books")
-	public ModelAndView showBooks() {
-		List<Post> all_posts = postService.getAllPosts();
-		ModelAndView mv = new ModelAndView("books");
-		mv.addObject("all_posts", all_posts);
-		return mv;
-	}
+	
 	@RequestMapping(value="/new-post") 
 	public ModelAndView newPost() {
 		ModelAndView mv = new ModelAndView("new-post");
