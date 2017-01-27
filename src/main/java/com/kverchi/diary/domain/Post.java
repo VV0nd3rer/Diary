@@ -17,6 +17,7 @@ public class Post {
 	private String title;
 	private String description;
 	private String text;
+	private int sight_id;
 	public Post() {};
 	public Post(int post_id, String title, String text) {
 		this.post_id = post_id;
@@ -46,6 +47,12 @@ public class Post {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public int getSight_id() {
+		return sight_id;
+	}
+	public void setSight_id(int sight_id) {
+		this.sight_id = sight_id;
 	}
 	@Override
 	public String toString(){

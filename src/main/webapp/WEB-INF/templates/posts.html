@@ -10,7 +10,7 @@
 
   <body>
     <div th:replace="header :: header">&nbsp;</div>
-    <div class="container" th:if="${not #lists.isEmpty(all_posts)}">
+    <div class="container" th:if="${not #lists.isEmpty(posts)}">
      
      <div class="blog-header">
    		<p class="lead blog-description">Posts</p>
@@ -25,7 +25,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="post: ${all_posts}">
+				<tr th:each="post: ${posts}">
 					<td th:text="${post.post_id}"></td>
 					<td th:text="${post.title}"></td>
 					<td th:if="${not #lists.isEmpty(post.description)}" th:text="${post.description}"></td>
@@ -37,7 +37,7 @@
    	  <div class="row">
    	   <div class="col-sm-8 blog-main">
 		
-		<div class="blog-post" th:each="post: ${all_posts}">
+		<div class="blog-post" th:each="post: ${posts}">
 		  <h2 class="blog-post-title" th:text="${post.title}"></h2>
 		  <p class="blog-post-meta" th:text="${post.post_id}"></p>
 		  <blockquote>

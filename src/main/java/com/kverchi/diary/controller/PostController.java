@@ -1,6 +1,7 @@
 package com.kverchi.diary.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +15,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kverchi.diary.domain.CountriesSight;
+import com.kverchi.diary.domain.Country;
 import com.kverchi.diary.domain.Post;
+import com.kverchi.diary.service.CountryService;
 import com.kverchi.diary.service.PostService;
 
 @RestController
-public class DiaryController {
-	final static Logger logger = Logger.getLogger(DiaryController.class);
+public class PostController {
+	final static Logger logger = Logger.getLogger(PostController.class);
 	String message = "Welcome";
 	@Autowired
 	PostService postService;
+	@Autowired
+	CountryService countryService;
 	/*@Autowired(required=true)
 	@Qualifier(value="postService")
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}*/
+	
+	
 	@RequestMapping("/main")
 	public ModelAndView showMain(
 			@RequestParam(value="name", required=false, defaultValue="Guest") String name) {
@@ -37,9 +45,27 @@ public class DiaryController {
 		return mv;
 	}
 	
-	@RequestMapping("/test-bootstrap-modal")
+	@RequestMapping("/map")
 	public ModelAndView showTestBootstrapModal() {
-		ModelAndView mv = new ModelAndView("test-bootstrap-modal");
+		ModelAndView mv = new ModelAndView("map");
+		return mv;
+	}
+	@RequestMapping("/country")
+	public ModelAndView country(@RequestParam("country_code") String code) {
+		Country country = countryService.getCountryById(code);
+		Set<CountriesSight> country_sights = country.getCountriesSight();
+		
+		ModelAndView mv = new ModelAndView("country");
+		mv.addObject("country", country);
+		mv.addObject("country_sights", country_sights);
+		return mv;
+	}
+	@RequestMapping("/sight_posts")
+	public ModelAndView showSightPosts(@RequestParam("sight_id") int sight_id) {
+		List<Post> sight_posts = null;
+		sight_posts = postService.getSightPosts(sight_id);
+		ModelAndView mv = new ModelAndView("posts");
+		mv.addObject("posts", sight_posts);
 		return mv;
 	}
 	@RequestMapping("/posts")
@@ -47,7 +73,7 @@ public class DiaryController {
 		List<Post> all_posts = postService.getAllPosts();
 		ModelAndView mv = new ModelAndView("posts");
 		mv.addObject("post", new Post());
-		mv.addObject("all_posts", all_posts);
+		mv.addObject("posts", all_posts);
 		return mv;
 	}
 	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")
@@ -94,21 +120,4 @@ public class DiaryController {
 		mv.addObject("post", new Post());
 		return mv;
 	}
-	/*@RequestMapping(value="/post/add", method=RequestMethod.POST)
-	public String addPost(@ModelAttribute("post") Post post) {
-		if(post.getPost_id() == 0) {
-			postService.addPost(post);
-		}
-		else {
-			postService.updatePost(post);
-		}
-		return "redirect:/posts";
-	}*/
-	
-	/*@RequestMapping("/posts/edit/{post_id}")
-    public String editPost(@PathVariable("post_id") int post_id, Model model){
-        model.addAttribute("post", this.postService.getPostById(post_id));
-        model.addAttribute("all_posts", this.postService.getAllPosts());
-        return "posts";
-    }*/
 }

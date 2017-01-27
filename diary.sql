@@ -1,66 +1,62 @@
--- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 05, 2017 at 08:04 PM
--- Server version: 10.1.19-MariaDB
--- PHP Version: 7.0.13
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `diary`
+-- База данных: `diary`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posts`
+-- Структура таблицы `posts`
 --
 
 CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
   `text` text NOT NULL,
-  `description` varchar(255) DEFAULT NULL
+  `description` varchar(255) DEFAULT NULL,
+  `sight_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `posts`
+-- Дамп данных таблицы `posts`
 --
 
-INSERT INTO `posts` (`post_id`, `title`, `text`, `description`) VALUES
-(1, 'Deep forest', 'It''s so fun hiding in the forest.', 'It''s so fun hiding in the forest.'),
-(2, 'New York', 'Kerry knows everyting about sex in the city.', 'Kerry knows everyting about...'),
-(4, 'Something new', 'hello', NULL);
+INSERT INTO `posts` (`post_id`, `title`, `text`, `description`, `sight_id`) VALUES
+(1, 'Deep forest', 'It''s so fun hiding in the forest.', 'About TShirt', NULL),
+(40, 'Sunny post :)', 'Nice book for life', 'About interesting book', NULL),
+(41, 'Hello', 'Let''s be friends?!', 'Hello, who are you?', NULL),
+(42, 'Coffee morning', 'Depresso :)', 'Coffee is it good?', 86),
+(43, 'dfsdf', 'sdfsdf', 'werwerr', NULL);
 
 --
--- Indexes for dumped tables
+-- Индексы сохранённых таблиц
 --
 
 --
--- Indexes for table `posts`
+-- Индексы таблицы `posts`
 --
 ALTER TABLE `posts`
-  ADD PRIMARY KEY (`post_id`);
+  ADD PRIMARY KEY (`post_id`),
+  ADD KEY `sight_id_idx` (`sight_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT для сохранённых таблиц
 --
 
 --
--- AUTO_INCREMENT for table `posts`
+-- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `posts`
+--
+ALTER TABLE `posts`
+  ADD CONSTRAINT `sight_id` FOREIGN KEY (`sight_id`) REFERENCES `countries_sights` (`sight_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

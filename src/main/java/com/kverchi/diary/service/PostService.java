@@ -12,4 +12,5 @@ public interface PostService {
 	public Post addPost(Post post);
 	public Post updatePost(Post post);
 	public void deletePost(int post_id);
+	public List<Post> getSightPosts(int sight_id);
 }

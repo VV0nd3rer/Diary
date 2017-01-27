@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.kverchi.diary.domain.Post;
 
 public interface PostDao extends GenericDao<Post> {
+	List<Post> getSightPosts(int sight_id);
 	/*public List<Post> getAllPosts();
 	public Post getPostById(int post_id);
 	public int addPost(Post post);

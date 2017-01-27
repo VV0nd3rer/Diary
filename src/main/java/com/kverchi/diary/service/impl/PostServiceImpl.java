@@ -46,4 +46,10 @@ public class PostServiceImpl implements PostService {
 	    postDao.delete(postToDel);
 	}
 
+	@Override
+	public List<Post> getSightPosts(int sight_id) {
+		List<Post> sightPosts = postDao.getSightPosts(sight_id);
+		return sightPosts;
+	}
+
 }

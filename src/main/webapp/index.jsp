@@ -16,7 +16,7 @@
 		<a href="media">Media</a>
 	  </li>
 	  <li>
-	    <a href="test-bootstrap-modal">Test bootstrap modal</a>
+	    <a href="map">Map</a>
 	  </li>
 	</ul>
 </h3>

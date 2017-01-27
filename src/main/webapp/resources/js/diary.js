@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    
 	$("#add-book-btn").click(function(){
         $("#modal-form").modal();
     });
@@ -96,8 +95,15 @@ $(document).ready(function(){
     	  //var valur =$(this).find('td:first').html();
     	   //alert(value);    
     });	 
+   $('table').on('click', '.row_action', function(event) {
+	   event.preventDefault();
+	   var id = $("#crud-tbl tr.danger").find('td:first').html();
+	   console.log(id);
+	   window.location.replace("sight_posts?sight_id="+id);
+   });
 });
 
+//End of document.ready
 function hideModalDialog() {
 	$("#modal-form").modal("hide");
 	$(':input','#modal-form')
