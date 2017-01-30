@@ -17,7 +17,7 @@ public class Post {
 	private String title;
 	private String description;
 	private String text;
-	private int sight_id;
+	private Integer sight_id;
 	public Post() {};
 	public Post(int post_id, String title, String text) {
 		this.post_id = post_id;

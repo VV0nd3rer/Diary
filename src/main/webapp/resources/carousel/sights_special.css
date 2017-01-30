@@ -1,0 +1,63 @@
+ /* body {
+      background: url(../../countryImg/CzechRepublic.png) no-repeat center top fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    } */
+    a {
+      color: #e5e616;
+    }
+    a:hover {
+      color: #88a7f7;
+    }
+    #wrap > h1 {
+      color: rgb(221, 142, 22);
+      margin: 14px auto 0;
+    }
+    #showcase {
+      height: 430px;
+      overflow: visible !important;
+    }
+    .card {
+      padding: 12px;
+      text-align: center;
+      background-color: rgba(61, 9, 9, 0.8);
+      border: 2px white dotted;
+      border-radius: 12px;
+    }
+    .card h2 {
+      margin: 0 0 7px 0;
+    }
+    .card a {
+      font-size: 18px;
+      display: block;
+    }
+    .card p {
+      font-size: 15px;
+    }
+    /*.card button, input[type="submit"], input[type="button"] {
+      margin-left: 37%;
+    }*/
+    footer hr {
+      width: 6px;
+    }
+    #share {
+      top: -84px;
+    }
+    #credits {
+      top: -78px;
+    }
+    #photo-credits {
+      text-align: center;
+    }
+    #photo-credits h1 {
+      font-size: 1em;
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+    #photo-credits > ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0;
+    }

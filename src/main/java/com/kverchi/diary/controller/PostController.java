@@ -35,7 +35,11 @@ public class PostController {
 		this.postService = postService;
 	}*/
 	
-	
+	@RequestMapping("/test-me")
+	public ModelAndView showTestPage() {
+		ModelAndView mv = new ModelAndView("test_page");
+		return mv;
+	}
 	@RequestMapping("/main")
 	public ModelAndView showMain(
 			@RequestParam(value="name", required=false, defaultValue="Guest") String name) {
@@ -74,6 +78,13 @@ public class PostController {
 		ModelAndView mv = new ModelAndView("posts");
 		mv.addObject("post", new Post());
 		mv.addObject("posts", all_posts);
+		return mv;
+	}
+	@RequestMapping("/single-post/{post_id}")
+	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
+		ModelAndView mv = new ModelAndView("single-post");
+		Post post = postService.getPostById(post_id);
+		mv.addObject("post", post);
 		return mv;
 	}
 	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")

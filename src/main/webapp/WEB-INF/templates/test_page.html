@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script>
+    <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script>
+   
+    <title>Test page</title>
+  </head>
+
+  <body>
+  <style>
+  	#carousel .cloud9-item, #buttons button {
+	  cursor: pointer;
+	}
+  </style>
+    <div th:replace="header :: header">&nbsp;</div>
+     
+     <div class="container">
+     
+  <div class="wrap">
+    <h1>Which browser is your favorite?</h1>
+    <div id="carousel" class="noselect">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Firefox">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Wyzo">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Opera">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Chrome">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Internet Explorer">
+      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Safari">
+    </div>
+	<div id="buttons">
+	  <button class="left">
+	    ←
+	  </button>
+	  <button class="right">
+	    →
+	  </button>
+	</div>
+  	</div>
+    </div>
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+	<script>
+	$("#carousel").Cloud9Carousel( {
+		  buttonLeft: $("#buttons > .left"),
+		  buttonRight: $("#buttons > .right"),
+		  autoPlay: 1,
+		  bringToFront: true
+		} );
+	</script>
+  </body>
+</html>
+

@@ -8,18 +8,44 @@
 	<link href="../../../resources/carousel/sights_special.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_special.css}"/>
 	<object th:include="include-res::links" th:remove="tag"/>
 	<script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script>
-	
+    <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script>
+	<script src="../../../resources/js/carousel.js" th:src="@{/resources/js/carousel.js}"></script>
     <title th:text="${country.country_name}"></title>
   </head>
   <!-- <head th:include="include-res::links">
   </head> -->
   <body>
+    <style>
+	  	#carousel .cloud9-item, #buttons button {
+		  cursor: pointer;
+		  position: fixed !important;
+		}
+		
+  	</style>
     <div th:replace="header :: header">&nbsp;</div>
     
-    <div class="container">
+    <div>
     <p>hello</p>
     <h4>Hello world</h4>
-    
+    <div class="wrap">
+	    <h1>Which browser is your favorite?</h1>
+	    <div id="carousel" class="noselect">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Firefox">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Wyzo">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Opera">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Chrome">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Internet Explorer">
+	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Safari">
+	    </div>
+		<div id="buttons">
+		  <button class="left">
+		    ←
+		  </button>
+		  <button class="right">
+		    →
+		  </button>
+		</div>
+  	</div>
 	 <div class="container" th:if="${not #lists.isEmpty(country_sights)}">
      
      <div class="blog-header">
@@ -46,31 +72,6 @@
 			</tbody>
 		</table>
 	  </div>
-     
-    <!--  <div id="carouselContent">
-	 
-	   <div id="wrap">
-    	  <div id="showcase" class="noselect">
-           
-           	<div class="card" th:each="sight: ${country_sights}">
-	     	    <h2 th:text="${sight.sight_label}"></h2>
-	     	   	<img src="#" th:src="@{/resources/countryImg/} + ${country.img_path}"/>
-	     		<p th:text="${sight.sight_description}"></p>
-	     		<p><a href="#">Read more</a></p>
-     	    </div>
-     	    
-     	  </div>
-    	  <footer>
-      		<p id="item-title">&nbsp;</p>
-      		<div id="nav" class="noselect">
-        	 <button class="left"> < </button>
-             <button class="right"> > </button>
-      		</div>
-      		<hr>
-     	  </footer>
-  	   </div>
-    </div> -->
-     
     </div>
     
     <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>

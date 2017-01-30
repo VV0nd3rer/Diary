@@ -2,8 +2,9 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-  <head th:include="include-res::links">
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
     <title>Posts</title>
    
   </head>
@@ -44,7 +45,7 @@
 		  	<p th:text="${post.description}"></p>
 		  </blockquote>
 		  <!-- <p th:text="${post.text}"></p> -->
-		   <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+		   <p><a class="btn btn-default" href="#" th:href="@{/single-post/{post_id}(post_id=${post.post_id}) }" role="button">View details &raquo;</a></p>
 		</div>
 	   </div>
 	  </div>
