@@ -11,6 +11,7 @@
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
 		<mysql.connector.version>5.1.6</mysql.connector.version>
+		<spring.security.version>4.2.0.RELEASE</spring.security.version>
   </properties>
   
   <dependencies>
@@ -165,6 +166,33 @@
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-databind</artifactId>
 		<version>2.7.5</version>
+	</dependency>
+	<!-- Spring security -->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-core</artifactId>
+	    <version>${spring.security.version}</version>
+	</dependency>	
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-web</artifactId>
+	    <version>${spring.security.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-config</artifactId>
+	    <version>${spring.security.version}</version>
+	</dependency>
+	<!-- End of Spring security -->
+	<!-- <dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>javax.mail-api</artifactId>
+	    <version>1.5.5</version>
+	</dependency> -->
+	<dependency>
+	    <groupId>com.sun.mail</groupId>
+	    <artifactId>javax.mail</artifactId>
+	    <version>1.5.5</version>
 	</dependency>
 	
   </dependencies>

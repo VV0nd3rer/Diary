@@ -22,6 +22,7 @@ import com.kverchi.diary.service.CountryService;
 import com.kverchi.diary.service.PostService;
 
 @RestController
+@RequestMapping("posts")
 public class PostController {
 	final static Logger logger = Logger.getLogger(PostController.class);
 	String message = "Welcome";
@@ -72,7 +73,7 @@ public class PostController {
 		mv.addObject("posts", sight_posts);
 		return mv;
 	}
-	@RequestMapping("/posts")
+	@RequestMapping("/list")
 	public ModelAndView showPosts() {
 		List<Post> all_posts = postService.getAllPosts();
 		ModelAndView mv = new ModelAndView("posts");
@@ -92,12 +93,12 @@ public class PostController {
 		List<Post> all_posts = postService.getAllPosts();
 		return all_posts;
 	}
-	@RequestMapping("/posts/edit/{post_id}")
+	@RequestMapping("/edit/{post_id}")
     public Post editPost(@PathVariable("post_id") int post_id, Model model){
        Post post = postService.getPostById(post_id);
        return post;
     }
-	@RequestMapping("/posts/remove/{post_id}")
+	@RequestMapping("/remove/{post_id}")
 	public String removePost(@PathVariable("post_id") int post_id) {
 		postService.deletePost(post_id);
 		String res = "OK";
@@ -117,13 +118,7 @@ public class PostController {
 		return added_post;
 	}
 	
-	@RequestMapping("/media")
-	public ModelAndView showMedia() {
-		List<Post> all_posts = postService.getAllPosts();
-		ModelAndView mv = new ModelAndView("media");
-		mv.addObject("all_posts", all_posts);
-		return mv;
-	}
+	
 	
 	@RequestMapping(value="/new-post") 
 	public ModelAndView newPost() {

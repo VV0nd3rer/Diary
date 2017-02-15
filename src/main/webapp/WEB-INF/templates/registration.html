@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- Bootstrap 3.3.0 Snippet by tradesouthwest 
+		http://bootsnipp.com/snippets/8ANqZ
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Registration</title>
+   
+  </head>
+
+  <body>
+    <div th:replace="header :: header">&nbsp;</div>
+    
+    <div class="container">
+	 <div class="row">
+		<div class="col-md-4 col-md-offset-4" id="regField">
+			<form class="form-horizontal" role="form">
+				<fieldset>
+
+					<!-- Form Name -->
+					<legend>Registration</legend>
+					<p class="validateTips">All form fields are required.</p>
+					<!-- <input type="hidden" name="id" value="-1" id="id"> -->
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput">Username</label>
+						<div class="col-sm-10">
+							<input type="text" id="username" placeholder="Username"
+								class="form-control">
+						</div>
+					</div>
+
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput">Email</label>
+						<div class="col-sm-10">
+							<input type="text" id="email" placeholder="Email"
+								class="form-control">
+						</div>
+					</div>
+
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput">Password</label>
+						<div class="col-sm-10">
+							<input type="password" id="password" placeholder="Password"
+								class="form-control">
+						</div>
+					</div>
+					
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput">Password</label>
+						<div class="col-sm-10">
+							<input type="password" id="matchingPassword" placeholder="Repeat password"
+								class="form-control" onkeyup="checkPass(); return false;">
+						</div>
+					</div>
+
+					<div class="form-group">
+	               		 <input class="btn btn-success" type="submit" name="submit_reg" id="register-ok-btn" value="Register">
+	            	</div>
+	                      <h5>You will receive an email to complete the registration and validation process. </h5>
+	                      <h5>Be sure to check your spam folders. </h5>
+
+				</fieldset>
+			</form>
+	    </div>
+			<!-- <div class="col-md-4 col-md-offset-4">
+            <form action="#" th:action="@{/user/add}" th:object="${regForm}" method="post" id="regForm" role="form">
+            <fieldset><legend class="text-center">Valid information is required to register. <span class="req"><small> required *</small></span></legend>
+			  <div id="legend">
+		      	<legend class="">Register</legend>
+		      	<p class="validateTips">All form fields are required.</p> 
+		      </div>
+				<div class="form-group">
+	                <label for="username"><span class="req">* </span> User name:  <small>This will be your login user name</small> </label> 
+	                    <input class="form-control" type="text" name="username" id = "txt" onkeyup = "Validate(this)" placeholder="minimum 6 letters" required />  
+	                        <div id="errLast"></div>
+	            </div>
+	           
+	            <div class="form-group">
+	                <label for="email"><span class="req">* </span> Email Address: </label> 
+	                    <input class="form-control" required type="text" name="email" id = "email"  onchange="email_validate(this.value);" />   
+	                        <div class="status" id="status"></div>
+	            </div>
+	
+	            
+	
+	            <div class="form-group">
+	                <label for="password"><span class="req">* </span> Password: </label>
+	                    <input required name="password" type="password" class="form-control inputpass" minlength="4" maxlength="16"  id="pass1" /> </p>
+	
+	                <label for="matchingPassword"><span class="req">* </span> Password Confirm: </label>
+	                    <input required name="matchingPassword" type="password" class="form-control inputpass" minlength="4" maxlength="16" placeholder="Enter again to validate"  id="pass2" onkeyup="checkPass(); return false;" />
+	                        <span id="confirmMessage" class="confirmMessage"></span>
+	            </div>
+	
+	            <div class="form-group">
+	                <input class="btn btn-success" type="submit" name="submit_reg" value="Register">
+	            </div>
+	                      <h5>You will receive an email to complete the registration and validation process. </h5>
+	                      <h5>Be sure to check your spam folders. </h5>
+ 
+
+            </fieldset>
+            </form>ends register form
+          
+        </div>ends col-6 -->
+	  </div>
+	</div>
+    
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+  </body>
+</html>

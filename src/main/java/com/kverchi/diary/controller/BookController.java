@@ -17,6 +17,7 @@ import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.BookService;
 
 @RestController	
+@RequestMapping("books")
 public class BookController {
 	@Autowired
 	BookService bookService;
@@ -25,12 +26,12 @@ public class BookController {
 	public void setBookService(BookService bookService) {
 		this.bookService = bookService;
 	}*/
-	@RequestMapping("/books/edit/{book_id}")
+	@RequestMapping("/edit/{book_id}")
     public Book editBook(@PathVariable("book_id") int book_id, Model model){
 		Book book = bookService.getBookById(book_id);
 		return book;
 	}
-	@RequestMapping("/books/remove/{book_id}")
+	@RequestMapping("/remove/{book_id}")
 	public String removeBook(@PathVariable("book_id") int book_id) {
 		bookService.deleteBook(book_id);
 		String res = "OK";
@@ -47,7 +48,7 @@ public class BookController {
 		}
 		return addedBook;
 	}
-	@RequestMapping("/books")
+	@RequestMapping("/list")
 	public ModelAndView showBooks() {
 		List<Book> all_books = bookService.getAllBooks();
 		ModelAndView mv = new ModelAndView("books");

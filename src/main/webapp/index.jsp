@@ -4,19 +4,22 @@
 <h3>
 	<ul>
 	  <li>
-		<a href="main?name=Kverchi">Main page</a>
+		<a href="posts/main?name=Kverchi">Main page</a>
 	  </li>
 	  <li>
-		<a href="posts">Posts</a>
+		<a href="posts/list">Posts</a>
 	  </li>
 	  <li>
-		<a href="books">Books</a>
+		<a href="books/list">Books</a>
 	  </li>
 	  <li>
-		<a href="media">Media</a>
+		<a href="media/list">Media</a>
 	  </li>
 	  <li>
-	    <a href="map">Map</a>
+	    <a href="posts/map">Map</a>
+	  </li>
+	  <li>
+	  	<a href="users/registration">Registration</a>
 	  </li>
 	</ul>
 </h3>
