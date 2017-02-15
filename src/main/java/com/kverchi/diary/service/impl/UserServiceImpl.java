@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kverchi.diary.custom.exception.ServiceException;
@@ -35,6 +36,8 @@ public class UserServiceImpl implements UserService {
 	private RoleDao roleDao;
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	 
 	
 	@Override
@@ -87,14 +90,16 @@ public class UserServiceImpl implements UserService {
 			logger.error(ex);
 		}
 		
-		
+		//TODO if account is created then send an email 
+		//in case of some internal error email will not be sent
 		if(isRegistrationEmailSent) {
 			//create an account
 			User newAccount = new User();
 			newAccount.setUsername(user.getUsername());
 			//TODO
-			//Password encoding + salt
-			newAccount.setPassword(user.getPassword());
+			//Salt
+			newAccount.setPassword(
+					passwordEncoder.encode(user.getPassword()));
 			newAccount.setEmail(user.getEmail());
 			newAccount.setRoles(Arrays.asList(roleDao.getByName("ROLE_USER")));
 			newAccount.setEnabled(false);

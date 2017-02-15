@@ -28,14 +28,17 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 		<sec:intercept-url pattern="/users/*" access="permitAll"/>
 		
 		<sec:intercept-url pattern="/posts/test-me" access="isAnonymous()"/>
-		<sec:csrf disabled="true"/>
+		
 	</sec:http>
 
 	<sec:authentication-manager>
 	  <sec:authentication-provider user-service-ref="userDetailsService">
+	   <sec:password-encoder ref="passwordEncoder">
+				<!-- <salt-source ref="saltSource" /> -->
+	   </sec:password-encoder>
 	  </sec:authentication-provider>	  
 	</sec:authentication-manager>
-	
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	<!-- Thymeleaf -->
 	<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
 		<property name="prefix" value="/WEB-INF/templates/" />
