@@ -16,8 +16,7 @@
             </button> -->
             <a class="navbar-brand" href="#">Diary</a>
             <p class="navbar-brand" >
-            	Logged in user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
-            	
+            	Logged user: <span sec:authentication="name">Bob</span>
             </p>
         </div>
         <div class="navbar-collapse collapse">
@@ -28,13 +27,17 @@
                 <li><a href="#" th:href="@{/media/list}">What to listen/watch</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            	<li><a href="@{/user/registration}">Registration</a>
-                <li><a href="#">Sign in</a></li>
-                <li><a href="#">Logout</a></li>
+            	<li sec:authorize="isAnonymous()"><a href="#" th:href="@{/users/registration}">Registration</a>
+                <li sec:authorize="isAnonymous()"><a href="#" th:href="@{/users/login}">Sign in</a></li>
+                <form th:action="@{/logout}" id="logout" method="post">
+					<input type="hidden"
+						name="${_csrf.parameterName}"
+						value="${_csrf.token}"/>
+				</form>
+                <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="#">Logged user: <span sec:authentication="name">Bob</span></a></li>
             </ul>
-        </div>
-       
-      
+        </div>      
     </div>
 </div>
 </body>

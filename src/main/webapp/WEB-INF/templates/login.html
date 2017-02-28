@@ -11,10 +11,11 @@
 <body>
     <div th:replace="header :: header">&nbsp;</div>
 	<div class="container">
-	        <div class="card card-container">
+	        <div class="row main">
+	          <div class="col-md-6 col-md-offset-4">
 	            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
 	            <p id="profile-name" class="profile-name-card"></p>
-	            <form class="form-signin" th:action="@{/login}" method="post">
+	            <form class="form-horizontal" th:action="@{/login}" method="post">
 	                <span id="reauth-email" class="reauth-email"></span>
 	                <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
 	                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
@@ -24,13 +25,14 @@
 	                        <input type="checkbox" name="_spring_security_remember_me" value="remember-me"> Remember me
 	                    </label>
 	                </div>
-	                <!-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
+	               
 	                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
 	            </form><!-- /form -->
-	            <a href="#" class="forgot-password">
+	            <a href="#" th:href="@{/users/forgot-password}" class="forgot-password">
 	                Forgot the password?
 	            </a>
-	        </div><!-- /card-container -->
+	          </div>
+	        </div><!-- /row-main -->
 	    </div><!-- /container -->
 	<div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
 </body>

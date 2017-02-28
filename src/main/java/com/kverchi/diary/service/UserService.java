@@ -12,4 +12,7 @@ public interface UserService {
 	User getUserByUsername(String username);
 	ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;
 	void activateAccount(User user);
+	boolean updatePassword(User user);
+	boolean createResetPasswordToken(String email);
+	User getResetPasswordToken(String token);
 }

@@ -139,7 +139,7 @@ $(document).ready(function(){
 	   
 	   if(valid) {
 		   $.ajax({
-			   url: "add-user",
+			   url: "users/add-user",
 			   type:"POST",
 			   data: JSON.stringify(data),
 			   contentType:"application/json; charset=utf-8",

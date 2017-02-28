@@ -3,6 +3,7 @@ package com.kverchi.diary.service.impl;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -18,8 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kverchi.diary.custom.exception.ServiceException;
+import com.kverchi.diary.dao.PasswordChangeRequestDao;
 import com.kverchi.diary.dao.RoleDao;
 import com.kverchi.diary.dao.UserDao;
+import com.kverchi.diary.domain.PasswordChangeRequest;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
@@ -34,6 +37,8 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	@Autowired
 	private RoleDao roleDao;
+	@Autowired
+	private PasswordChangeRequestDao passwordChangeRequestDao;
 	@Autowired
 	private JavaMailSender mailSender;
 	@Autowired
@@ -71,24 +76,10 @@ public class UserServiceImpl implements UserService {
 		
 		// Sending email implementation needs to be here as 'isRegistrationEmailSent'
 		boolean isRegistrationEmailSent = false;
-		
-		MimeMessagePreparator preparator = new MimeMessagePreparator() {
-			
-			@Override
-			public void prepare(MimeMessage mimeMessage) throws Exception {
-				mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-				mimeMessage.setFrom(new InternetAddress("kverchi24@gmail.com"));
-				mimeMessage.setText(
-						"Dear " + user.getUsername() + ", thank you for your registration. " +
-						"Please activate your account by clicking <a href='http://localhost:8080/Diary/users/confirm-registration/" + user.getUsername() + "'>here</a>.");
-			}
-		};
-		try {
-			mailSender.send(preparator);
-			isRegistrationEmailSent = true;
-		} catch(MailException ex) {
-			logger.error(ex);
-		}
+		String emailText = "Dear " + user.getUsername() + ", thank you for your registration. " +
+						   "Please activate your account by clicking <a href='http://localhost:8080/Diary/users/confirm-registration/" + 
+						   user.getUsername() + "'>here</a>.";
+		isRegistrationEmailSent = sendEmail(user.getEmail(), emailText);
 		
 		//TODO if account is created then send an email 
 		//in case of some internal error email will not be sent
@@ -103,7 +94,7 @@ public class UserServiceImpl implements UserService {
 			newAccount.setEmail(user.getEmail());
 			newAccount.setRoles(Arrays.asList(roleDao.getByName("ROLE_USER")));
 			newAccount.setEnabled(false);
-			int res = userDao.create(newAccount);
+			int res = (Integer)userDao.create(newAccount);
 			logger.debug("'Create' method returned ID: " + res);
 			if(res != 0) {
 				response.setRespCode(HttpStatus.OK);
@@ -124,6 +115,61 @@ public class UserServiceImpl implements UserService {
 		}
 		//return response;
 	}
+	@Override
+	public boolean createResetPasswordToken(String email) {
+		User user = null;
+		user = userDao.getUserByEmail(email);
+		if(user == null) {
+			return false;
+		}
+		String token = generateSecureToken();
+		PasswordChangeRequest passChangeReq = new PasswordChangeRequest();
+		passChangeReq.setUUID(token);
+		passChangeReq.setUserId(user.getUserId());
+		passChangeReq.setCreatedTime(new Date());
+		String id = (String)passwordChangeRequestDao.create(passChangeReq);
+		//if(id > 0 /*id == token*/) {
+			String emailText = "Reset pass link is http://localhost:8080/Diary/users/change-password/"+token;
+			sendEmail(user.getEmail(), emailText);
+			return true;
+		//}
+		//return false;
+	}
+	@Override
+	public User getResetPasswordToken(String token) {
+		PasswordChangeRequest passChangeReq = null;
+		passChangeReq = passwordChangeRequestDao.getById(token);
+		if(passChangeReq == null) {
+			return null;
+		}
+		//TODO check date and time validity
+		//passChangeReq.getCreatedTime()...
+		if(passChangeReq.isUUIDused()) {
+			return null;
+		}
+		passChangeReq.setUUIDused(true);
+		passwordChangeRequestDao.update(passChangeReq);
+		User user = userDao.getById(passChangeReq.getUserId());
+		return user;
+	}
+	private boolean sendEmail(String toAddr, String text) {
+		boolean res = false;
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddr));
+				mimeMessage.setFrom(new InternetAddress("kverchi24@gmail.com"));
+				mimeMessage.setText(text);
+			}
+		};
+		try {
+			mailSender.send(preparator);
+			res = true;
+		} catch(MailException ex) {
+			logger.error(ex);
+		}
+		return res;
+	}
 	
 	private String generateSecureToken() {
 		String token = new String();
@@ -139,5 +185,15 @@ public class UserServiceImpl implements UserService {
 	public void activateAccount(User user) {
 		user.setEnabled(true);
 		userDao.update(user);
+	}
+	@Override
+	public boolean updatePassword(User user) {
+		User updUsr = userDao.getById(user.getUserId());
+		if(updUsr == null) {
+			return false;
+		}
+		updUsr.setPassword(passwordEncoder.encode(user.getPassword()));
+		userDao.update(updUsr);
+		return true;
 	}
 }

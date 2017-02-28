@@ -19,6 +19,9 @@
 	    <a href="posts/map">Map</a>
 	  </li>
 	  <li>
+	    <a href="users/login">Login</a>
+	  </li>
+	  <li>
 	  	<a href="users/registration">Registration</a>
 	  </li>
 	</ul>

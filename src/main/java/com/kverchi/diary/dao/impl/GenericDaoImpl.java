@@ -30,14 +30,15 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
     }
 	@Transactional
 	@Override
-	public int create(T t) {
+	public Serializable create(T t) {
 		Session session = null;
 		//Transaction tx = null;
-		int id = 0;
+		Serializable id = 0;
 		try {
 			session = sessionFactory.openSession();
+			session.beginTransaction();
 			//tx = session.beginTransaction();
-			id = (Integer)session.save(t);
+			id = session.save(t);
 		    //tx.commit();
 			session.getTransaction().commit();
 		} catch (Exception e) {

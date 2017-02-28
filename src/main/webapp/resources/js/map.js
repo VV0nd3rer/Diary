@@ -9,7 +9,7 @@ jQuery('#vmap').vectorMap({
         	console.log("country code: " + code);
         	console.log("region: " + region);
         	console.log("element: " + element);
-        	window.location.replace("posts/country?country_code="+code);
+        	window.location.replace("country?country_code="+code);
         }
     });
 });

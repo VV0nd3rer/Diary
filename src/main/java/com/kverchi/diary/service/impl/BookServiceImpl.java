@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	
 	public Book addBook(Book book) {
-		int addedId = bookDao.create(book);
+		int addedId = (Integer)bookDao.create(book);
 		Book addedBook = bookDao.getById(addedId);
 		return addedBook;
 	}

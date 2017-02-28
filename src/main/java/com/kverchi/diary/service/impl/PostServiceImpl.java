@@ -30,7 +30,7 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	public Post addPost(Post post) {
-		int added_id = postDao.create(post);
+		int added_id = (Integer)postDao.create(post);
 		Post added_post = postDao.getById(added_id);
 		return added_post;
 	}

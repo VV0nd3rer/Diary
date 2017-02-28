@@ -194,6 +194,12 @@
 	    <artifactId>javax.mail</artifactId>
 	    <version>1.5.5</version>
 	</dependency>
+	<!-- Thymeleaf + Spring Security integration -->
+	<dependency>
+	    <groupId>org.thymeleaf.extras</groupId>
+	    <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+	    <version>3.0.0.RELEASE</version>
+	</dependency>
 	
   </dependencies>
   <build>

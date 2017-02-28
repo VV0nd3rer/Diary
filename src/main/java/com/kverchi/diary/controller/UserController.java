@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.custom.exception.ServiceException;
+import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
+import com.kverchi.diary.form.ForgotPasswordForm;
+import com.kverchi.diary.form.NewPasswordForm;
 import com.kverchi.diary.form.RegistrationForm;
 import com.kverchi.diary.service.UserService;
 
@@ -50,12 +53,57 @@ public class UserController {
 				return new ModelAndView("login");
 			}
 		}
-			//TODO resend on Error Page, confirmation link is not valid anymore
-			return new ModelAndView("../posts/test-me");
+//		TODO return error info with error page
+			return new ModelAndView("/posts/test-me");
 	}
 	@RequestMapping(value="/login")
 	public ModelAndView login() {
 		return new ModelAndView("login");
+	}
+	@RequestMapping(value="/forgot-password")
+	public ModelAndView recoverPassword() {
+		ModelAndView mv = new ModelAndView("forgot-password");
+		mv.addObject("forgotPasswordForm", new ForgotPasswordForm());
+		return mv;
+	}
+	@RequestMapping(value="/reset-password", method = RequestMethod.POST)
+	public ModelAndView resetPassword(@ModelAttribute ForgotPasswordForm forgotPasswordForm) {
+		String email = forgotPasswordForm.getEmail();
+		boolean res = userService.createResetPasswordToken(email);
+		if(res) {
+			//TODO return info about reset link
+			return new ModelAndView("login");
+		}
+//		TODO return error info with error page
+		return new ModelAndView("posts/test-me");
+	}
+	@RequestMapping(value="/change-password/{UUID}")
+	public ModelAndView changePassword(@PathVariable String UUID) {
+		User user = null;
+		user = userService.getResetPasswordToken(UUID);
+		if(user != null) {
+			ModelAndView mv = new ModelAndView("new-password");
+			NewPasswordForm newPassForm = new NewPasswordForm();
+			newPassForm.setUserId(user.getUserId());
+			newPassForm.setUsername(user.getUsername());
+			mv.addObject("newPasswordForm", newPassForm);
+			return mv;
+		}
+//		TODO return error info with error page
+		return new ModelAndView("posts/test-me");
+	}
+	@RequestMapping(value="/update-password", method = RequestMethod.POST)
+	public ModelAndView updatePassword(@ModelAttribute NewPasswordForm newPasswordForm) {
+		User user = new User();
+		user.setUserId(newPasswordForm.getUserId());
+		user.setPassword(newPasswordForm.getPassword());
+		boolean res = userService.updatePassword(user);
+		if(res) {
+			//TODO return info about reset link
+			return new ModelAndView("login");
+		}
+//		TODO return error info with error page
+		return new ModelAndView("posts/test-me");
 	}
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<String> exceptionHandler(Exception ex) {
