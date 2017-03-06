@@ -1,0 +1,26 @@
+Storing sensitive data in properties file
+
+Encryption/Decryption 
+	Jasypt
+
+application.properties
+for example:
+dataSource.password=ENC(1oqwimyLNS+hRJ240Rhkgm9FYZudI5qs)
+dataSource.username=ENC(jd5ZREpBqxuN9ok0IhnXabgw7V3EoG2p)
+
+adminEmail.username=
+adminEmail.password=
+
+...
+
+Store Jasypt password (key for encryption/decryption) as environment variable.
+"The Jasypt library retains the master password in encrypted form in memory."
+TODO: test password stored in memory with analyzing memory dump.
+
+How to:
+https://wiki.jasig.org/display/CASUM/HOWTO+Use+Jasypt+to+encrypt+passwords+in+configuration+files
+https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_A-MQ/6.2/html/Security_Guide/FMQSecurityEncryptProperties.html
+
+Add environment variable in Tomcat:
+In catalina.sh file add
+	JAVA_OPTS="-DDIARY_PASS='<your_password_for_encryption>'"

@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Password_change_requests")
+@Table(name="password_change_requests")
 public class PasswordChangeRequest implements Serializable {
 	@Id
 	private String UUID;

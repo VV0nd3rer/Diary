@@ -16,6 +16,27 @@ http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<context:component-scan base-package="com.kverchi.diary" />
+	<!-- <context:property-placeholder location="classpath:properties/app.properties" />  -->
+	
+	<bean id="propertyPlaceholderConfigurer"
+      class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+	  <constructor-arg ref="configurationEncryptor" />
+	  <property name="location" value="classpath:properties/app.properties" />
+	</bean>
+ 
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+	  <property name="config" ref="environmentVariablesConfiguration" />
+	</bean>
+	 
+	<bean id="environmentVariablesConfiguration"
+	      class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+	  <property name="algorithm" value="PBEWithMD5AndDES" />
+	  <property name="passwordEnvName" value="DIARY_PASS" />
+	  
+	<!--   <property name="password" value="jasypt" /> -->
+	 
+	</bean>
+	
 	
 	<sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true" >
 	    <sec:access-denied-handler error-page="/denied"/>
@@ -91,14 +112,14 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 		destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/diary" />
-		<property name="username" value="root" />
-		<property name="password" value="" />
+		<property name="username" value="${db.username}" />  
+        <property name="password" value="${db.password}" />
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="587"/>
-		<property name="username" value="kverchi24@gmail.com"/>
-		<property name="password" value="n1c3_w0r1d"/>
+		<property name="username" value="${adminEmail.username}"/>
+		<property name="password" value="${adminEmail.password}"/>
 		<property name="javaMailProperties">
 	    <props>
        	      <prop key="mail.smtp.auth">true</prop>

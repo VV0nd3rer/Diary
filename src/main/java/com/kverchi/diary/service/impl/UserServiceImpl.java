@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.getById(passChangeReq.getUserId());
 		return user;
 	}
-	private boolean sendEmail(String toAddr, String text) {
+	private boolean sendEmail(final String toAddr, final String text) {
 		boolean res = false;
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			@Override

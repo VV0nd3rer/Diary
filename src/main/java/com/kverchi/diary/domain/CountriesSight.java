@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Countries_sights")
+@Table(name="countries_sights")
 public class CountriesSight implements Serializable {
 	@Id
 	@Column(name="sight_id")
