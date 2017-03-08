@@ -27,6 +27,7 @@ import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
+import com.kverchi.diary.service.EmailService;
 import com.kverchi.diary.service.UserService;
 
 @Service
@@ -40,7 +41,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private PasswordChangeRequestDao passwordChangeRequestDao;
 	@Autowired
-	private JavaMailSender mailSender;
+	//private JavaMailSender mailSender;
+	private EmailService emailService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	 
@@ -79,7 +81,7 @@ public class UserServiceImpl implements UserService {
 		String emailText = "Dear " + user.getUsername() + ", thank you for your registration. " +
 						   "Please activate your account by clicking <a href='http://localhost:8080/Diary/users/confirm-registration/" + 
 						   user.getUsername() + "'>here</a>.";
-		isRegistrationEmailSent = sendEmail(user.getEmail(), emailText);
+		isRegistrationEmailSent = /*sendEmail*/emailService.sendEmailFromAdmin(user.getEmail(), emailText);
 		
 		//TODO if account is created then send an email 
 		//in case of some internal error email will not be sent
@@ -130,7 +132,7 @@ public class UserServiceImpl implements UserService {
 		String id = (String)passwordChangeRequestDao.create(passChangeReq);
 		//if(id > 0 /*id == token*/) {
 			String emailText = "Reset pass link is http://localhost:8080/Diary/users/change-password/"+token;
-			sendEmail(user.getEmail(), emailText);
+			/*sendEmail*/emailService.sendEmailFromAdmin(user.getEmail(), emailText);
 			return true;
 		//}
 		//return false;
@@ -152,25 +154,7 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.getById(passChangeReq.getUserId());
 		return user;
 	}
-	private boolean sendEmail(final String toAddr, final String text) {
-		boolean res = false;
-		MimeMessagePreparator preparator = new MimeMessagePreparator() {
-			@Override
-			public void prepare(MimeMessage mimeMessage) throws Exception {
-				mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddr));
-				mimeMessage.setFrom(new InternetAddress("kverchi24@gmail.com"));
-				mimeMessage.setText(text);
-			}
-		};
-		try {
-			mailSender.send(preparator);
-			res = true;
-		} catch(MailException ex) {
-			logger.error(ex);
-		}
-		return res;
-	}
-	
+
 	private String generateSecureToken() {
 		String token = new String();
 		try {

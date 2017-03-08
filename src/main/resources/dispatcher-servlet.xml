@@ -33,7 +33,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	  <property name="algorithm" value="PBEWithMD5AndDES" />
 	  <property name="passwordEnvName" value="DIARY_PASS" />
 	  
-	<!--   <property name="password" value="jasypt" /> -->
+	<!--   <property name="password" value="grateful" /> -->
 	 
 	</bean>
 	
