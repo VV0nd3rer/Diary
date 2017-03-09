@@ -42,6 +42,36 @@ INSERT INTO `books` VALUES (1,'\"Atlas shrugged\"','Ayn Rand','Novel by Ayn');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comments` (
+  `comment_id` int(11) NOT NULL,
+  `comment_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `text` varchar(255) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`comment_id`),
+  KEY `post_id_idx` (`post_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `comment_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comments`
+--
+
+LOCK TABLES `comments` WRITE;
+/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `countries`
 --
 
@@ -120,7 +150,7 @@ CREATE TABLE `password_change_requests` (
 
 LOCK TABLES `password_change_requests` WRITE;
 /*!40000 ALTER TABLE `password_change_requests` DISABLE KEYS */;
-INSERT INTO `password_change_requests` VALUES ('-12899045',21,'2017-02-17 20:03:49',1),('-1632187161',21,'2017-02-17 20:01:08',1),('-1704339970',21,'2017-02-17 20:10:48',1),('1904649547',21,'2017-02-17 20:08:35',1);
+INSERT INTO `password_change_requests` VALUES ('-12899045',21,'2017-02-17 20:03:49',1),('-1632187161',21,'2017-02-17 20:01:08',1),('-1640102924',21,'2017-03-08 13:58:01',0),('-1666581228',21,'2017-03-01 21:47:48',1),('-1704339970',21,'2017-02-17 20:10:48',1),('1199007491',21,'2017-03-01 21:52:00',0),('1904649547',21,'2017-02-17 20:08:35',1);
 /*!40000 ALTER TABLE `password_change_requests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +258,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'user1','123456',1,'user1@gmail.eu'),(2,'user2','123456',1,'user2@gmail.eu'),(3,'user3','123456',1,'user3@gmail.eu'),(21,'kverchi','$2a$10$4CcH7EnhJqMqElN7DZMb7OwRK/JSvFMuvWzjb6R12tPfT.UxfWV6W',1,'kverchi@hotmail.com');
+INSERT INTO `users` VALUES (1,'user1','123456',1,'user1@gmail.eu'),(2,'user2','123456',1,'user2@gmail.eu'),(3,'user3','123456',1,'user3@gmail.eu'),(21,'kverchi','$2a$10$zaXx4XNKJCaG3FIkjOmQuuT3jEL215SiDIUqXeZ12ykMirT7xngvW',1,'kverchi@hotmail.com');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -241,4 +271,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-01 11:08:17
+-- Dump completed on 2017-03-09 13:01:32
