@@ -1,10 +1,16 @@
 package com.kverchi.diary.domain;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +24,10 @@ public class Post {
 	private String description;
 	private String text;
 	private Integer sight_id;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="post_id")
+	private Set<Comment> post_comments;
+	
 	public Post() {};
 	public Post(int post_id, String title, String text) {
 		this.post_id = post_id;
@@ -51,9 +61,16 @@ public class Post {
 	public int getSight_id() {
 		return sight_id;
 	}
-	public void setSight_id(int sight_id) {
+	public void setSight_id(Integer sight_id) {
 		this.sight_id = sight_id;
 	}
+	public Set<Comment> getPost_comments() {
+		return post_comments;
+	}
+	public void setPost_comments(Set<Comment> post_comments) {
+		this.post_comments = post_comments;
+	}
+	
 	@Override
 	public String toString(){
 		return "id="+post_id+", title="+title+", text="+text;

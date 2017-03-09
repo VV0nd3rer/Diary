@@ -85,6 +85,7 @@ public class PostController {
 	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
 		ModelAndView mv = new ModelAndView("single-post");
 		Post post = postService.getPostById(post_id);
+		//post.getPost_comments()
 		mv.addObject("post", post);
 		return mv;
 	}

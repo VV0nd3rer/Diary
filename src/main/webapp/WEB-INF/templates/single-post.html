@@ -34,7 +34,7 @@
 			<!-- Blog Comments -->
 
                 <!-- Comments Form -->
-                <div class="well">
+                <div class="well" sec:authorize="isAuthenticated()">
                     <h4>Leave a Comment:</h4>
                     <form role="form">
                         <div class="form-group">

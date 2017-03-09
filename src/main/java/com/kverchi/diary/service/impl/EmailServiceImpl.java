@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Override
-	public boolean sendEmailFromAdmin(String toAddr, String text) {
+	public boolean sendEmailFromAdmin(final String toAddr, final String text) {
 		/*boolean res = false;
 		AdminEmailAddress adminEmail = null;
 		adminEmail = emailDao.getById(ADMIN_EMAIL);

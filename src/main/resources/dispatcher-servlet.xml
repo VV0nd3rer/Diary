@@ -31,9 +31,9 @@ http://www.springframework.org/schema/security/spring-security.xsd">
 	<bean id="environmentVariablesConfiguration"
 	      class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 	  <property name="algorithm" value="PBEWithMD5AndDES" />
-	  <property name="passwordEnvName" value="DIARY_PASS" />
+	  <!-- <property name="passwordEnvName" value="DIARY_PASS" /> -->
 	  
-	<!--   <property name="password" value="grateful" /> -->
+	  <property name="password" value="grateful" />
 	 
 	</bean>
 	
