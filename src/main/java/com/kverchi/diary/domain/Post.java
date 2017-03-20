@@ -1,5 +1,6 @@
 package com.kverchi.diary.domain;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.type.descriptor.java.ZonedDateTimeJavaDescriptor;
 
 @Entity
 @Table(name="posts")
@@ -20,11 +24,15 @@ public class Post {
 	@Column(name="post_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int post_id;
+	private ZonedDateTime post_datetime;
 	private String title;
 	private String description;
 	private String text;
 	private Integer sight_id;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="user_id")
+	private User user;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="post_id")
 	private Set<Comment> post_comments;
 	
@@ -39,6 +47,12 @@ public class Post {
 	}
 	public void setPost_id(int post_id) {
 		this.post_id = post_id;
+	}
+	public ZonedDateTime getPost_datetime() {
+		return post_datetime;
+	}
+	public void setPost_datetime(ZonedDateTime post_datetime) {
+		this.post_datetime = post_datetime;
 	}
 	public String getTitle() {
 		return title;
@@ -71,8 +85,15 @@ public class Post {
 		this.post_comments = post_comments;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	@Override
 	public String toString(){
 		return "id="+post_id+", title="+title+", text="+text;
 	}
+	
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kverchi.diary.domain.Comment;
 import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
 import com.kverchi.diary.domain.Post;
@@ -85,8 +86,11 @@ public class PostController {
 	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
 		ModelAndView mv = new ModelAndView("single-post");
 		Post post = postService.getPostById(post_id);
-		//post.getPost_comments()
+		Set<Comment> comments = post.getPost_comments();
+		
 		mv.addObject("post", post);
+		mv.addObject("comments", comments);
+		
 		return mv;
 	}
 	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")

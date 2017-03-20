@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	 List<T> objList = null;
 	 try {
 	    session = sessionFactory.openSession();
-	    objList = session.createCriteria(type).list();
+	    objList = session.createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	 } catch (Exception e) {
 		 logger.error(e.getMessage());
 	 } finally {

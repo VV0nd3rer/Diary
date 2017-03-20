@@ -13,15 +13,14 @@
     <div class="container">
 	 <div class="row">
 	   	<div class="col-lg-8">
-	   		<h3 th:text="${post.title}"/>
+	   		<h4 th:text="${post.title}"/>
 	   		<p class="lead">
-			   by
-				<a href="#">Start Bootstrap</a>
+			   by <span  th:text="${post.user.username}">someone</span>
 			</p>
 			<hr>
 			<p>
-			<span class="glyphicon glyphicon-time"></span>
-				Posted on August 24, 2013 at 9:00 PM
+			<span class="glyphicon glyphicon-time" th:text="${post.post_datetime}">Posted on August 24, 2013 at 9:00 PM</span>
+				
 			</p>
 			<hr>
 			<img class="img-responsive" src="http://placehold.it/900x300" alt="">
@@ -49,15 +48,18 @@
                 <!-- Posted Comments -->
 
                 <!-- Comment -->
-                <div class="media">
+                <div class="media" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
                     <a class="pull-left" href="#">
                         <img class="media-object" src="http://placehold.it/64x64" alt="">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Start Bootstrap
-                            <small>August 25, 2014 at 9:30 PM</small>
+                        	
+                           <!--  <small>August 25, 2014 at 9:30 PM</small> -->
                         </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        <p th:text="${comment.comment_datetime}"/>
+                        <p th:text="${comment.user.username}"/>
+                        <p th:text="${comment.text}"/>
                     </div>
 				</div>
 			

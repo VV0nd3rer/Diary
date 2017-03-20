@@ -1,9 +1,11 @@
 package com.kverchi.diary.dao.impl;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,6 +22,26 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	
 	final static Logger logger = Logger.getLogger(PostDaoImpl.class);
 
+	@Override
+	public Post getById(Serializable id) {
+		Session session = null;
+		Post obj = null;
+		try {
+			session = sessionFactory.openSession();
+			obj = (Post) session.get(Post.class, id);
+			Hibernate.initialize(obj.getPost_comments());
+			Hibernate.initialize(obj.getUser());
+			
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null && session.isOpen()) {
+	               session.close();
+	           }
+		}
+		return obj;
+	}
+	
 	@Override
 	public List<Post> getSightPosts(int sight_id) {
 		Session session = null;
