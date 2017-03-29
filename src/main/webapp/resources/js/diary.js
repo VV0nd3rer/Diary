@@ -58,10 +58,7 @@ $(document).ready(function(){
 		var comment = new Object();
 		comment.text = text.val();
 		comment.post_id = post_id.val();
-		/*var data = {}
-		data["text"] = text.val();
-		data["post"]["post_id"] = post_id.val();
-		console.log(post_id.val());*/
+	
 		tips = $( ".validateTips" );
 	    var valid = false;
 	    valid = checkLength(text, "text", 2, 80); 
@@ -81,8 +78,9 @@ $(document).ready(function(){
 	     	   success: function(res){
 	     		   console.log(res.respCode);
 	     		   console.log(res.respMsg);
-	     		  if(res.respCode == 'OK') {   
-					   $("#comment-section").append("<div class='media-body'><p>"+res.responseObject.text+"</p></div>");
+	     		  if(res.respCode == 'OK') {  
+	     			   var comment_block = '<div class="row"><div class="col-sm-1"><div class="thumbnail"><img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></div></div><div class="col-sm-5"><div class="panel panel-default"><div class="panel-heading"><strong>' + res.responseObject.user.username + '</strong><p> commented <span class="text-muted">' + res.responseObject.comment_datetime + '</span></p></div><div class="panel-body">' + res.responseObject.text + '</div></div></div></div>'
+					   $("#comment-section").append(comment_block);
 					   $("#text").val('');
 				   }
 				   else /*if(res.respCode == 'PRECONDITION_FAILED')*/ {

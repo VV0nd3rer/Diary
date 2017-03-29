@@ -52,23 +52,51 @@
                 <!-- Posted Comments -->
 
                 <!-- Comment -->
-                <div class="media" id="comment-section" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
+               <!--  <div class="media" id="comment-section" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
                     <a class="pull-left" href="#">
-                       <!--  <img class="media-object" src="http://placehold.it/64x64" alt=""> -->
+                        <img class="media-object" src="http://placehold.it/64x64" alt="">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Start Bootstrap
                         	
-                           <!--  <small>August 25, 2014 at 9:30 PM</small> -->
+                            <small>August 25, 2014 at 9:30 PM</small>
                         </h4>
                         <p th:text="${comment.comment_datetime}"/>
                         <p th:text="${comment.user.username}"/>
                         <p th:text="${comment.text}"/>
                     </div>
+				</div> -->
+			 <div id="comment-section" >
+				<div class="row" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
+					<div class="col-sm-1">
+						<div class="thumbnail">
+							<img class="img-responsive user-photo"
+								src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+						</div>
+						<!-- /thumbnail -->
+					</div>
+					<!-- /col-sm-1 -->
+
+					<div class="col-sm-5">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong th:text="${comment.user.username}">myusername</strong>
+								<p>
+								  commented 
+								  <span class="text-muted" th:text="${comment.comment_datetime}">5 days ago</span>
+								</p>
+							</div>
+							<div class="panel-body" th:text="${comment.text}">Comment content</div>
+							<!-- /panel-body -->
+						</div>
+						<!-- /panel panel-default -->
+					</div>
+					<!-- /col-sm-5 -->
+
+
 				</div>
-			
-		</div>
-	 </div>
+			 </div>
+			</div>
 	</div>
   </body>
 </html>
