@@ -2,10 +2,12 @@ package com.kverchi.diary.domain;
 
 import org.springframework.http.HttpStatus;
 
-public class ServiceResponse {
+public class ServiceResponse<T> {
 	
 	private HttpStatus respCode;
 	private String respMsg;
+	private T responseObject;
+	
 	public ServiceResponse() {}
 	public ServiceResponse(HttpStatus code, String msg) {
 		this.respCode = code;
@@ -22,5 +24,11 @@ public class ServiceResponse {
 	}
 	public void setRespMsg(String respMsg) {
 		this.respMsg = respMsg;
+	}
+	public T getResponseObject() {
+		return responseObject;
+	}
+	public void setResponseObject(T responseObject) {
+		this.responseObject = responseObject;
 	}
 }

@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Table(name="comments")
@@ -26,6 +30,10 @@ public class Comment {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="user_id")
 	private User user;
+	/*@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="post_id")
+	private Post post;*/
+	private int post_id;
 	
 	public int getComment_id() {
 		return comment_id;
@@ -51,5 +59,12 @@ public class Comment {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public int getPost_id() {
+		return post_id;
+	}
+	public void setPost_id(int post_id) {
+		this.post_id = post_id;
+	}
+	
 	
 }

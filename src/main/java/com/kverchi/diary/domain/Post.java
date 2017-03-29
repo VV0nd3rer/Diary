@@ -17,6 +17,9 @@ import javax.persistence.Table;
 
 import org.hibernate.type.descriptor.java.ZonedDateTimeJavaDescriptor;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="posts")
 public class Post {

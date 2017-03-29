@@ -1,4 +1,105 @@
 $(document).ready(function(){
+	
+	//CKEDITOR.replace( 'editor1' );
+	
+	$("#create-post-ok-btn").click(function() {
+		event.preventDefault();
+		var postText = CKEDITOR.instances.editor1.getData();
+		alert(postText);
+		
+		var id = $("#id");
+		var title = $("#title");
+		var description = $ ("#description");
+		//var text = $("#editor1");
+		var data = {}
+		data["post_id"] = id.val();
+		data["title"] = title.val();
+		data["description"] = description.val();
+		data["text"] = postText;
+		
+		tips = $( ".validateTips" );
+		
+		var token = $("meta[name='_csrf']").attr("content");
+	 	var header = $("meta[name='_csrf_header']").attr("content");
+	 	$(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	 	
+	 	$.ajax({
+	     	   url:"add-post",
+	     	   type:"POST",
+	     	   data: JSON.stringify(data),
+	     	   contentType:"application/json; charset=utf-8",
+	     	   dataType:"json",
+	     	   success: function(res){
+	     		  console.log(res.respCode);
+				  console.log(res.respMsg);
+				  if(res.respCode == 'OK') {
+					  window.location.href = "../posts/list";
+				  }
+				  else /* if(res.respCode == 'PRECONDITION_FAILED') */{
+					   addErrMsg(res.respMsg);
+				  }
+	     	   },
+	     	   error : function(e) {
+	     		    console.log("Error: ", e);
+	    			display(e);
+	 	   		},
+	 	   		done : function(e) {
+	 	   			alert("DONE");
+	 	   		}
+	     	 });
+	});
+	$("#add-comment").click(function() {
+		event.preventDefault();
+		var post_id = $("#post-id");
+		console.log(post_id.val());
+		var text = $("#text");
+		var comment = new Object();
+		comment.text = text.val();
+		comment.post_id = post_id.val();
+		/*var data = {}
+		data["text"] = text.val();
+		data["post"]["post_id"] = post_id.val();
+		console.log(post_id.val());*/
+		tips = $( ".validateTips" );
+	    var valid = false;
+	    valid = checkLength(text, "text", 2, 80); 
+	    var token = $("meta[name='_csrf']").attr("content");
+ 	    var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+        
+        if(valid) {
+	        $.ajax({
+	     	   url:"../add-comment",
+	     	   type:"POST",
+	     	   data: JSON.stringify(comment/*data*/),
+	     	   contentType:"application/json; charset=utf-8",
+	     	   dataType:"json",
+	     	   success: function(res){
+	     		   console.log(res.respCode);
+	     		   console.log(res.respMsg);
+	     		  if(res.respCode == 'OK') {   
+					   $("#comment-section").append("<div class='media-body'><p>"+res.responseObject.text+"</p></div>");
+					   $("#text").val('');
+				   }
+				   else /*if(res.respCode == 'PRECONDITION_FAILED')*/ {
+					   addErrMsg(res.respMsg);
+				   } 		  		
+	     	   },
+	     	   error : function(e) {
+	     		    console.log("Error: ", e);
+	    			//display(e);
+	 	   		},
+	 	   		done : function(e) {
+	 	   			alert("DONE");
+	 	   		}
+	     	 });
+        }
+		
+	});
 	//Books page CRUD functionality
 	$("#add-book-btn").click(function(){
         $("#modal-form").modal();
@@ -65,7 +166,13 @@ $(document).ready(function(){
         valid = valid && checkLength( title, "title", 3, 16 );
         valid = valid && checkLength( description, "description", 3, 80 );
         valid = valid && checkLength( author, "author", 3, 80 );
-      
+        
+        var token = $("meta[name='_csrf']").attr("content");
+ 	    var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+        
         if(valid) {
 	        $.ajax({
 	     	   url:"add-book",
@@ -108,8 +215,8 @@ $(document).ready(function(){
    $("#register-ok-btn").click(function() {   	   	
 	   event.preventDefault();
 	   remErrMsg();
-	   var token = $("meta[name='_csrf']").attr("content");
-	   var header = $("meta[name='_csrf_header']").attr("content");
+	  /* var token = $("meta[name='_csrf']").attr("content");
+	   var header = $("meta[name='_csrf_header']").attr("content");*/
 	   
 	   var username = $("#username");
 	   var email = $("#email");
@@ -131,7 +238,7 @@ $(document).ready(function(){
 	   valid = valid && (password.val() == matchingPassword.val());
 	   
 	   var token = $("meta[name='_csrf']").attr("content");
-	    var header = $("meta[name='_csrf_header']").attr("content");
+	   var header = $("meta[name='_csrf_header']").attr("content");
 	    $(document).ajaxSend(function(e, xhr, options) {
 	        xhr.setRequestHeader(header, token);
 	    });

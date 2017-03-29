@@ -5,6 +5,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Books</title>
   </head>
 

@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +18,8 @@ import com.kverchi.diary.domain.Comment;
 import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
 import com.kverchi.diary.domain.Post;
+import com.kverchi.diary.domain.ServiceResponse;
+import com.kverchi.diary.service.CommentService;
 import com.kverchi.diary.service.CountryService;
 import com.kverchi.diary.service.PostService;
 
@@ -29,6 +30,8 @@ public class PostController {
 	String message = "Welcome";
 	@Autowired
 	PostService postService;
+	@Autowired 
+	CommentService commentService;
 	@Autowired
 	CountryService countryService;
 	/*@Autowired(required=true)
@@ -110,17 +113,16 @@ public class PostController {
 		return res;
 	}
 	@RequestMapping(value="/add-post", method = RequestMethod.POST)
-	public Post addPost(@RequestBody Post post) {
-		Post added_post;
+	public ServiceResponse addPost(@RequestBody Post post) {
+		ServiceResponse response = new ServiceResponse();
 		logger.debug("post ID: " + post.getPost_id());
 		if(post.getPost_id() == -1) {
-		   added_post = postService.addPost(post);
+			response = postService.addPost(post);
 		}
 		else {
-		   added_post = postService.updatePost(post);
+		   //added_post = postService.updatePost(post);
 		}
-		logger.debug("added post: " + added_post.getTitle());
-		return added_post;
+		return response;
 	}
 	
 	
@@ -131,4 +133,11 @@ public class PostController {
 		mv.addObject("post", new Post());
 		return mv;
 	}
+	@RequestMapping(value="/add-comment", method = RequestMethod.POST)
+	public ServiceResponse addComment(@RequestBody Comment comment) {
+		ServiceResponse response = new ServiceResponse<Comment>();
+		response = commentService.addComment(comment);
+		return response;
+	}
+	
 }

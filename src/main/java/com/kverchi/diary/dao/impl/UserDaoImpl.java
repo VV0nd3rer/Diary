@@ -27,6 +27,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	           
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return user;
 		} 
 		finally {
 			if (session != null && session.isOpen()) {
@@ -51,6 +52,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	           
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return user;
 		} 
 		finally {
 			if (session != null && session.isOpen()) {

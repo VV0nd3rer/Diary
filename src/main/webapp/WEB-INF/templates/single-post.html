@@ -6,6 +6,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Post</title>
   </head>
    <body>
@@ -23,7 +25,7 @@
 				
 			</p>
 			<hr>
-			<img class="img-responsive" src="http://placehold.it/900x300" alt="">
+			<!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
 			
 			<hr>
 			<!-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> -->
@@ -36,10 +38,12 @@
                 <div class="well" sec:authorize="isAuthenticated()">
                     <h4>Leave a Comment:</h4>
                     <form role="form">
+                        <p class="validateTips"></p>
                         <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
+                            <input type="hidden" th:value="${post.post_id}" id="post-id"/>
+                            <textarea class="form-control" id="text" rows="3" placeholder="Comment"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="add-comment">Add</button>
                     </form>
                 </div>
 
@@ -48,9 +52,9 @@
                 <!-- Posted Comments -->
 
                 <!-- Comment -->
-                <div class="media" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
+                <div class="media" id="comment-section" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
                     <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                       <!--  <img class="media-object" src="http://placehold.it/64x64" alt=""> -->
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Start Bootstrap
