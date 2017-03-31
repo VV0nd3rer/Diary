@@ -4,13 +4,17 @@ $(document).ready(function(){
 	
 	$("#create-post-ok-btn").click(function() {
 		event.preventDefault();
-		var postText = CKEDITOR.instances.editor1.getData();
-		alert(postText);
-		
+		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
+		/*alert(postText);
+		var postRawText = tinyMCE.get('editor1').getContent({format : 'raw'});
+		var postTrulyText = tinyMCE.get('editor1').getContent({format : 'text'});
+		alert(postRawText);
+		alert(postTrulyText);*/
+		console.log(postText);
+		console.log(postText.length);
 		var id = $("#id");
 		var title = $("#title");
 		var description = $ ("#description");
-		//var text = $("#editor1");
 		var data = {}
 		data["post_id"] = id.val();
 		data["title"] = title.val();
@@ -19,36 +23,43 @@ $(document).ready(function(){
 		
 		tips = $( ".validateTips" );
 		
+		var valid = false;
+	    valid = checkLength(title, "title", 2, 80); 
+		valid = valid && checkLength(description, "description", 2, 80);
+		valid = valid && checkLength(postText, "text", 5, 350);
+		console.log(valid);
 		var token = $("meta[name='_csrf']").attr("content");
 	 	var header = $("meta[name='_csrf_header']").attr("content");
 	 	$(document).ajaxSend(function(e, xhr, options) {
 	        xhr.setRequestHeader(header, token);
 	    });
+	 	if(valid) {
+	 		$.ajax({
+		     	   url:"add-post",
+		     	   type:"POST",
+		     	   data: JSON.stringify(data),
+		     	   contentType:"application/json; charset=utf-8",
+		     	   dataType:"json",
+		     	   success: function(res){
+		     		  console.log(res.respCode);
+					  console.log(res.respMsg);
+					  if(res.respCode == 'OK') {
+						  window.location.href = "../posts/list";
+					  }
+					  else /* if(res.respCode == 'PRECONDITION_FAILED') */{
+						   addErrMsg(res.respMsg);
+					  }
+		     	   },
+		     	   error : function(e) {
+		     		    console.log("Error: ", e);
+		    			display(e);
+		 	   		},
+		 	   		done : function(e) {
+		 	   			alert("DONE");
+		 	   		}
+		     	 });
+	 	}
 	 	
-	 	$.ajax({
-	     	   url:"add-post",
-	     	   type:"POST",
-	     	   data: JSON.stringify(data),
-	     	   contentType:"application/json; charset=utf-8",
-	     	   dataType:"json",
-	     	   success: function(res){
-	     		  console.log(res.respCode);
-				  console.log(res.respMsg);
-				  if(res.respCode == 'OK') {
-					  window.location.href = "../posts/list";
-				  }
-				  else /* if(res.respCode == 'PRECONDITION_FAILED') */{
-					   addErrMsg(res.respMsg);
-				  }
-	     	   },
-	     	   error : function(e) {
-	     		    console.log("Error: ", e);
-	    			display(e);
-	 	   		},
-	 	   		done : function(e) {
-	 	   			alert("DONE");
-	 	   		}
-	     	 });
 	});
 	$("#add-comment").click(function() {
 		event.preventDefault();
@@ -299,9 +310,8 @@ function remErrMsg() {
 	tips.empty();
 }
 
-
 function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
+    if ( o.val().length > max || o.val().length < min || o.length > max || o.length < min) {
       o.addClass( "alert alert-danger" );
       addErrMsg( "Length of " + n + " must be between " +
         min + " and " + max + "." );

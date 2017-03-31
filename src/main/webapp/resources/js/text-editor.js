@@ -1,3 +1,3 @@
 $(document).ready(function(){
-	CKEDITOR.replace( 'editor1' );
+	tinymce.init({ mode : "exact", elements : "editor1" });
 });

@@ -1,6 +1,7 @@
 package com.kverchi.diary.domain;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -52,6 +53,9 @@ public class Post {
 		this.post_id = post_id;
 	}
 	public ZonedDateTime getPost_datetime() {
+		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+		String text = post_datetime.format(formatter);
+		post_datetime = ZonedDateTime.parse(text, formatter);
 		return post_datetime;
 	}
 	public void setPost_datetime(ZonedDateTime post_datetime) {

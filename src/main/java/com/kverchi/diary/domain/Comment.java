@@ -1,6 +1,7 @@
 package com.kverchi.diary.domain;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +43,9 @@ public class Comment {
 		this.comment_id = comment_id;
 	}
 	public ZonedDateTime getComment_datetime() {
+		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+		String text = comment_datetime.format(formatter);
+		comment_datetime = ZonedDateTime.parse(text, formatter);
 		return comment_datetime;
 	}
 	public void setComment_datetime(ZonedDateTime comment_datetime) {

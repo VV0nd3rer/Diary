@@ -6,6 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+    <script src="../../../resources/js/text-editor.js" th:src="@{/resources/js/text-editor.js}"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
   	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Post</title>
@@ -29,7 +30,7 @@
 			
 			<hr>
 			<!-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> -->
-			<p th:text="${post.text}"/>
+			<div id="post-text" th:utext="${post.text}"></div>
 			<hr>
 			
 			<!-- Blog Comments -->
