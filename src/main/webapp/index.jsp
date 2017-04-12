@@ -16,7 +16,7 @@
 		<a href="media/list">Media</a>
 	  </li>
 	  <li>
-	    <a href="posts/map">Map</a>
+	    <a href="sights/map">Map</a>
 	  </li>
 	  <li>
 	    <a href="users/login">Login</a>

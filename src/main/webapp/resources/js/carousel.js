@@ -1,8 +1,12 @@
 $(document).ready(function(){ 
-$("#carousel").Cloud9Carousel( {
+	/*$("#carousel").Cloud9Carousel( {
 		  buttonLeft: $("#buttons > .left"),
 		  buttonRight: $("#buttons > .right"),
 		  autoPlay: 1,
 		  bringToFront: true
-		});
+		} );*/
+	
+	
+	$('#gallery').jqcarousel();
+	
 });

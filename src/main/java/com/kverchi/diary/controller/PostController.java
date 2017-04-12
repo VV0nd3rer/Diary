@@ -54,29 +54,6 @@ public class PostController {
 		return mv;
 	}
 	
-	@RequestMapping("/map")
-	public ModelAndView showTestBootstrapModal() {
-		ModelAndView mv = new ModelAndView("map");
-		return mv;
-	}
-	@RequestMapping("/country")
-	public ModelAndView country(@RequestParam("country_code") String code) {
-		Country country = countryService.getCountryById(code);
-		Set<CountriesSight> country_sights = country.getCountriesSight();
-		
-		ModelAndView mv = new ModelAndView("country");
-		mv.addObject("country", country);
-		mv.addObject("country_sights", country_sights);
-		return mv;
-	}
-	@RequestMapping("/sight_posts")
-	public ModelAndView showSightPosts(@RequestParam("sight_id") int sight_id) {
-		List<Post> sight_posts = null;
-		sight_posts = postService.getSightPosts(sight_id);
-		ModelAndView mv = new ModelAndView("posts");
-		mv.addObject("posts", sight_posts);
-		return mv;
-	}
 	@RequestMapping("/list")
 	public ModelAndView showPosts() {
 		List<Post> all_posts = postService.getAllPosts();
@@ -102,9 +79,11 @@ public class PostController {
 		return all_posts;
 	}
 	@RequestMapping("/edit/{post_id}")
-    public Post editPost(@PathVariable("post_id") int post_id, Model model){
+    public ModelAndView editPost(@PathVariable("post_id") int post_id, Model model){
        Post post = postService.getPostById(post_id);
-       return post;
+       ModelAndView mv = new ModelAndView("new-post");
+       mv.addObject("post", post);
+       return mv;
     }
 	@RequestMapping("/remove/{post_id}")
 	public String removePost(@PathVariable("post_id") int post_id) {
@@ -116,11 +95,11 @@ public class PostController {
 	public ServiceResponse addPost(@RequestBody Post post) {
 		ServiceResponse response = new ServiceResponse();
 		logger.debug("post ID: " + post.getPost_id());
-		if(post.getPost_id() == -1) {
+		if(post.getPost_id() == 0) {
 			response = postService.addPost(post);
 		}
 		else {
-		   //added_post = postService.updatePost(post);
+		   response = postService.updatePost(post);
 		}
 		return response;
 	}

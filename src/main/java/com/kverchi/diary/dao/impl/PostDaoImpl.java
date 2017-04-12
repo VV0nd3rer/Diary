@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -42,6 +43,28 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 		return obj;
 	}
 	
+	@Transactional
+	@Override
+	public List<Post> getAllRecords() {
+	 Session session = null;
+	 List<Post> objList = null;
+	 try {
+	    session = sessionFactory.openSession();
+	    objList = session.createCriteria(Post.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	    for(Post post : objList) {
+ 		   Hibernate.initialize(post.getPost_comments());
+ 		   Hibernate.initialize(post.getUser());
+ 	    }
+	 } catch (Exception e) {
+		 logger.error(e.getMessage());
+	 } finally {
+	    if (session != null && session.isOpen()) {
+	       session.close();
+	    }
+	 }
+	 return objList;
+	}
+
 	@Override
 	public List<Post> getSightPosts(int sight_id) {
 		Session session = null;
@@ -55,6 +78,10 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	    	   Query hQuery = session.createQuery(query);
 	    	   hQuery.setParameter("sight_id", sight_id);   
 	    	   sight_posts = hQuery.list();
+	    	   for(Post post : sight_posts) {
+	    		   Hibernate.initialize(post.getPost_comments());
+	    		   Hibernate.initialize(post.getUser());
+	    	   }
 	    	   
 		}
 		catch (Exception e) {

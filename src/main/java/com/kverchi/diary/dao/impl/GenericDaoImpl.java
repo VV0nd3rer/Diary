@@ -70,16 +70,17 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	}
 	@Transactional
 	@Override
-	public void update(T t) {
+	public boolean update(T t) {
 		Session session = null;	
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.update(t);
 			session.getTransaction().commit();
+			return true;
 		} catch(Exception e) {
 			logger.error(e.getMessage());
-			
+			return false;
 		} finally {
 			if (session != null && session.isOpen()) {
 	               session.close();

@@ -1,5 +1,6 @@
 package com.kverchi.diary.service.impl;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -76,10 +77,32 @@ public class PostServiceImpl implements PostService {
 		return response;
 	}
 
-	public Post updatePost(Post post) {
-		postDao.update(post);
-		Post updated_post = postDao.getById(post.getPost_id());
-		return updated_post;
+	public ServiceResponse updatePost(Post post) {
+		ServiceResponse response = 
+				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
+		//TODO 
+		//Here is lazy load:
+		//List of posts - no user loaded
+		//Single post - user loaded
+		//How is it better to develop this thing?
+		Post postNeedToUpd = postDao.getById(post.getPost_id());
+		postNeedToUpd.setTitle(post.getTitle());
+		postNeedToUpd.setDescription(post.getDescription());
+		postNeedToUpd.setText(post.getText());
+		postNeedToUpd.setPost_datetime(ZonedDateTime.now());
+		
+		boolean isPostUpdated = postDao.update(postNeedToUpd);
+		if(isPostUpdated) {
+			Post updated_post = postDao.getById(post.getPost_id());
+			response.setRespCode(HttpStatus.OK);
+			response.setRespMsg(ServiceMessageResponse.OK.toString());
+			return response;
+		}
+		else {
+			response.setRespCode(HttpStatus.INTERNAL_SERVER_ERROR);
+			response.setRespMsg(ServiceMessageResponse.TRANSACTION_PROBLEM.toString());
+			return response;
+		}
 	}
 	
 	public void deletePost(int post_id) {

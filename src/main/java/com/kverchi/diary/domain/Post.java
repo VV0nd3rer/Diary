@@ -33,10 +33,10 @@ public class Post {
 	private String description;
 	private String text;
 	private Integer sight_id;
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name="user_id")
 	private User user;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JoinColumn(name="post_id")
 	private Set<Comment> post_comments;
 	

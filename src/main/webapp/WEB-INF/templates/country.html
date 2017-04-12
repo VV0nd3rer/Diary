@@ -4,74 +4,38 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   
     
-    <link href="../../../resources/carousel/sights_common.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_common.css}"/>
-	<link href="../../../resources/carousel/sights_special.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_special.css}"/>
+   <!--  <link href="../../../resources/carousel/sights_common.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_common.css}"/>
+	<link href="../../../resources/carousel/sights_special.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_special.css}"/> -->
+	
 	<object th:include="include-res::links" th:remove="tag"/>
-	<script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script>
-    <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script>
+	<!-- For  jqcarousel.js -->
+	<script src="../../../resources/jquery-ui/jquery-ui.js" th:src="@{/resources/jquery-ui/jquery-ui.js}"></script>
+	<script src="../../../resources/jqcarousel/src/jqcarousel.js" th:src="@{/resources/jqcarousel/src/jqcarousel.js}"></script>
+	<!-- end  for jqcarousel.js -->
+	
+	<!-- <script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script> -->
+    <!-- <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script> -->
 	<script src="../../../resources/js/carousel.js" th:src="@{/resources/js/carousel.js}"></script>
     <title th:text="${country.country_name}"></title>
   </head>
-  <!-- <head th:include="include-res::links">
-  </head> -->
+  
   <body>
-    <style>
-	  	#carousel .cloud9-item, #buttons button {
-		  cursor: pointer;
-		  position: fixed !important;
-		}
-		
-  	</style>
+ 
     <div th:replace="header :: header">&nbsp;</div>
     
-    <div>
-    <p>hello</p>
-    <h4>Hello world</h4>
-    <div class="wrap">
-	    <h1>Which browser is your favorite?</h1>
-	    <div id="carousel" class="noselect">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Firefox">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Wyzo">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Opera">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Chrome">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Internet Explorer">
-	      <img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Safari">
+    <div class="container" th:if="${not #lists.isEmpty(country_sights)}">
+    
+    	<p> hello </p>
+	    <div id="gallery">
+	     <div th:each="sight: ${country_sights}">
+	        <h3 th:text="${sight.sight_label}"></h3>
+	     	<img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Prague">
+	     	<p th:text="${sight.country_code}"></p>
+			<p th:if="${not #lists.isEmpty(sight.sight_description)}" th:text="${sight.sight_description}"></p>
+			<p class="row_action"><a href="#" th:text="Open"></a></p>
+	     </div>
 	    </div>
-		<div id="buttons">
-		  <button class="left">
-		    ←
-		  </button>
-		  <button class="right">
-		    →
-		  </button>
-		</div>
-  	</div>
-	 <div class="container" th:if="${not #lists.isEmpty(country_sights)}">
-     
-     <div class="blog-header">
-   		<p class="lead blog-description">Posts</p>
-   	  </div>
-   	  <p>This is example of table with data </p>
-      <table id="crud-tbl" class="table table-striped">
-			<thead>
-				<tr>
-					<th width="80">Post ID</th>
-					<th width="120">Title</th>
-					<th width="120">Text</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="clickable-row" th:each="sight: ${country_sights}">
-					<td id="id" th:text="${sight.sight_id}"></td>
-					<td th:text="${sight.sight_label}"></td>
-					<td th:text="${sight.country_code}"></td>
-					<td th:if="${not #lists.isEmpty(sight.sight_description)}" th:text="${sight.sight_description}"></td>
-					<td class="row_action"><a href="#" th:text="Open"></a></td>
-					
-				</tr>
-			</tbody>
-		</table>
-	  </div>
+	    
     </div>
     
     <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>

@@ -32,9 +32,9 @@ public class CountriesSight implements Serializable {
 	@Column(name="description")
 	private String sight_description;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="sight_id")
-	Set<Post> sight_posts;
+	Set<Post> sight_posts;*/
 	
 	public int getSight_id() {
 		return sight_id;
@@ -66,12 +66,12 @@ public class CountriesSight implements Serializable {
 	public void setSight_description(String sight_description) {
 		this.sight_description = sight_description;
 	}
-	public Set<Post> getSight_posts() {
+	/*public Set<Post> getSight_posts() {
 		return sight_posts;
 	}
 	public void setSight_posts(Set<Post> sight_posts) {
 		this.sight_posts = sight_posts;
-	}
+	}*/
 	/*@Override
 	public boolean equals(Object obj) {
 		if(obj == this)

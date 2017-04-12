@@ -31,6 +31,7 @@ public class BookController {
 		Book book = bookService.getBookById(book_id);
 		return book;
 	}
+	//TODO return ServiceResponse
 	@RequestMapping("/remove/{book_id}")
 	public String removeBook(@PathVariable("book_id") int book_id) {
 		bookService.deleteBook(book_id);

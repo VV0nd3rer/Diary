@@ -40,7 +40,11 @@
 		
 		<div class="blog-post" th:each="post: ${posts}">
 		  <h2 class="blog-post-title" th:text="${post.title}"></h2>
+		  <p class="lead">
+			   by <span  th:text="${post.user.username}">someone</span>
+		  </p>
 		  <p class="blog-post-meta" th:text="${post.post_id}"></p>
+		 
 		  <blockquote>
 		  	<p th:text="${post.description}"></p>
 		  </blockquote>
