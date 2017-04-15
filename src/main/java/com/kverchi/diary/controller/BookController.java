@@ -41,7 +41,7 @@ public class BookController {
 	@RequestMapping(value="/add-book", method = RequestMethod.POST)
 	public Book addBook(@RequestBody Book book) {
 		Book addedBook;
-		if(book.getBook_id() == -1) {
+		if(book.getBook_id() == 0) {
 			addedBook = bookService.addBook(book);
 		}
 		else {

@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 public interface GenericDao<T> {
-	Serializable create(final T t);
+	//Serializable create(final T t);
+	T persist(T t);
     T getById(final Serializable id);
     boolean update(final T t);   
     void delete(final T t);

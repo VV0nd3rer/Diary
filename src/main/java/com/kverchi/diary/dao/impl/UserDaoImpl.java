@@ -1,7 +1,9 @@
 package com.kverchi.diary.dao.impl;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
+import javax.persistence.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -14,24 +16,23 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	
 	@Override
 	public User getUserByUsername(String username) {
-		Session session = null;
+		EntityManager entityManager = null; 
 		User user = null;
 		try { 
-	    	   session = sessionFactory.openSession();
-	    	   String query = " FROM User u WHERE u.username = :username";
-	    	   Query hQuery = session.createQuery(query);
-	    	   hQuery.setParameter("username", username);   
-	    	   if(hQuery.list().size() > 0) {
-	    		   user = (User)hQuery.list().get(0);
-	    	   }
-	           
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String str_query = " FROM User u WHERE u.username = :username";
+			Query query = entityManager.createQuery(str_query);
+			query.setParameter("username", username);   
+			user = (User)query.getSingleResult();
+	    	entityManager.getTransaction().commit();   
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return user;
 		} 
 		finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
 			}
 		}
 		return user;
@@ -39,24 +40,23 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 
 	@Override
 	public User getUserByEmail(String email) {
-		Session session = null;
+		EntityManager entityManager = null; 
 		User user = null;
 		try { 
-	    	   session = sessionFactory.openSession();
-	    	   String query = " FROM User u WHERE u.email = :email";
-	    	   Query hQuery = session.createQuery(query);
-	    	   hQuery.setParameter("email", email);   
-	    	   if(hQuery.list().size() > 0) {
-	    		   user = (User)hQuery.list().get(0);
-	    	   }
-	           
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String str_query = " FROM User u WHERE u.email = :email";
+			Query query = entityManager.createQuery(str_query);
+			query.setParameter("email", email);   
+			user = (User)query.getSingleResult();
+	    	entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return user;
 		} 
 		finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
 			}
 		}
 		return user;

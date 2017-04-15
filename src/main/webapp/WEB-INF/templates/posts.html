@@ -11,7 +11,7 @@
 
   <body>
     <div th:replace="header :: header">&nbsp;</div>
-    <div class="container" th:if="${not #lists.isEmpty(posts)}">
+    <div class="container" th:if="${not #lists.isEmpty(posts) and posts != null}">
      
      <div class="blog-header">
    		<p class="lead blog-description">Posts</p>

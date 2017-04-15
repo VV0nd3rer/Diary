@@ -49,14 +49,15 @@ public class CommentServiceImpl implements CommentService {
 		}
 		comment.setUser(loggedInUser);
 		
-		int added_id = (Integer)commentDao.create(comment);
-		if(added_id == 0) {
+		//int added_id = (Integer)commentDao.create(comment);
+		Comment addedComment = (Comment)commentDao.persist(comment);
+		if(addedComment == null) {
 			logger.debug("Transaction problem.");
 			response.setRespCode(HttpStatus.INTERNAL_SERVER_ERROR);
 			response.setRespMsg(ServiceMessageResponse.TRANSACTION_PROBLEM.toString());
 			return response;
 		}
-		Comment addedComment = commentDao.getById(added_id);
+		//Comment addedComment = commentDao.getById(added_id);
 		response.setRespCode(HttpStatus.OK);
 		response.setRespMsg(ServiceMessageResponse.OK.toString());
 		response.setResponseObject(addedComment);

@@ -89,8 +89,9 @@ $(document).ready(function(){
 	     		   console.log(res.respCode);
 	     		   console.log(res.respMsg);
 	     		  if(res.respCode == 'OK') {  
-	     			   var comment_block = '<div class="row"><div class="col-sm-1"><div class="thumbnail"><img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></div></div><div class="col-sm-5"><div class="panel panel-default"><div class="panel-heading"><strong>' + res.responseObject.user.username + '</strong><p> commented <span class="text-muted">' + res.responseObject.comment_datetime + '</span></p></div><div class="panel-body">' + res.responseObject.text + '</div></div></div></div>'
-					   $("#comment-section").append(comment_block);
+	     			   var comment_block = '<div class="row"><div class="col-sm-1"><div class="thumbnail"><img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></div></div><div class="col-sm-5"><div class="panel panel-default"><div class="panel-heading"><strong>' + res.responseObject.user.username + '</strong><p> commented <span class="text-muted">just now</span></p></div><div class="panel-body">' + res.responseObject.text + '</div></div></div></div>'
+					   console.log("comment date: " + res.responseObject.comment_datetime);
+	     			   $("#comment-section").append(comment_block);
 					   $("#text").val('');
 				   }
 				   else /*if(res.respCode == 'PRECONDITION_FAILED')*/ {
@@ -106,8 +107,8 @@ $(document).ready(function(){
 	 	   		}
 	     	 });
         }
-		
 	});
+	
 	//Books page CRUD functionality
 	$("#add-book-btn").click(function(){
         $("#modal-form").modal();
@@ -207,7 +208,7 @@ $(document).ready(function(){
         
         tips = $( ".validateTips" );
         var valid = true;
-        valid = valid && checkLength( title, "title", 3, 16 );
+        valid = valid && checkLength( title, "title", 3, 30 );
         valid = valid && checkLength( description, "description", 3, 80 );
         valid = valid && checkLength( author, "author", 3, 80 );
         
@@ -226,15 +227,14 @@ $(document).ready(function(){
 	     	   contentType:"application/json; charset=utf-8",
 	     	   dataType:"json",
 	     	   success: function(obj){
-	     		    hideModalDialog();
-	     		   if(id != -1) {   
+	     		   hideModalDialog();
+	     		   if(id != 0) {   
 	     		        $("#crud-tbl tr:contains('" + obj.book_id + "')").remove();  		    
 	     		    }
 	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.book_id+"</td><td>"+obj.book_title+"</td><td>"+obj.author+"</td></tr>");  		  		
 	     	   },
 	     	   error : function(e) {
 	     		    console.log("Error: ", e);
-	    			display(e);
 	 	   		},
 	 	   		done : function(e) {
 	 	   			alert("DONE");
@@ -279,7 +279,7 @@ $(document).ready(function(){
 	     	   dataType:"json",
 	     	   success: function(obj){
 	     		    hideModalDialog();
-	     		   if(id != -1) {   
+	     		   if(id != 0) {   
 	     		        $("#crud-tbl tr:contains('" + obj.sight_id + "')").remove();  		    
 	     		    }
 	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.sight_id+"</td><td>"+obj.country_code+"</td><td>"+obj.sight_label+"</td><td>"+obj.sight_description+"</td></tr>");  		  		
@@ -382,7 +382,7 @@ function hideModalDialog() {
     .val('')
     .removeAttr('checked')
     .removeAttr('selected');
-	$(':input[type=hidden]','#modal-form').val('-1');
+	$(':input[type=hidden]','#modal-form').val('0');
 }
 function addErrMsg( t ) {
     tips

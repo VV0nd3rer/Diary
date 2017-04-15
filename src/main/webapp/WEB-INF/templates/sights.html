@@ -47,7 +47,7 @@
 			          <!-- Form Name -->
 			          <legend>Sight details</legend>
 					  <p class="validateTips">All form fields are required.</p> 
-					  <input type="hidden" name="sight_id" value="-1" id="sight_id">
+					  <input type="hidden" name="sight_id" value="0" id="sight_id">
 			          <!-- Text input-->
 			          <div class="form-group">
 			            <label class="col-sm-2 control-label" for="textinput">Title</label>
@@ -90,7 +90,7 @@
 		</div><!-- /.modal fade -->
         <!-- End of modal form -->
      <input id="add-sight-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
-     <div th:if="${not #lists.isEmpty(country_sights)}">
+     <div th:if="${not #lists.isEmpty(country_sights) and country_sights != null}">
       <div class="blog-header">
    		<p class="lead blog-description">Counry sights</p>
    	  </div>

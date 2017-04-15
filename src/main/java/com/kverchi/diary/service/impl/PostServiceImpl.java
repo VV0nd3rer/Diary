@@ -64,9 +64,10 @@ public class PostServiceImpl implements PostService {
 		}
 		post.setUser(loggedInUser);
 		
-		int added_id = (Integer)postDao.create(post);
+		//int added_id = (Integer)postDao.create(post);
+		Post added_post = (Post)postDao.persist(post);
 		//Post added_post = postDao.getById(added_id);
-		if(added_id == 0) {
+		if(added_post == null) {
 			logger.debug("Transaction problem.");
 			response.setRespCode(HttpStatus.INTERNAL_SERVER_ERROR);
 			response.setRespMsg(ServiceMessageResponse.TRANSACTION_PROBLEM.toString());
@@ -89,7 +90,6 @@ public class PostServiceImpl implements PostService {
 		postNeedToUpd.setTitle(post.getTitle());
 		postNeedToUpd.setDescription(post.getDescription());
 		postNeedToUpd.setText(post.getText());
-		postNeedToUpd.setPost_datetime(ZonedDateTime.now());
 		
 		boolean isPostUpdated = postDao.update(postNeedToUpd);
 		if(isPostUpdated) {

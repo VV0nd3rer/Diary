@@ -32,8 +32,9 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 
 	@Override
 	public CountriesSight addSight(CountriesSight sight) {
-		int addedId = (Integer)countriesSightDao.create(sight);
-		CountriesSight addedSight = countriesSightDao.getById(addedId);
+		/*int addedId = (Integer)countriesSightDao.create(sight);
+		CountriesSight addedSight = countriesSightDao.getById(addedId);*/
+		CountriesSight addedSight = (CountriesSight)countriesSightDao.persist(sight);
 		return addedSight;
 	}
 

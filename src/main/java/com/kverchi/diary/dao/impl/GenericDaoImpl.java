@@ -4,6 +4,14 @@ import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -18,109 +26,138 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	final static Logger logger = Logger.getLogger(GenericDaoImpl.class);
 	
 	@Autowired
-	protected SessionFactory sessionFactory;
+	protected EntityManagerFactory entityManagerFactory;
 	
 	private Class<T> type;
     
-	   
 	@SuppressWarnings("unchecked")
 	public GenericDaoImpl() {
         Type t = getClass().getGenericSuperclass();
         ParameterizedType pt = (ParameterizedType) t;
         type = (Class<T>) pt.getActualTypeArguments()[0];
     }
-	@Transactional
+		
+	/*@Transactional
 	@Override
 	public Serializable create(T t) {
-		Session session = null;
-		//Transaction tx = null;
+		EntityManager entityManager = null; 
 		Serializable id = 0;
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			//tx = session.beginTransaction();
-			id = session.save(t);
-		    //tx.commit();
-			session.getTransaction().commit();
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.persist(t);
+			entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return id;
 		} finally {
-			if (session != null && session.isOpen()) {
-	               session.close();
-	           }
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
 		}
 		return id;
+	}*/
+	@Transactional
+	@Override
+	public T persist(T t) {
+		EntityManager entityManager = null; 
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.persist(t);
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		} finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return t;
 	}
 	@Transactional
 	@Override
 	public T getById(Serializable id) {
-		Session session = null;
+		EntityManager entityManager = null; 
 		T obj = null;
 		try {
-			session = sessionFactory.openSession();
-			obj = (T) session.get(type,id);
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			obj = (T) entityManager.find(type, id);
+			entityManager.getTransaction().commit();
 		} catch(Exception e) {
 			logger.error(e.getMessage());
+			return obj;
 		} finally {
-			if (session != null && session.isOpen()) {
-	               session.close();
-	           }
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+	        }
 		}
 		return obj;
 	}
+	
 	@Transactional
 	@Override
 	public boolean update(T t) {
-		Session session = null;	
+		EntityManager entityManager = null; 
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.update(t);
-			session.getTransaction().commit();
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.merge(t);
+			entityManager.getTransaction().commit();
 			return true;
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			return false;
 		} finally {
-			if (session != null && session.isOpen()) {
-	               session.close();
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
 	           }
 		}
 	}
 	@Transactional
 	@Override
 	public void delete(T t) {
-		Session session = null;
-		
+		EntityManager entityManager = null; 
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.delete(t);
-			session.getTransaction().commit();
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.remove(entityManager.merge(t));
+			entityManager.getTransaction().commit();
 			
 		} catch(Exception e) {
 			logger.error(e.getMessage());	
+			return;
 		} finally {
-			if (session != null && session.isOpen()) {
-	               session.close();
-	        }
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+	           }
 		}
 		
 	}
 	@Transactional
 	@Override
 	public List<T> getAllRecords() {
-	 Session session = null;
+	 EntityManager entityManager = null; 
 	 List<T> objList = null;
 	 try {
-	    session = sessionFactory.openSession();
-	    objList = session.createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		 entityManager = entityManagerFactory.createEntityManager();
+		 entityManager.getTransaction().begin();
+		 CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		 CriteriaQuery<T> criteriaQuery = builder.createQuery(type);
+	     Root<T> obj = criteriaQuery.from(type);
+	     criteriaQuery.select(obj);
+	     TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
+	     objList = query.getResultList();
+	     entityManager.getTransaction().commit();
 	 } catch (Exception e) {
 		 logger.error(e.getMessage());
+		 return objList;
 	 } finally {
-	    if (session != null && session.isOpen()) {
-	       session.close();
-	    }
+		 if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+	     }
 	 }
 	 return objList;
 	}

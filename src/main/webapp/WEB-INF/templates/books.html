@@ -13,7 +13,7 @@
   <body>
     <div th:replace="header :: header">&nbsp;</div>
      
-     <div class="container" th:if="${not #lists.isEmpty(all_books)}">
+     <div class="container" th:if="${not #lists.isEmpty(all_books) and all_books != null}">
       
       <!-- Modal dialog -->
       <div class="modal fade" id="modal-dialog" role="dialog">
@@ -47,7 +47,7 @@
 			          <!-- Form Name -->
 			          <legend>Book Details</legend>
 					  <p class="validateTips">All form fields are required.</p> 
-					  <input type="hidden" name="id" value="-1" id="id">
+					  <input type="hidden" name="id" value="0" id="id">
 			          <!-- Text input-->
 			          <div class="form-group">
 			            <label class="col-sm-2 control-label" for="textinput">Title</label>
@@ -58,7 +58,7 @@
 			
 					  <!-- Text input-->
 			          <div class="form-group">
-			            <label class="col-sm-2 control-label" for="textinput">Text</label>
+			            <label class="col-sm-2 control-label" for="textinput">Author</label>
 			            <div class="col-sm-10">
 			              <input type="text" id="author" placeholder="Author" class="form-control">
 			            </div>

@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.type.descriptor.java.ZonedDateTimeJavaDescriptor;
@@ -60,6 +62,11 @@ public class Post {
 	}
 	public void setPost_datetime(ZonedDateTime post_datetime) {
 		this.post_datetime = post_datetime;
+	}
+	@PrePersist
+	@PreUpdate
+	public void setPost_datetime() {
+		this.post_datetime = ZonedDateTime.now();
 	}
 	public String getTitle() {
 		return title;

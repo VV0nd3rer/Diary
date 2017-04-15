@@ -70,7 +70,7 @@
                     </div>
 				</div> -->
 			 <div id="comment-section" >
-				<div class="row" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
+				<div class="row" th:if="${not #lists.isEmpty(comments) and comments != null}" th:each="comment: ${comments}">
 					<div class="col-sm-1">
 						<div class="thumbnail">
 							<img class="img-responsive user-photo"
@@ -86,7 +86,7 @@
 								<strong th:text="${comment.user.username}">myusername</strong>
 								<p>
 								  commented 
-								  <span class="text-muted" th:text="${comment.comment_datetime}">5 days ago</span>
+								  <span class="text-muted" id="comment_date" th:text="${comment.comment_datetime}">5 days ago</span>
 								</p>
 							</div>
 							<div class="panel-body" th:text="${comment.text}">Comment content</div>

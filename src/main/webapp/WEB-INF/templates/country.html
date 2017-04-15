@@ -23,7 +23,7 @@
  
     <div th:replace="header :: header">&nbsp;</div>
     
-    <div class="container" th:if="${not #lists.isEmpty(country_sights)}">
+    <div class="container" th:if="${not #lists.isEmpty(country_sights) and country_sights != null}">
     
     	<p> hello </p>
 	    <div id="gallery">

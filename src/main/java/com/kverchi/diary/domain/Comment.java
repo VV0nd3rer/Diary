@@ -11,7 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -28,7 +31,7 @@ public class Comment {
 	@Column(name="comment_datetime")
 	private ZonedDateTime comment_datetime;
 	private String text;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
 	/*@ManyToOne(cascade=CascadeType.ALL)
@@ -48,8 +51,13 @@ public class Comment {
 		comment_datetime = ZonedDateTime.parse(text, formatter);
 		return comment_datetime;
 	}
+	
 	public void setComment_datetime(ZonedDateTime comment_datetime) {
 		this.comment_datetime = comment_datetime;
+	}
+	@PrePersist
+	public void setComment_datetime() {
+		this.comment_datetime = ZonedDateTime.now();
 	}
 	public String getText() {
 		return text;

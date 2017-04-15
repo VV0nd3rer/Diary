@@ -4,10 +4,16 @@ package com.kverchi.diary.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +31,22 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 
 	@Override
 	public Post getById(Serializable id) {
-		Session session = null;
+		EntityManager entityManager = null; 
 		Post obj = null;
 		try {
-			session = sessionFactory.openSession();
-			obj = (Post) session.get(Post.class, id);
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			obj = (Post) entityManager.find(Post.class, id);
 			Hibernate.initialize(obj.getPost_comments());
 			Hibernate.initialize(obj.getUser());
-			
+			entityManager.getTransaction().commit();
 		} catch(Exception e) {
 			logger.error(e.getMessage());
+			return obj;
 		} finally {
-			if (session != null && session.isOpen()) {
-	               session.close();
-	           }
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+	        }
 		}
 		return obj;
 	}
@@ -46,56 +54,62 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	@Transactional
 	@Override
 	public List<Post> getAllRecords() {
-	 Session session = null;
+	 EntityManager entityManager = null; 
 	 List<Post> objList = null;
 	 try {
-	    session = sessionFactory.openSession();
-	    objList = session.createCriteria(Post.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+	    
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
+		Root<Post> obj = criteriaQuery.from(Post.class);
+		criteriaQuery.select(obj);
+		TypedQuery<Post> query = entityManager.createQuery(criteriaQuery);
+	    objList = query.getResultList();
+		
 	    for(Post post : objList) {
  		   Hibernate.initialize(post.getPost_comments());
  		   Hibernate.initialize(post.getUser());
  	    }
+	    entityManager.getTransaction().commit();
 	 } catch (Exception e) {
-		 logger.error(e.getMessage());
+		 //logger.error(e.getMessage());
+		 return objList;
 	 } finally {
-	    if (session != null && session.isOpen()) {
-	       session.close();
-	    }
+		 if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+	     }
 	 }
 	 return objList;
 	}
 
 	@Override
 	public List<Post> getSightPosts(int sight_id) {
-		Session session = null;
+		EntityManager entityManager = null; 
 		List<Post> sight_posts = null;
 		try { 
-	    	   session = sessionFactory.openSession();
-	    	   /* String query = "select Country.country_code, Country.country_name, CountriesSight.sight_label, CountriesSight.sight_description "
-	    	   + "from Country, CountriesSight"
-	    	   + "where  Country.country_code=CountriesSight.country_code and Country.country_code = :code";*/
-	    	   String query = " FROM Post p WHERE p.sight_id = :sight_id";
-	    	   Query hQuery = session.createQuery(query);
-	    	   hQuery.setParameter("sight_id", sight_id);   
-	    	   sight_posts = hQuery.list();
-	    	   for(Post post : sight_posts) {
-	    		   Hibernate.initialize(post.getPost_comments());
-	    		   Hibernate.initialize(post.getUser());
-	    	   }
-	    	   
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+	    	String str_query = " FROM Post p WHERE p.sight_id = :sight_id";
+	    	Query query = entityManager.createQuery(str_query);
+	    	query.setParameter("sight_id", sight_id);   
+	    	sight_posts = query.getResultList();
+
+	    	for(Post post : sight_posts) {
+	    		Hibernate.initialize(post.getPost_comments());
+	    		Hibernate.initialize(post.getUser());
+	    	}
+	    	entityManager.getTransaction().commit();
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
+			return sight_posts;
 		} 
 		finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
 			}
 		}
 		return sight_posts;
 	}
-	
-	
-	
-
 }

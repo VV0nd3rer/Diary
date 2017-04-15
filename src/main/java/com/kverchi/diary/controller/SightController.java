@@ -82,7 +82,7 @@ public class SightController {
 	@RequestMapping(value="/add-sight", method = RequestMethod.POST)
 	public CountriesSight addSight(@RequestBody CountriesSight sight) {
 		CountriesSight addedSight;
-		if(sight.getSight_id() == -1) {
+		if(sight.getSight_id() == 0) {
 			addedSight = countriesSightService.addSight(sight);
 		}
 		else {

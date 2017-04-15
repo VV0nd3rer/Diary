@@ -96,19 +96,18 @@ public class UserServiceImpl implements UserService {
 			newAccount.setEmail(user.getEmail());
 			newAccount.setRoles(Arrays.asList(roleDao.getByName("ROLE_USER")));
 			newAccount.setEnabled(false);
-			int res = (Integer)userDao.create(newAccount);
-			logger.debug("'Create' method returned ID: " + res);
-			if(res != 0) {
-				response.setRespCode(HttpStatus.OK);
-				response.setRespMsg(ServiceMessageResponse.OK.toString());
-				return response;
-			}
-			else  {
+			//int res = (Integer)userDao.create(newAccount);
+			User added_user = (User)userDao.persist(newAccount);
+			if(added_user == null) {
 				response.setRespCode(HttpStatus.INTERNAL_SERVER_ERROR);
 				response.setRespMsg(ServiceMessageResponse.TRANSACTION_PROBLEM.toString());
 				return response;
 			}
-				
+			else  {
+				response.setRespCode(HttpStatus.OK);
+				response.setRespMsg(ServiceMessageResponse.OK.toString());
+				return response;
+			}
 		}
 		else {
 			response.setRespCode(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -129,7 +128,8 @@ public class UserServiceImpl implements UserService {
 		passChangeReq.setUUID(token);
 		passChangeReq.setUserId(user.getUserId());
 		passChangeReq.setCreatedTime(new Date());
-		String id = (String)passwordChangeRequestDao.create(passChangeReq);
+		//String id = (String)passwordChangeRequestDao.create(passChangeReq);
+		passwordChangeRequestDao.persist(passChangeReq);
 		//if(id > 0 /*id == token*/) {
 			String emailText = "Reset pass link is http://localhost:8080/Diary/users/change-password/"+token;
 			/*sendEmail*/emailService.sendEmailFromAdmin(user.getEmail(), emailText);
