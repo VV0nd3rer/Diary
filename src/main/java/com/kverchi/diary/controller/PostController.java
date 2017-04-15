@@ -20,6 +20,7 @@ import com.kverchi.diary.domain.Country;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.service.CommentService;
+import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.CountryService;
 import com.kverchi.diary.service.PostService;
 
@@ -34,6 +35,9 @@ public class PostController {
 	CommentService commentService;
 	@Autowired
 	CountryService countryService;
+	@Autowired
+	CountriesSightService countriesSightService;
+	
 	/*@Autowired(required=true)
 	@Qualifier(value="postService")
 	public void setPostService(PostService postService) {
@@ -67,8 +71,9 @@ public class PostController {
 		ModelAndView mv = new ModelAndView("single-post");
 		Post post = postService.getPostById(post_id);
 		Set<Comment> comments = post.getPost_comments();
-		
+		CountriesSight sight = post.getSight();
 		mv.addObject("post", post);
+		mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
 		
 		return mv;
@@ -81,8 +86,13 @@ public class PostController {
 	@RequestMapping("/edit/{post_id}")
     public ModelAndView editPost(@PathVariable("post_id") int post_id, Model model){
        Post post = postService.getPostById(post_id);
+       List<CountriesSight> sightList = null;
+       if(post.getSight() != null) {
+    	  sightList = countriesSightService.getCountrySights(post.getSight().getCountry_code());
+       }
        ModelAndView mv = new ModelAndView("new-post");
        mv.addObject("post", post);
+       mv.addObject("sightList", sightList);
        return mv;
     }
 	@RequestMapping("/remove/{post_id}")
@@ -95,6 +105,7 @@ public class PostController {
 	public ServiceResponse addPost(@RequestBody Post post) {
 		ServiceResponse response = new ServiceResponse();
 		logger.debug("post ID: " + post.getPost_id());
+		logger.debug("sight ID: " + post.getSight().getSight_id());
 		if(post.getPost_id() == 0) {
 			response = postService.addPost(post);
 		}

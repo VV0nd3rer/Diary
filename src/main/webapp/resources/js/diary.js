@@ -9,15 +9,18 @@ $(document).ready(function(){
 		alert(postRawText);
 		alert(postTrulyText);*/
 		var id = $("#id");
+		var sight_id = $("#sight").find(":selected");
 		var title = $("#title");
 		var description = $ ("#description");
 		console.log("id: " + id.val());
 		var data = {}
+		var sight = {}
+		sight["sight_id"] = sight_id.val();
 		data["post_id"] = id.val();
 		data["title"] = title.val();
 		data["description"] = description.val();
 		data["text"] = postText;
-		
+		data["sight"] = sight;
 		tips = $( ".validateTips" );
 		
 		var valid = false;

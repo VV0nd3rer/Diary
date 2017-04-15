@@ -6,5 +6,5 @@ import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
 
 public interface CountryDao extends GenericDao<Country>{
-	public List<CountriesSight>getCountrySights(String contry_code);
+	
 }

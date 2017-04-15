@@ -48,6 +48,7 @@ public class CountriesSight implements Serializable {
 	public void setSight_label(String sight_label) {
 		this.sight_label = sight_label;
 	}
+	
 	public String getCountry_code() {
 		return country_code;
 	}

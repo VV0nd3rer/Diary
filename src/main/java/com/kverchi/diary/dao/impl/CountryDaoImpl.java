@@ -18,32 +18,4 @@ import com.kverchi.diary.domain.Country;
 @Repository
 public class CountryDaoImpl extends GenericDaoImpl<Country> implements CountryDao {
 	
-	final static Logger logger = Logger.getLogger(CountryDaoImpl.class);
-	
-	@Transactional
-	@Override
-	public List<CountriesSight> getCountrySights(String contry_code) {
-		EntityManager entityManager = null; 
-		List<CountriesSight> sights = null;
-		try {
-			entityManager = entityManagerFactory.createEntityManager();
-			entityManager.getTransaction().begin();
-			String str_query = " FROM CountriesSight cs WHERE cs.country_code = :code";
-	    	Query query = entityManager.createQuery(str_query);
-	    	query.setParameter("code", contry_code);   
-	        sights = query.getResultList();
-	        entityManager.getTransaction().commit();
-	       } 
-	       catch (Exception e) {
-	    	   logger.error(e.getMessage());
-	    	   return sights;
-	       } 
-	       finally {
-	    	   if (entityManager != null && entityManager.isOpen()) {
-					entityManager.close();
-		       }
-	       }
-		return sights;
-	}
-
 }

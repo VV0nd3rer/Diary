@@ -23,10 +23,6 @@ public class CountryServiceImpl implements CountryService {
 		Country res = countryDao.getById(country_id);
 		return res;
 	}
-	@Override
-	public List<CountriesSight> getCountrySights(String country_id) {
-		List<CountriesSight> countries_sight = countryDao.getCountrySights(country_id);
-		return countries_sight;
-	}
+	
 
 }

@@ -17,9 +17,12 @@ import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.dao.impl.PostDaoImpl;
+import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
+import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.PostService;
+import com.kverchi.diary.service.UserService;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -28,7 +31,10 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private PostDao postDao;
 	@Autowired
-	private UserDao userDao;
+	private UserService userService;
+	@Autowired
+	private CountriesSightService countriesSightService;
+	
 	/*public void setPostDao(PostDao postDao) {
 		this.postDao = postDao;
 	}*/
@@ -55,7 +61,7 @@ public class PostServiceImpl implements PostService {
 			response.setRespMsg(ServiceMessageResponse.NO_USER_WITH_USERNAME.toString());
 			return response;
 		}
-		User loggedInUser = userDao.getUserByUsername(loggedInUserName);
+		User loggedInUser = userService.getUserByUsername(loggedInUserName);
 		if(loggedInUser == null) {
 			logger.debug("No user with username " + loggedInUserName + ". No created new post, return back...");
 			response.setRespCode(HttpStatus.PRECONDITION_FAILED);
@@ -87,6 +93,9 @@ public class PostServiceImpl implements PostService {
 		//Single post - user loaded
 		//How is it better to develop this thing?
 		Post postNeedToUpd = postDao.getById(post.getPost_id());
+		CountriesSight updSightForPost = countriesSightService.getSightById(post.getSight().getSight_id());
+		
+		postNeedToUpd.setSight(updSightForPost);
 		postNeedToUpd.setTitle(post.getTitle());
 		postNeedToUpd.setDescription(post.getDescription());
 		postNeedToUpd.setText(post.getText());

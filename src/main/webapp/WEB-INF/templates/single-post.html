@@ -19,6 +19,7 @@
 	   	<div class="col-lg-8">
 	   		<h4 th:text="${post.title}"/>
 	   		<p id="post_id" th:text="${post.post_id}"/>
+	   		<p th:if="${not #lists.isEmpty(post.sight)}" th:text="${post.sight.sight_label}"/>
 	   		<p class="lead">
 			   by <span  th:text="${post.user.username}">someone</span>
 			</p>

@@ -1,5 +1,7 @@
 package com.kverchi.diary.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,11 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 	public CountriesSight getSightById(int sight_id) {
 		return countriesSightDao.getById(sight_id);
 	}
-
+	@Override
+	public List<CountriesSight> getCountrySights(String country_id) {
+		List<CountriesSight> countries_sight = countriesSightDao.getCountrySights(country_id);
+		return countries_sight;
+	}
 	@Override
 	public void deleteSight(int sight_id) {
 		CountriesSight sightToDel = getSightById(sight_id);
