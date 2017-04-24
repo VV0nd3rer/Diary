@@ -21,12 +21,12 @@
      <form class="form-horizontal" role="form" th:object="${post}">
         <p class="validateTips"></p>
         <input type="hidden" th:value="${post.post_id}" id="id"/>
-        
+       
         
         <div class="form-group">
 			 <label class="col-sm-2 control-label" for="title">Sight</label>
 			 <div class="col-sm-10">
-			   <label class="form-control" th:if="${not #lists.isEmpty(post.sight) and sightList != null}" th:text="${post.sight.sight_label}"></label>
+			   <label class="form-control" th:if="${not #lists.isEmpty(sight) and sight != null}" th:text="${sight.sight_label}"></label>
 			    <select id="sight">
 				  <option th:if="${not #lists.isEmpty(sightList) and sightList != null}" th:each="sight: ${sightList}" th:value="${sight.sight_id}" th:text="${sight.sight_label}"></option>
 				</select> 

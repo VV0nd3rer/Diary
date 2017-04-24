@@ -39,7 +39,6 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 			obj = (Post) entityManager.find(Post.class, id);
 			Hibernate.initialize(obj.getPost_comments());
 			Hibernate.initialize(obj.getUser());
-			Hibernate.initialize(obj.getSight());
 			entityManager.getTransaction().commit();
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -74,7 +73,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
  	    }
 	    entityManager.getTransaction().commit();
 	 } catch (Exception e) {
-		 //logger.error(e.getMessage());
+		 logger.error(e.getMessage());
 		 return objList;
 	 } finally {
 		 if (entityManager != null && entityManager.isOpen()) {

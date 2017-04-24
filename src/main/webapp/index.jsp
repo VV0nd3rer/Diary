@@ -1,6 +1,7 @@
 <html>
 <body>
-<h2>Hello!</h2>
+<h2>Hello and welcome :)</h2>
+
 <h3>
 	<ul>
 	  <li>

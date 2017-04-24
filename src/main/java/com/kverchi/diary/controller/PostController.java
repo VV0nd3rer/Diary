@@ -3,6 +3,8 @@ package com.kverchi.diary.controller;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.Comment;
@@ -71,7 +75,7 @@ public class PostController {
 		ModelAndView mv = new ModelAndView("single-post");
 		Post post = postService.getPostById(post_id);
 		Set<Comment> comments = post.getPost_comments();
-		CountriesSight sight = post.getSight();
+		CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
 		mv.addObject("post", post);
 		mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
@@ -87,11 +91,16 @@ public class PostController {
     public ModelAndView editPost(@PathVariable("post_id") int post_id, Model model){
        Post post = postService.getPostById(post_id);
        List<CountriesSight> sightList = null;
-       if(post.getSight() != null) {
-    	  sightList = countriesSightService.getCountrySights(post.getSight().getCountry_code());
-       }
+       
+       String country_code = null;
+	   country_code = getSessionAttribute("country_code");
+	   if(country_code != null) {
+		   sightList = countriesSightService.getCountrySights(country_code);
+	   }
+	   CountriesSight sight =  countriesSightService.getSightById(post_id);
        ModelAndView mv = new ModelAndView("new-post");
        mv.addObject("post", post);
+       mv.addObject("sight", sight);
        mv.addObject("sightList", sightList);
        return mv;
     }
@@ -105,7 +114,7 @@ public class PostController {
 	public ServiceResponse addPost(@RequestBody Post post) {
 		ServiceResponse response = new ServiceResponse();
 		logger.debug("post ID: " + post.getPost_id());
-		logger.debug("sight ID: " + post.getSight().getSight_id());
+		
 		if(post.getPost_id() == 0) {
 			response = postService.addPost(post);
 		}
@@ -119,8 +128,15 @@ public class PostController {
 	
 	@RequestMapping(value="/new-post") 
 	public ModelAndView newPost() {
+		String country_code = null;
+		country_code = getSessionAttribute("country_code");
+		List<CountriesSight> sightList = null;
+		if(country_code != null) {
+			   sightList = countriesSightService.getCountrySights(country_code);
+		}
 		ModelAndView mv = new ModelAndView("new-post");
 		mv.addObject("post", new Post());
+		mv.addObject("sightList", sightList);
 		return mv;
 	}
 	@RequestMapping(value="/add-comment", method = RequestMethod.POST)
@@ -129,5 +145,12 @@ public class PostController {
 		response = commentService.addComment(comment);
 		return response;
 	}
-	
+	//TODO ServletRequestAttribute or Spring security...
+	private String getSessionAttribute(String arg) {
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		HttpSession session = attr.getRequest().getSession(true);
+		String value = (String)session.getAttribute(arg);
+		logger.debug("country_code from session: " + value);
+		return value;
+	}
 }

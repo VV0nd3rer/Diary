@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	$("#create-post-ok-btn").click(function() {
+	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
 		/*alert(postText);
@@ -13,14 +13,15 @@ $(document).ready(function(){
 		var title = $("#title");
 		var description = $ ("#description");
 		console.log("id: " + id.val());
+		console.log("sight id: " + sight_id.val());
 		var data = {}
 		var sight = {}
-		sight["sight_id"] = sight_id.val();
+		data["sight_id"] = sight_id.val();
 		data["post_id"] = id.val();
 		data["title"] = title.val();
 		data["description"] = description.val();
 		data["text"] = postText;
-		data["sight"] = sight;
+		
 		tips = $( ".validateTips" );
 		
 		var valid = false;
@@ -63,7 +64,7 @@ $(document).ready(function(){
 	 	
 	});
 	
-	$("#add-comment").click(function() {
+	$("#add-comment").click(function(event) {
 		event.preventDefault();
 		var post_id = $("#post-id");
 		console.log(post_id.val());
@@ -151,7 +152,7 @@ $(document).ready(function(){
     $("#delete-sight-btn").click(function() {
     	$("#modal-dialog").modal();
     });
-    $("#modal-dialog-ok-btn").click(function() {
+    $("#modal-dialog-ok-btn").click(function(event) {
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
@@ -191,11 +192,11 @@ $(document).ready(function(){
     	$("#modal-dialog").modal("hide");
     });
     
-    $("#modal-form-cancel-btn").click(function() {
+    $("#modal-form-cancel-btn").click(function(event) {
     	event.preventDefault();
     	hideModalDialog();
     });
-    $("#modal-form-save-book-btn").click(function(){
+    $("#modal-form-save-book-btn").click(function(event){
     	event.preventDefault();
     	
     	var id = $("#id");
@@ -246,7 +247,7 @@ $(document).ready(function(){
         }
         
     });
-   $("#modal-form-save-sight-btn").click(function() {
+   $("#modal-form-save-sight-btn").click(function(event) {
 	   event.preventDefault();
 
 	   var id = $("#sight_id");
@@ -314,7 +315,7 @@ $(document).ready(function(){
    //--- End of Books page CRUD functionality	
    
    //Registration 
-   $("#register-ok-btn").click(function() {   	   	
+   $("#register-ok-btn").click(function(event) {   	   	
 	   event.preventDefault();
 	   remErrMsg();
 	  /* var token = $("meta[name='_csrf']").attr("content");

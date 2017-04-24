@@ -3,6 +3,8 @@ package com.kverchi.diary.controller;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.CountriesSight;
@@ -51,6 +55,10 @@ public class SightController {
 	public ModelAndView sights(@RequestParam("country_code") String code) {
 		Country country = countryService.getCountryById(code);
 		Set<CountriesSight> country_sights = country.getCountriesSight();
+		
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		HttpSession session = attr.getRequest().getSession(true);
+		session.setAttribute("country_code", code);
 		
 		ModelAndView mv = new ModelAndView("sights");
 		mv.addObject("country", country);
