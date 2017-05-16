@@ -24,7 +24,7 @@
 	<!-- <bean id="environmentVariablesConfiguration"
 	      class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 	  <property name="algorithm" value="PBEWithMD5AndDES" />
-	  <property name="passwordEnvName" value="DIARY_PASS_VAR" />
+	  <property name="passwordEnvName" value="DIARY_PASS_VARIABLE" />
 	  for easy development and testing
 	   <property name="password" value="<your_pass>" />
 	</bean> -->
