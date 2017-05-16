@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head >  
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button> -->
+            <a class="navbar-brand" href="#">Diary</a>
+            <p class="navbar-brand" >
+            	Logged user: <span sec:authentication="name">Bob</span>
+            </p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#" th:href="@{/posts/list}">Where to go</a></li>
+                <li><a href="#" th:href="@{/sights/map}">Map</a></li>
+                <li><a href="#" th:href="@{/books/list}">What to read</a></li>
+                <li><a href="#" th:href="@{/media/list}">What to listen/watch</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            	<li sec:authorize="isAnonymous()"><a href="#" th:href="@{/users/registration}">Registration</a>
+                <li sec:authorize="isAnonymous()"><a href="#" th:href="@{/users/login}">Sign in</a></li>
+                <form th:action="@{/logout}" id="logout" method="post">
+					<input type="hidden"
+						name="${_csrf.parameterName}"
+						value="${_csrf.token}"/>
+				</form>
+                <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="#">Logged user: <span sec:authentication="name">Bob</span></a></li>
+            </ul>
+        </div>      
+    </div>
+</div>
+</body>
+</html>

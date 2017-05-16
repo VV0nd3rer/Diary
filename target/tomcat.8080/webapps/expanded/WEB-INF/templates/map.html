@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <link href="../../../resources/jqvmap/jqvmap.css" rel="stylesheet" media="screen" th:href="@{/resources/jqvmap/jqvmap.css}"/>
+	<script src="../../../resources/jqvmap/jquery.vmap.js" th:src="@{/resources/jqvmap/jquery.vmap.js}"></script>
+	<script src="../../../resources/jqvmap/jquery.vmap.europe.js" th:src="@{/resources/jqvmap/jquery.vmap.europe.js}"></script>
+	<script src="../../../resources/js/map.js" th:src="@{/resources/js/map.js}"></script>
+    <title>Map</title>
+  </head>
+
+  <body>
+    <div th:replace="header :: header">&nbsp;</div>
+    
+    <div class="container">
+      <p>Hello </p>
+      <div align="center" id="vmap" style="width: 680px; height: 520px; margin-left: 40px;"></div>
+    </div>
+    
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+</body>
+</html>

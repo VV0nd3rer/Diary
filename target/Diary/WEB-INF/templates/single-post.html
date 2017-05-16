@@ -1,0 +1,107 @@
+<!-- Template from https://startbootstrap.com/template-overviews/blog-post/ -->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <script src="../../../resources/js/text-editor.js" th:src="@{/resources/js/text-editor.js}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Post</title>
+  </head>
+   <body>
+    <div th:replace="header :: header">&nbsp;</div>
+    <div class="container">
+	 <div class="row">
+	    <a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+	   	<div class="col-lg-8">
+	   		<h4 th:text="${post.title}"/>
+	   		<p id="post_id" th:text="${post.post_id}"/>
+	   		
+	   		<p th:text="${sight.sight_label}"/>
+	   		<p class="lead">
+			   by <span  th:text="${post.user.username}">someone</span>
+			</p>
+			<hr>
+			<p>
+			<span class="glyphicon glyphicon-time" th:text="${post.post_datetime}">Posted on August 24, 2013 at 9:00 PM</span>
+				
+			</p>
+			<hr>
+			<!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
+			
+			<hr>
+			<!-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> -->
+			<div id="post-text" th:utext="${post.text}"></div>
+			<hr>
+			
+			<!-- Blog Comments -->
+
+                <!-- Comments Form -->
+                <div class="well" sec:authorize="isAuthenticated()">
+                    <h4>Leave a Comment:</h4>
+                    <form role="form">
+                        <p class="validateTips"></p>
+                        <div class="form-group">
+                            <input type="hidden" th:value="${post.post_id}" id="post-id"/>
+                            <textarea class="form-control" id="text" rows="3" placeholder="Comment"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="add-comment">Add</button>
+                    </form>
+                </div>
+
+                <hr>
+
+                <!-- Posted Comments -->
+
+                <!-- Comment -->
+               <!--  <div class="media" id="comment-section" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">Start Bootstrap
+                        	
+                            <small>August 25, 2014 at 9:30 PM</small>
+                        </h4>
+                        <p th:text="${comment.comment_datetime}"/>
+                        <p th:text="${comment.user.username}"/>
+                        <p th:text="${comment.text}"/>
+                    </div>
+				</div> -->
+			 <div id="comment-section" >
+				<div class="row" th:if="${not #lists.isEmpty(comments) and comments != null}" th:each="comment: ${comments}">
+					<div class="col-sm-1">
+						<div class="thumbnail">
+							<img class="img-responsive user-photo"
+								src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+						</div>
+						<!-- /thumbnail -->
+					</div>
+					<!-- /col-sm-1 -->
+
+					<div class="col-sm-5">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong th:text="${comment.user.username}">myusername</strong>
+								<p>
+								  commented 
+								  <span class="text-muted" id="comment_date" th:text="${comment.comment_datetime}">5 days ago</span>
+								</p>
+							</div>
+							<div class="panel-body" th:text="${comment.text}">Comment content</div>
+							<!-- /panel-body -->
+						</div>
+						<!-- /panel panel-default -->
+					</div>
+					<!-- /col-sm-5 -->
+
+
+				</div>
+			 </div>
+			</div>
+	</div>
+  </body>
+</html>

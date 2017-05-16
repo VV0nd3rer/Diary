@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  
+    
+   <!--  <link href="../../../resources/carousel/sights_common.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_common.css}"/>
+	<link href="../../../resources/carousel/sights_special.css" rel="stylesheet" media="screen" th:href="@{/resources/carousel/sights_special.css}"/> -->
+	
+	<object th:include="include-res::links" th:remove="tag"/>
+	<!-- For  jqcarousel.js -->
+	<script src="../../../resources/jquery-ui/jquery-ui.js" th:src="@{/resources/jquery-ui/jquery-ui.js}"></script>
+	<script src="../../../resources/jqcarousel/src/jqcarousel.js" th:src="@{/resources/jqcarousel/src/jqcarousel.js}"></script>
+	<!-- end  for jqcarousel.js -->
+	
+	<!-- <script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script> -->
+    <!-- <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script> -->
+	<script src="../../../resources/js/carousel.js" th:src="@{/resources/js/carousel.js}"></script>
+    <title th:text="${country.country_name}"></title>
+  </head>
+  
+  <body>
+ 
+    <div th:replace="header :: header">&nbsp;</div>
+    
+    <div class="container" th:if="${not #lists.isEmpty(country_sights) and country_sights != null}">
+    
+    	<p> hello </p>
+	    <div id="gallery">
+	     <div th:each="sight: ${country_sights}">
+	        <h3 th:text="${sight.sight_label}"></h3>
+	     	<img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Prague">
+	     	<p th:text="${sight.country_code}"></p>
+			<p th:if="${not #lists.isEmpty(sight.sight_description)}" th:text="${sight.sight_description}"></p>
+			<p class="row_action"><a href="#" th:text="Open"></a></p>
+	     </div>
+	    </div>
+	    
+    </div>
+    
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+</body>
+</html>

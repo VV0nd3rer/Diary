@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Books</title>
+  </head>
+
+  <body>
+    <div th:replace="header :: header">&nbsp;</div>
+     
+     <div class="container" th:if="${not #lists.isEmpty(all_books) and all_books != null}">
+      
+      <!-- Modal dialog -->
+      <div class="modal fade" id="modal-dialog" role="dialog">
+		 <div class="modal-dialog">
+		  <div class="modal-content">
+		   <div class="modal-body" style="padding:40px 50px;">
+		     <p>Are you sure?</p>
+		     <div class="form-group">
+			    <div class="col-sm-offset-2 col-sm-10">
+			      <div class="pull-right">
+			         <button type="submit" class="btn btn-default" id="modal-dialog-cancel-btn">Cancel</button>
+			         <button type="submit" class="btn btn-primary" id="modal-dialog-ok-btn">OK</button>
+			      </div>
+			    </div>
+			 </div>
+		   </div>
+		  </div>
+		 </div>
+	  </div>
+      
+      <!-- Modal form -->
+	  <div class="modal fade" id="modal-form" role="dialog">
+		 <div class="modal-dialog">
+		  <div class="modal-content">
+		   <div class="modal-body" style="padding:40px 50px;">
+			 <div class="row">
+			    
+			      <form class="form-horizontal" role="form">
+			        <fieldset>
+			
+			          <!-- Form Name -->
+			          <legend>Book Details</legend>
+					  <p class="validateTips">All form fields are required.</p> 
+					  <input type="hidden" name="id" value="0" id="id">
+			          <!-- Text input-->
+			          <div class="form-group">
+			            <label class="col-sm-2 control-label" for="textinput">Title</label>
+			            <div class="col-sm-10">
+			              <input type="text" id="title" placeholder="Title" class="form-control">
+			            </div>
+			          </div>
+			
+					  <!-- Text input-->
+			          <div class="form-group">
+			            <label class="col-sm-2 control-label" for="textinput">Author</label>
+			            <div class="col-sm-10">
+			              <input type="text" id="author" placeholder="Author" class="form-control">
+			            </div>
+			          </div>
+			
+			          <!-- Text input-->
+			          <div class="form-group">
+			            <label class="col-sm-2 control-label" for="textinput">Description</label>
+			            <div class="col-sm-10">
+			              <input type="text" id="description" placeholder="Description" class="form-control">
+			            </div>
+			          </div>
+			          
+			          <div class="form-group">
+			            <div class="col-sm-offset-2 col-sm-10">
+			              <div class="pull-right">
+			                <button type="submit" class="btn btn-default" id="modal-form-cancel-btn">Cancel</button>
+			                <button type="submit" class="btn btn-primary" id="modal-form-save-book-btn">Save</button>
+			              </div>
+			            </div>
+			          </div>
+			
+			        </fieldset>
+			      </form>
+			 </div><!-- /.row -->
+			</div>
+		   </div>
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal fade -->
+        <!-- End of modal form -->
+        
+     <div class="blog-header">
+   		<p class="lead blog-description">Books</p>
+   	  </div>
+   	  <p>This is example of table with data </p>
+   	  <input id="add-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
+   	  <input id="update-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Update">
+   	  <input id="delete-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Delete">
+      <table id="crud-tbl" class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="80">Book ID</th>
+					<th width="120">Title</th>
+					<th width="120">Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="clickable-row" th:each="book: ${all_books}">
+					<td th:text="${book.book_id}"></td>
+					<td th:text="${book.book_title}"></td>
+					<td th:if="${not #lists.isEmpty(book.book_description)}" th:text="${book.book_description}"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+    </div>
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+
+  </body>
+</html>

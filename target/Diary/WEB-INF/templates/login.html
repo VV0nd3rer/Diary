@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+    <title>Login</title>
+</head>
+<body>
+    <div th:replace="header :: header">&nbsp;</div>
+	<div class="container">
+	        <div class="row main">
+	          <div class="col-md-6 col-md-offset-4">
+	            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+	            <p id="profile-name" class="profile-name-card"></p>
+	            <form class="form-horizontal" th:action="@{/login}" method="post">
+	                <span id="reauth-email" class="reauth-email"></span>
+	                <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+	                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+	                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	                <div id="remember" class="checkbox">
+	                    <label>
+	                        <input type="checkbox" name="_spring_security_remember_me" value="remember-me"> Remember me
+	                    </label>
+	                </div>
+	               
+	                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+	            </form><!-- /form -->
+	            <a href="#" th:href="@{/users/forgot-password}" class="forgot-password">
+	                Forgot the password?
+	            </a>
+	          </div>
+	        </div><!-- /row-main -->
+	    </div><!-- /container -->
+	<div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+</body>
+</html>
+	    

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <object th:include="include-res::links" th:remove="tag"/>
+ 
+    <title>Test page</title>
+  </head>
+
+  <body>
+  
+    <div th:replace="header :: header">&nbsp;</div>
+     
+     <div class="container">
+     	<p th:text="${result}"/>some text</p>
+
+    </div>
+    <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+	
+  </body>
+</html>
+
