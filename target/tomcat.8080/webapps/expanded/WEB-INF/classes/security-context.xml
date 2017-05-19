@@ -32,7 +32,7 @@
 	<sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true" >
 	    <sec:access-denied-handler error-page="/denied"/>
 		<sec:form-login login-page="/users/login"
-									authentication-failure-url="/users/Login?failed=true"
+									authentication-failure-url="/users/login?failed=true"
 								    default-target-url="/posts/list"/>
 								    
 		<sec:csrf token-repository-ref="tokenRepository"/>

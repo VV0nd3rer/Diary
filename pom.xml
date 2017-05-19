@@ -107,6 +107,14 @@
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>5.1.6</version>
 	</dependency>
+	<!-- Postgresql db driver -->
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>9.4.1212</version>
+	</dependency>
+
+	
 	<!-- Apache Commons DBCP -->
 	<dependency>
 		<groupId>commons-dbcp</groupId>
