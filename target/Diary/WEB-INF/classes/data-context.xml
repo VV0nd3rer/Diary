@@ -43,7 +43,7 @@
 		<property name="url" value="jdbc:postgresql://localhost:5432/diary" /> 
 		-->
 		<!-- Heroku Postgresql connetion -->
-		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="driverClassName" value="${database.driverClassName}"/>
 		<property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
 		<!-- 
 		<property name="username" value="${db.username}" />  
