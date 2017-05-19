@@ -10,7 +10,7 @@ INSERT INTO books VALUES (1,'\"Atlas shrugged\"','Ayn Rand','Novel by Ayn'),(2,'
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   username char(50) NOT NULL,
-  password char(64) NOT NULL,
+  password character varying(64) NOT NULL,
   enabled char(1) NOT NULL,
   email char(45) NOT NULL
 ) 
