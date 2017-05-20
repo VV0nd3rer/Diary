@@ -71,6 +71,7 @@ public class EmailServiceImpl implements EmailService {
 			mailSender.send(preparator);
 			res = true;
 		} catch(MailException ex) {
+			ex.printStackTrace();
 			logger.error(ex);
 		}
 		return res;

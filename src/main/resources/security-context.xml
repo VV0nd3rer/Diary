@@ -10,24 +10,25 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
-	<context:property-placeholder location="classpath:properties/app.properties" />	
-	<!-- <bean id="propertyPlaceholderConfigurer"
+	<!-- <context:property-placeholder location="classpath:properties/app.properties" />	 -->
+	
+	<bean id="propertyPlaceholderConfigurer"
       class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
 	  <constructor-arg ref="configurationEncryptor" />
 	  <property name="location" value="classpath:properties/app.properties" />
-	</bean>	 -->
+	</bean>	
 	
-	<!-- <bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
 	  <property name="config" ref="environmentVariablesConfiguration" />
-	</bean> -->
+	</bean>
 	 
-	<!-- <bean id="environmentVariablesConfiguration"
+	<bean id="environmentVariablesConfiguration"
 	      class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 	  <property name="algorithm" value="PBEWithMD5AndDES" />
-	  <property name="passwordEnvName" value="DIARY_PASS_VARIABLE" />
-	  for easy development and testing
-	   <property name="password" value="<your_pass>" />
-	</bean> -->
+	  <property name="passwordEnvName" value="DIARY_PASS_VAR" />
+	  <!-- for easy development and testing
+	   <property name="password" value="<your_pass>" /> -->
+	</bean>
 	
 	<sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true" >
 	    <sec:access-denied-handler error-page="/denied"/>
@@ -60,7 +61,7 @@
 	
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" depends-on="propertyPlaceholderConfigurer"> 
 		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="587"/>
 		<property name="username" value="${adminEmail.username}"/>

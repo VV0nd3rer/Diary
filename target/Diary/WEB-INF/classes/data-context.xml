@@ -31,26 +31,29 @@
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
+		
 		<!-- Local MySQL connection -->
 		<!-- 
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/diary" /> 
+		<property name="username" value="${db.mysql.username}" />  
+        <property name="password" value="${db.mysql.password}" /> 
 		-->
 		
 		<!-- Local Postgresql connection -->
-		<!-- 
-		<property name="driverClassName" value="org.postgresql.Driver" />
+		
+		<!-- <property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="jdbc:postgresql://localhost:5432/diary" /> 
-		-->
+		<property name="username" value="${db.postgres.username}" />  
+        <property name="password" value="${db.postgres.password}" />  -->
+		
+		
 		<!-- Heroku Postgresql connetion -->
 		<property name="driverClassName" value="${database.driverClassName}"/>
 		<property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
-		<!-- 
-		<property name="username" value="${db.username}" />  
-        <property name="password" value="${db.password}" /> 
-        -->
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-    	<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+		<property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+    	<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/> 
+    	
     	<property name="maxActive" value="10"/>
 	    <property name="maxIdle" value="5"/>
 	    <property name="minIdle" value="2"/>
