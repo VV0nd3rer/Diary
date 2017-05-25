@@ -72,4 +72,6 @@ hr.black-curl {
 	border-right-color:#ddd;
 	border-width:8px;
 }
-	 
+#map {
+	height: 450px;
+}

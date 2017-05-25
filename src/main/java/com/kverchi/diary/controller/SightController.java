@@ -39,7 +39,25 @@ public class SightController {
 		ModelAndView mv = new ModelAndView("map");
 		return mv;
 	}
-	
+	@RequestMapping("/gmap")
+	public ModelAndView showGmap() {
+		ModelAndView mv = new ModelAndView("gmap");
+		return mv;
+	}
+	@RequestMapping("/get-sights") 
+	public List<CountriesSight> getSights() {
+		List<CountriesSight> sights = countriesSightService.getCountrySights("cz");
+		return sights;
+	}
+	@RequestMapping("/is-coord-stored") 
+	public boolean isCoordStored(float x, float y) {
+		boolean res = false;
+		CountriesSight sight = countriesSightService.getSightByCoord(x, y);
+		if(sight != null) {
+			res =  true;
+		}
+		return res;
+	}
 	//Test page with carousel plagin
 	/*@RequestMapping("/carousel")
 	public ModelAndView country(@RequestParam("country_code") String code) {
@@ -81,7 +99,7 @@ public class SightController {
 		return sight;
 	}
 	//TODO return ServiceResponse
-	@RequestMapping("/remove/{book_id}")
+	@RequestMapping("/remove/{sight_id}")
 	public String removeSight(@PathVariable("sight_id") int sight_id) {
 		countriesSightService.deleteSight(sight_id);
 		String res = "OK";

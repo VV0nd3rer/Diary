@@ -45,5 +45,31 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 		return sights;
 	}
 
+	@Override
+	public CountriesSight getSightByCoord(float x, float y) {
+		EntityManager entityManager = null; 
+		CountriesSight sight = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String str_query = " FROM CountriesSight cs WHERE cs.map_coord_x = :x AND cs.map_coord_y = :y";
+	    	Query query = entityManager.createQuery(str_query);
+	    	query.setParameter("x", x);   
+	    	query.setParameter("y", y);
+	        sight = (CountriesSight) query.getSingleResult();
+	        entityManager.getTransaction().commit();
+	       } 
+	       catch (Exception e) {
+	    	   logger.error(e.getMessage());
+	    	   return sight;
+	       } 
+	       finally {
+	    	   if (entityManager != null && entityManager.isOpen()) {
+					entityManager.close();
+		       }
+	       }
+		return sight;
+	}
+
 
 }

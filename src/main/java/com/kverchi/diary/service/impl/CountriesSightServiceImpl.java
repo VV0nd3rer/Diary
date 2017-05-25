@@ -43,5 +43,10 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 		CountriesSight addedSight = (CountriesSight)countriesSightDao.persist(sight);
 		return addedSight;
 	}
+	@Override
+	public CountriesSight getSightByCoord(float x, float y) {
+		CountriesSight sight = countriesSightDao.getSightByCoord(x, y);
+		return sight;
+	}
 
 }

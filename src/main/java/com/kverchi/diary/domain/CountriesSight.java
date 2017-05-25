@@ -31,6 +31,10 @@ public class CountriesSight implements Serializable {
 	private String img_url;
 	@Column(name="description")
 	private String sight_description;
+	@Column(name="map_coord_x")
+	private float map_coord_x;
+	@Column(name="map_coord_y")
+	private float map_coord_y;
 	
 	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="sight_id")
@@ -86,5 +90,17 @@ public class CountriesSight implements Serializable {
     public int hashCode() { 
       return Objects.hash(this.getSight_id());
     }*/
+	public float getMap_coord_x() {
+		return map_coord_x;
+	}
+	public void setMap_coord_x(float map_coord_x) {
+		this.map_coord_x = map_coord_x;
+	}
+	public float getMap_coord_y() {
+		return map_coord_y;
+	}
+	public void setMap_coord_y(float map_coord_y) {
+		this.map_coord_y = map_coord_y;
+	}
    
 }

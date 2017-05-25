@@ -133,19 +133,7 @@ $(document).ready(function(){
         	$("#modal-form").modal();
     	});
     });
-    $("#update-sight-btn").click(function() {
-    	var id = $("#crud-tbl tr.danger").find('td:first').html();
-    	console.log(id); 
-    	var upd_sight_url = "../sights/edit/"+id;
-    	$.get(upd_sight_url, function(data) {
-    		//event.preventDefault();
-    		$("#sight_id").val(id);
-    		$("#code").val(data.country_code);
-    		$("#label").val(data.sight_label);
-    		$("#description").val(data.sight_description);
-        	$("#modal-form").modal();
-    	});
-    });
+    
     $("#delete-book-btn").click(function() {
     	$("#modal-dialog").modal();
     });
@@ -247,58 +235,7 @@ $(document).ready(function(){
         }
         
     });
-   $("#modal-form-save-sight-btn").click(function(event) {
-	   event.preventDefault();
 
-	   var id = $("#sight_id");
-	   var code = $("#code");
-	   var label = $("#label");
-	   var description = $("#description");
-
-	   var data = {}
-	   data["sight_id"] = id.val();
-	   data["country_code"] = code.val();
-	   data["sight_label"] = label.val();
-	   data["sight_description"] = description.val();
-       
-       tips = $( ".validateTips" );
-       var valid = false;
-       valid = checkLength( code, "code", 2, 2 );
-       valid = valid && checkLength( label, "label", 3, 80 );
-       valid = valid && checkLength( description, "description", 3, 80 );
-       
-       var token = $("meta[name='_csrf']").attr("content");
-	   var header = $("meta[name='_csrf_header']").attr("content");
-       $(document).ajaxSend(function(e, xhr, options) {
-	        xhr.setRequestHeader(header, token);
-	    });
-       
-       var save_sight_url = "../sights/add-sight";
-       if(valid) {
-       	$.ajax({
-	     	   url: save_sight_url,
-	     	   type:"POST",
-	     	   data: JSON.stringify(data),
-	     	   contentType:"application/json; charset=utf-8",
-	     	   dataType:"json",
-	     	   success: function(obj){
-	     		    hideModalDialog();
-	     		   if(id != 0) {   
-	     		        $("#crud-tbl tr:contains('" + obj.sight_id + "')").remove();  		    
-	     		    }
-	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.sight_id+"</td><td>"+obj.country_code+"</td><td>"+obj.sight_label+"</td><td>"+obj.sight_description+"</td></tr>");  		  		
-	     	   },
-	     	   error : function(e) {
-	     		    console.log("Error: ", e);
-	    			display(e);
-	 	   		},
-	 	   		done : function(e) {
-	 	   			alert("DONE");
-	 	   		}
-	     	 });
-       }
-       
-   });
  
     $('#crud-tbl').on('click', '.clickable-row', function(event) {
     	  console.log('click on crud-tbl class');

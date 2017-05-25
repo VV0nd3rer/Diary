@@ -6,7 +6,8 @@ import com.kverchi.diary.domain.CountriesSight;
 
 public interface CountriesSightService {
 	CountriesSight getSightById(int sight_id);
-	public List<CountriesSight> getCountrySights(String country_id);
+    List<CountriesSight> getCountrySights(String country_id);
+    CountriesSight getSightByCoord(float x, float y);
 	void deleteSight(int sight_id);
 	CountriesSight updateSight(CountriesSight sight);
 	CountriesSight addSight(CountriesSight sight);
