@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,7 @@ import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
+import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.EmailService;
 import com.kverchi.diary.service.UserService;
 
@@ -179,5 +183,16 @@ public class UserServiceImpl implements UserService {
 		updUsr.setPassword(passwordEncoder.encode(user.getPassword()));
 		userDao.update(updUsr);
 		return true;
+	}
+	@Override
+	public User getUserFromSession() {
+		SecurityContext context = SecurityContextHolder.getContext();
+	      Authentication authentication = context.getAuthentication();
+	      Object principal = authentication.getPrincipal();
+	      if (principal instanceof UserDetailsImpl) {
+	    	  UserDetailsImpl userDetails = (UserDetailsImpl) principal;
+	          return userDetails.getUser();
+	      }
+	      return null;
 	}
 }

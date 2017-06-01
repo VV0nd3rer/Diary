@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+	var root = '/Diary';
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
@@ -35,7 +35,8 @@ $(document).ready(function(){
 	        xhr.setRequestHeader(header, token);
 	    });
 	 	if(valid) {
-	 		var add_post_url = "../add-post";
+	 		var add_post_url = "/posts/add-post";
+	 		var posts_list_url =  "/posts/list";
 	 		$.ajax({
 		     	   url: add_post_url,
 		     	   type:"POST",
@@ -46,15 +47,14 @@ $(document).ready(function(){
 		     		  console.log(res.respCode);
 					  console.log(res.respMsg);
 					  if(res.respCode == 'OK') {
-						  window.location.href = "../list";
+						  window.location.href = posts_list_url;
 					  }
 					  else /* if(res.respCode == 'PRECONDITION_FAILED') */{
 						   addErrMsg(res.respMsg);
 					  }
 		     	   },
 		     	   error : function(e) {
-		     		    console.log("Error: ", e);
-		    			display(e);
+		    			window.location.href = posts_list_url;
 		 	   		},
 		 	   		done : function(e) {
 		 	   			alert("DONE");
@@ -83,8 +83,11 @@ $(document).ready(function(){
 	    });
         
         if(valid) {
+        	var add_comment_url = "/posts/add-comment";
+        	alert(add_comment_url);
+        	alert 
 	        $.ajax({
-	     	   url:"../add-comment",
+	     	   url: add_comment_url,
 	     	   type:"POST",
 	     	   data: JSON.stringify(comment/*data*/),
 	     	   contentType:"application/json; charset=utf-8",
@@ -123,7 +126,7 @@ $(document).ready(function(){
     $("#update-book-btn").click(function() {   	   	
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log(id); 
-    	var upd_book_url = "edit/"+id;
+    	var upd_book_url = "/books/edit/"+id;
     	$.get(upd_book_url, function(data) {
     		//event.preventDefault();
     		$("#id").val(id);
@@ -144,7 +147,7 @@ $(document).ready(function(){
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
-    	var rm_book_url = "remove/"+id;
+    	var rm_book_url = "/books/remove/"+id;
     	$.get(rm_book_url, function(data) {
     		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
@@ -162,7 +165,7 @@ $(document).ready(function(){
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
-    	var rm_sight_url = "../sights/remove/"+id;
+    	var rm_sight_url = "/sights/remove/"+id;
     	$.get(rm_sight_url, function(data) {
     		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
@@ -210,7 +213,7 @@ $(document).ready(function(){
 	        xhr.setRequestHeader(header, token);
 	    });
         
-        var save_book_url = "add-book";
+        var save_book_url = "/books/add-book";
         if(valid) {
         	$.ajax({
 	     	   url: save_book_url,
@@ -286,7 +289,7 @@ $(document).ready(function(){
 	   
 	   if(valid) {
 		   $.ajax({
-			   url: "users/add-user",
+			   url: "/users/add-user",
 			   type:"POST",
 			   data: JSON.stringify(data),
 			   contentType:"application/json; charset=utf-8",
@@ -306,7 +309,7 @@ $(document).ready(function(){
 			   error : function(e) {
 				   console.log("Error: ", e);
 				   //TODO Error page for internal service error
-				   window.location.href = "../posts/test-me";
+				   window.location.href = "/posts/test-me";
 			   },
 			   done : function(e) {
 				   alert("DONE");

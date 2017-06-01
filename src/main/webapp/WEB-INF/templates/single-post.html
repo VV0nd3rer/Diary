@@ -15,12 +15,14 @@
     <div th:replace="header :: header">&nbsp;</div>
     <div class="container">
 	 <div class="row">
-	    <a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+	    <span th:if="${ isAuthor }">
+	    	<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+	    </span>
 	   	<div class="col-lg-8">
 	   		<h4 th:text="${post.title}"/>
 	   		<p id="post_id" th:text="${post.post_id}"/>
 	   		
-	   		<p th:text="${sight.sight_label}"/>
+	   		<p th:if="${sight != null}"  th:text="${sight.sight_label}"/>
 	   		<p class="lead">
 			   by <span  th:text="${post.user.username}">someone</span>
 			</p>

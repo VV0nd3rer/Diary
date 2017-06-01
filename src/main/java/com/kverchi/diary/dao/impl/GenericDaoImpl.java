@@ -68,6 +68,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			e.printStackTrace();
 			return null;
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {

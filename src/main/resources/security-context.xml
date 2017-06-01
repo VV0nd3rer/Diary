@@ -30,6 +30,8 @@
 	   <property name="password" value="<your_pass>" /> -->
 	</bean>
 	
+	<sec:global-method-security pre-post-annotations="enabled" />
+	
 	<sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true" >
 	    <sec:access-denied-handler error-page="/denied"/>
 		<sec:form-login login-page="/users/login"
@@ -38,11 +40,12 @@
 								    
 		<sec:csrf token-repository-ref="tokenRepository"/>
 		<sec:remember-me/>
-	    <sec:logout logout-success-url="/posts/map"/>
+	    <sec:logout logout-success-url="/sights/gmap"/>
 		<sec:intercept-url pattern="/books/*" access="hasRole ('ROLE_ADMIN')" />
 		<sec:intercept-url pattern="/posts/*" access="permitAll" />
 		<sec:intercept-url pattern="/media/*" access="hasRole ('ROLE_TRAVELLER')" />
-		<sec:intercept-url pattern="/login*" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/users/login*" access="isAnonymous()"/>
+		<sec:intercept-url pattern="/users/registration*" access="isAnonymous()"/>
 		<!-- <sec:intercept-url pattern="/posts/test-me" access="isAnonymous()"/> -->
 	</sec:http>
 	

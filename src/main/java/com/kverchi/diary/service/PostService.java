@@ -8,10 +8,10 @@ import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 
 public interface PostService {
-	public List<Post> getAllPosts();
-	public Post getPostById(int post_id);
-	public ServiceResponse addPost(Post post);
-	public ServiceResponse updatePost(Post post);
-	public void deletePost(int post_id);
-	public List<Post> getSightPosts(int sight_id);
+	List<Post> getAllPosts();
+	Post getPostById(int post_id);
+	ServiceResponse addPost(Post post);
+	ServiceResponse updatePost(Post post);
+	void deletePost(int post_id);
+	List<Post> getSightPosts(int sight_id);
 }

@@ -15,4 +15,5 @@ public interface UserService {
 	boolean updatePassword(User user);
 	boolean createResetPasswordToken(String email);
 	User getResetPasswordToken(String token);
+	User getUserFromSession();
 }
