@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +27,7 @@ import com.kverchi.diary.service.PostService;
 
 @RestController	
 @RequestMapping("sights")
+//@SessionAttributes("country_code")
 public class SightController {
 	@Autowired
 	CountriesSightService countriesSightService;
@@ -46,7 +48,7 @@ public class SightController {
 	}
 	@RequestMapping("/get-sights") 
 	public List<CountriesSight> getSights() {
-		List<CountriesSight> sights = countriesSightService.getCountrySights("cz");
+		List<CountriesSight> sights = countriesSightService.getAllSights();//getCountrySights("CZ");
 		return sights;
 	}
 	@RequestMapping("/is-coord-stored") 
@@ -81,15 +83,6 @@ public class SightController {
 		ModelAndView mv = new ModelAndView("sights");
 		mv.addObject("country", country);
 		mv.addObject("country_sights", country_sights);
-		return mv;
-	}
-	
-	@RequestMapping("/posts/{sight_id}")
-	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
-		List<Post> sight_posts = null;
-		sight_posts = postService.getSightPosts(sight_id);
-		ModelAndView mv = new ModelAndView("posts");
-		mv.addObject("posts", sight_posts);
 		return mv;
 	}
 	

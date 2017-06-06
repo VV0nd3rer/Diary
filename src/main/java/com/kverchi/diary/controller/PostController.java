@@ -84,12 +84,23 @@ public class PostController {
 		mv.addObject("posts", all_posts);
 		return mv;
 	}
+	@RequestMapping("/sight/{sight_id}")
+	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
+		
+		List<Post> sight_posts = null;
+		sight_posts = postService.getSightPosts(sight_id);
+		ModelAndView mv = new ModelAndView("posts");
+		mv.addObject("posts", sight_posts);
+		return mv;
+	}
 	@RequestMapping("/single-post/{post_id}")
 	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
 		ModelAndView mv = new ModelAndView(SINGLE_POST);
 		Post post = postService.getPostById(post_id);
 		Set<Comment> comments = post.getPost_comments();
 		CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
+		//Add sight ID to the session
+		
 		mv.addObject("post", post);
 		mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
@@ -122,13 +133,9 @@ public class PostController {
 	   }
        
        List<CountriesSight> sightList = null;
-       
-       String country_code = null;
-	   country_code = getSessionAttribute("country_code");
-	   if(country_code != null) {
-		   sightList = countriesSightService.getCountrySights(country_code);
-	   }
-	   CountriesSight sight =  countriesSightService.getSightById(post_id);
+       sightList = countriesSightService.getAllSights();
+      
+	   CountriesSight sight =  countriesSightService.getSightById(post.getSight_id());
 	   
        ModelAndView mv = new ModelAndView(NEW_POST);
        mv.addObject("post", post);
@@ -194,12 +201,9 @@ public class PostController {
 		if(currentUser == null) {
 			return new ModelAndView(LOGIN);
 		}
-		String country_code = null;
-		country_code = getSessionAttribute("country_code");
+		
 		List<CountriesSight> sightList = null;
-		if(country_code != null) {
-			   sightList = countriesSightService.getCountrySights(country_code);
-		}
+		sightList = countriesSightService.getAllSights();
 		ModelAndView mv = new ModelAndView(NEW_POST);
 		mv.addObject("post", new Post());
 		mv.addObject("sightList", sightList);

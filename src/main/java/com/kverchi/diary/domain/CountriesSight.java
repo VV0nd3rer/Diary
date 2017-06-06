@@ -25,8 +25,14 @@ public class CountriesSight implements Serializable {
 	private int sight_id;
 	@Column(name="sight_label")
 	private String sight_label;
-	@Column(name="country_code")
-	private String country_code;
+	
+	@ManyToOne
+    @JoinColumn(name="country_code")
+	private Country country;
+	
+	/*@Column(name="country_code")
+	private String country_code;*/
+	
 	@Column(name="img_url")
 	private String img_url;
 	@Column(name="description")
@@ -53,12 +59,18 @@ public class CountriesSight implements Serializable {
 		this.sight_label = sight_label;
 	}
 	
-	public String getCountry_code() {
+	public Country getCountry() {
+		return country;
+	}
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+	/*public String getCountry_code() {
 		return country_code;
 	}
 	public void setCountry_code(String country_code) {
 		this.country_code = country_code;
-	}
+	}*/
 	public String getImg_url() {
 		return img_url;
 	}

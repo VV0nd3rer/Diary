@@ -6,7 +6,7 @@ import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
 
 public interface CountryService {
-	public List<Country> getAllCountries();
-	public Country getCountryById(String country_id);
-	
+	List<Country> getAllCountries();
+	Country getCountryById(String country_id);
+	void addCountry(Country country);
 }

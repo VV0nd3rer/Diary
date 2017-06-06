@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	
 	var root = '/Diary';
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
@@ -35,8 +36,8 @@ $(document).ready(function(){
 	        xhr.setRequestHeader(header, token);
 	    });
 	 	if(valid) {
-	 		var add_post_url = "/posts/add-post";
-	 		var posts_list_url =  "/posts/list";
+	 		var add_post_url = root + "/posts/add-post";
+	 		var posts_list_url =  root + "/posts/list";
 	 		$.ajax({
 		     	   url: add_post_url,
 		     	   type:"POST",
@@ -83,7 +84,7 @@ $(document).ready(function(){
 	    });
         
         if(valid) {
-        	var add_comment_url = "/posts/add-comment";
+        	var add_comment_url = root + "/posts/add-comment";
         	alert(add_comment_url);
         	alert 
 	        $.ajax({
@@ -126,7 +127,7 @@ $(document).ready(function(){
     $("#update-book-btn").click(function() {   	   	
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log(id); 
-    	var upd_book_url = "/books/edit/"+id;
+    	var upd_book_url = root + "/books/edit/"+id;
     	$.get(upd_book_url, function(data) {
     		//event.preventDefault();
     		$("#id").val(id);
@@ -140,14 +141,14 @@ $(document).ready(function(){
     $("#delete-book-btn").click(function() {
     	$("#modal-dialog").modal();
     });
-    $("#delete-sight-btn").click(function() {
+    $("#delete-sight-btn").click(function() {F
     	$("#modal-dialog").modal();
     });
     $("#modal-dialog-ok-btn").click(function(event) {
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
-    	var rm_book_url = "/books/remove/"+id;
+    	var rm_book_url = root+"/books/remove/"+id;
     	$.get(rm_book_url, function(data) {
     		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
@@ -165,7 +166,7 @@ $(document).ready(function(){
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
     	console.log (id); 
-    	var rm_sight_url = "/sights/remove/"+id;
+    	var rm_sight_url = root+"/sights/remove/"+id;
     	$.get(rm_sight_url, function(data) {
     		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
@@ -213,7 +214,7 @@ $(document).ready(function(){
 	        xhr.setRequestHeader(header, token);
 	    });
         
-        var save_book_url = "/books/add-book";
+        var save_book_url = root+"/books/add-book";
         if(valid) {
         	$.ajax({
 	     	   url: save_book_url,
@@ -289,7 +290,7 @@ $(document).ready(function(){
 	   
 	   if(valid) {
 		   $.ajax({
-			   url: "/users/add-user",
+			   url: root+"/users/add-user",
 			   type:"POST",
 			   data: JSON.stringify(data),
 			   contentType:"application/json; charset=utf-8",

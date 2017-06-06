@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="countries")
 public class Country {
@@ -25,6 +27,7 @@ public class Country {
 	private String img_path;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="country_code")
+	@JsonIgnore
 	private Set<CountriesSight> countriesSight;
 	
 	public String getCountry_code() {

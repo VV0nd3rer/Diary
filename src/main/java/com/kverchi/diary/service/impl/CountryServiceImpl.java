@@ -23,6 +23,10 @@ public class CountryServiceImpl implements CountryService {
 		Country res = countryDao.getById(country_id);
 		return res;
 	}
+	@Override
+	public void addCountry(Country country) {
+		countryDao.persist(country);
+	}
 	
 
 }
