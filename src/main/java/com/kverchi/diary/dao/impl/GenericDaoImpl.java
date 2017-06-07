@@ -69,7 +69,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
-			return null;
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -89,7 +88,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			entityManager.getTransaction().commit();
 		} catch(Exception e) {
 			logger.error(e.getMessage());
-			return obj;
+			e.printStackTrace();
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -110,12 +109,13 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			return true;
 		} catch(Exception e) {
 			logger.error(e.getMessage());
-			return false;
+			e.printStackTrace();
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
 	           }
 		}
+		return false;
 	}
 	@Transactional
 	@Override
@@ -129,7 +129,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			
 		} catch(Exception e) {
 			logger.error(e.getMessage());	
-			return;
+			e.printStackTrace();
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -154,7 +154,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	     entityManager.getTransaction().commit();
 	 } catch (Exception e) {
 		 logger.error(e.getMessage());
-		 return objList;
+		 e.printStackTrace();
 	 } finally {
 		 if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();

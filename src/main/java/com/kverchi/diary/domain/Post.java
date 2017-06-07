@@ -21,10 +21,13 @@ import javax.persistence.Table;
 import org.hibernate.type.descriptor.java.ZonedDateTimeJavaDescriptor;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="posts")
+//http://www.greggbolinger.com/ignoring-hibernate-garbage-via-jsonignoreproperties/
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Post {
 	@Id
 	@Column(name="post_id")

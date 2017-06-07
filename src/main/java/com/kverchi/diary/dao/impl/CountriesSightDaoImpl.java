@@ -35,7 +35,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	       } 
 	       catch (Exception e) {
 	    	   logger.error(e.getMessage());
-	    	   return sights;
+	    	   e.printStackTrace();
 	       } 
 	       finally {
 	    	   if (entityManager != null && entityManager.isOpen()) {
@@ -61,7 +61,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	       } 
 	       catch (Exception e) {
 	    	   logger.error(e.getMessage());
-	    	   return sight;
+	    	   e.printStackTrace();
 	       } 
 	       finally {
 	    	   if (entityManager != null && entityManager.isOpen()) {

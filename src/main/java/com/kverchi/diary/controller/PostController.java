@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kverchi.diary.domain.Comment;
 import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
+import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
@@ -78,11 +79,20 @@ public class PostController {
 	
 	@RequestMapping("/list")
 	public ModelAndView showPosts() {
-		List<Post> all_posts = postService.getAllPosts();
+		int num_posts_on_page = 5;
+		int page_index = 1;
+		Pagination pagination = postService.getPostsPage(page_index, num_posts_on_page);
 		ModelAndView mv = new ModelAndView(POSTS);
+		mv.addObject("pages_total_num", pagination.getPages_total_num());
 		mv.addObject("post", new Post());
-		mv.addObject("posts", all_posts);
+		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
+	}
+	@RequestMapping("/page/{page_index}")
+	public Pagination showPagePosts(@PathVariable("page_index") int page_index) {
+		int num_posts_on_page = 5;
+		Pagination pagination = postService.getPostsPage(page_index, num_posts_on_page);
+		return pagination;
 	}
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {

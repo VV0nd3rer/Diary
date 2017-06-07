@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 
@@ -14,4 +15,5 @@ public interface PostService {
 	ServiceResponse updatePost(Post post);
 	void deletePost(int post_id);
 	List<Post> getSightPosts(int sight_id);
+	Pagination getPostsPage(int page_index, int num_posts_on_page);
 }

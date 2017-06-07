@@ -42,7 +42,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 			entityManager.getTransaction().commit();
 		} catch(Exception e) {
 			logger.error(e.getMessage());
-			return obj;
+			e. printStackTrace();
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -74,7 +74,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	    entityManager.getTransaction().commit();
 	 } catch (Exception e) {
 		 logger.error(e.getMessage());
-		 return objList;
+		 e. printStackTrace();
 	 } finally {
 		 if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -103,7 +103,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
-			return sight_posts;
+			e. printStackTrace();
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {
@@ -111,5 +111,66 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 			}
 		}
 		return sight_posts;
+	}
+
+	@Override
+	public int getNumOfPosts() {
+		EntityManager entityManager = null; 
+		int numOfRows = 0;
+		try { 
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+	    	String str_query = "select count(*) from Post";
+	    	Query query = entityManager.createQuery(str_query);
+	    	numOfRows = ((Long)query.getSingleResult()).intValue();
+	    	entityManager.getTransaction().commit();
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			e. printStackTrace();
+		} 
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return numOfRows;
+	}
+
+	@Override
+	public int getNumOfPosts(int sight_id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Post> getLimitPosts(int limit, int offset) {
+		EntityManager entityManager = null; 
+		List<Post> limitedPosts = null;
+		try { 
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String str_query = "FROM Post order by post_datetime";
+	    	Query query = entityManager.createQuery(str_query);
+	    	query.setFirstResult(offset);
+	    	query.setMaxResults(limit);
+	    	limitedPosts = query.getResultList();
+
+	    	for(Post post : limitedPosts) {
+	    		Hibernate.initialize(post.getPost_comments());
+	    		Hibernate.initialize(post.getUser());
+	    	}
+	    	entityManager.getTransaction().commit();
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			e. printStackTrace();
+		} 
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return limitedPosts;
 	}
 }

@@ -28,7 +28,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	    	entityManager.getTransaction().commit();   
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return user;
+			e. printStackTrace();
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {
@@ -52,7 +52,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	    	entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return user;
+			e. printStackTrace();
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {

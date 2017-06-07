@@ -7,6 +7,9 @@ import com.kverchi.diary.domain.Post;
 
 public interface PostDao extends GenericDao<Post> {
 	List<Post> getSightPosts(int sight_id);
+	int getNumOfPosts();
+	int getNumOfPosts(int sight_id);
+	List<Post> getLimitPosts(int limit, int offset);
 	/*public List<Post> getAllPosts();
 	public Post getPostById(int post_id);
 	public int addPost(Post post);

@@ -5,6 +5,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+    <script src="../../../resources/bootpag/jquery.bootpag.min.js" th:src="@{/resources/bootpag/jquery.bootpag.min.js}"></script>
+    <script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>
     <title>Posts</title>
    
   </head>
@@ -37,7 +39,7 @@
      <p>This is example of "post" style </p>
    	  <div class="row">
    	   <div class="col-sm-8 blog-main">
-		
+		<input type="hidden" th:value="${pages_total_num}" id="pages-total-num"/>
 		<div class="blog-post" th:each="post: ${posts}">
 		  <h2 class="blog-post-title" th:text="${post.title}"></h2>
 		  <p class="lead">
@@ -53,15 +55,21 @@
 		</div>
 	   </div>
 	  </div>
+		
+	  <div id="paginator">Dynamic Content goes here</div>
+	  <div id="page-selection">Pagination goes here</div>
+		 
 	  <hr class="black-curl">
  	  
 	</div>
+	
 	<div class="container">
         <h1>Share your feelings!</h1>
         <p>Do you like to discover new places on Earth? Are you happy to learn something new?</p>
         <p><a class="btn btn-primary btn-lg" href="new-post" role="button">Create great post &raquo;</a></p>
-      </div>
-		 <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+    </div>
+      
+	<div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
 
   </body>
 </html>

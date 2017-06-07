@@ -27,7 +27,7 @@ public class RoleDaoImpl extends GenericDaoImpl<Role> implements RoleDao {
 			entityManager.getTransaction().commit();  
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return role;
+			e. printStackTrace();
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {

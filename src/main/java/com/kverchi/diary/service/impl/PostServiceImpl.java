@@ -18,6 +18,7 @@ import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.dao.impl.PostDaoImpl;
 import com.kverchi.diary.domain.CountriesSight;
+import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.service.CountriesSightService;
@@ -122,6 +123,22 @@ public class PostServiceImpl implements PostService {
 	public List<Post> getSightPosts(int sight_id) {
 		List<Post> sightPosts = postDao.getSightPosts(sight_id);
 		return sightPosts;
+	}
+
+	@Override
+	public Pagination getPostsPage(int page_index, int num_posts_on_page) {
+		int numOfPosts = postDao.getNumOfPosts();
+		int numOfPages = numOfPosts/num_posts_on_page;
+		if(numOfPosts % num_posts_on_page != 0) {
+			numOfPages += 1;
+		}
+		int posts_row_offset = num_posts_on_page * page_index - num_posts_on_page;
+		logger.debug("number of all posts is " + numOfPosts);
+		logger.debug("row offset " + posts_row_offset);
+		logger.debug("numOfPages: " + numOfPages);
+		List<Post> pagePosts = postDao.getLimitPosts(num_posts_on_page, posts_row_offset);
+		Pagination pagination = new Pagination(pagePosts, numOfPages);
+		return pagination;
 	}
 
 }

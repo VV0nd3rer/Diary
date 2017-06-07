@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	
 	var root = '/Diary';
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
