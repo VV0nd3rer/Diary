@@ -118,14 +118,12 @@ public class PostServiceImpl implements PostService {
 		Post postToDel = postDao.getById(post_id);
 	    postDao.delete(postToDel);
 	}
-
 	@Override
 	public List<Post> getSightPosts(int sight_id) {
-		List<Post> sightPosts = postDao.getSightPosts(sight_id);
-		return sightPosts;
+		  List<Post> sightPosts = postDao.getSightPosts(sight_id);
+		  return sightPosts;
 	}
-
-	@Override
+	/*@Override
 	public Pagination getPostsPage(int page_index, int num_posts_on_page) {
 		int numOfPosts = postDao.getNumOfPosts();
 		int numOfPages = numOfPosts/num_posts_on_page;
@@ -139,6 +137,8 @@ public class PostServiceImpl implements PostService {
 		List<Post> pagePosts = postDao.getLimitPosts(num_posts_on_page, posts_row_offset);
 		Pagination pagination = new Pagination(pagePosts, numOfPages);
 		return pagination;
-	}
+	}*/
+
+
 
 }

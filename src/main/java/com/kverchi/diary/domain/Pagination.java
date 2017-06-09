@@ -1,12 +1,12 @@
 package com.kverchi.diary.domain;
 
 import java.util.List;
-
+//context factory - id of name -> return concrete class
 public class Pagination {
-	private List<Post> pagePosts;
+	private List pagePosts;
 	private int pages_total_num;
 	public Pagination(){}
-	public Pagination(List<Post> pagePosts, int pages_total_num) {
+	public Pagination(List pagePosts, int pages_total_num) {
 		this.pagePosts = pagePosts;
 		this.pages_total_num = pages_total_num;
 	}

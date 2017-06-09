@@ -36,27 +36,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         ParameterizedType pt = (ParameterizedType) t;
         type = (Class<T>) pt.getActualTypeArguments()[0];
     }
-		
-	/*@Transactional
-	@Override
-	public Serializable create(T t) {
-		EntityManager entityManager = null; 
-		Serializable id = 0;
-		try {
-			entityManager = entityManagerFactory.createEntityManager();
-			entityManager.getTransaction().begin();
-			entityManager.persist(t);
-			entityManager.getTransaction().commit();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return id;
-		} finally {
-			if (entityManager != null && entityManager.isOpen()) {
-				entityManager.close();
-			}
-		}
-		return id;
-	}*/
 	@Transactional
 	@Override
 	public T persist(T t) {
@@ -162,5 +141,5 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	 }
 	 return objList;
 	}
-
+	
 }

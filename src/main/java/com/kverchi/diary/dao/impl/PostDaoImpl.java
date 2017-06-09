@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kverchi.diary.dao.PaginationDao;
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.domain.Post;
 
@@ -135,12 +136,6 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 			}
 		}
 		return numOfRows;
-	}
-
-	@Override
-	public int getNumOfPosts(int sight_id) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override

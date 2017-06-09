@@ -6,8 +6,6 @@ $(document).ready(function(){
         maxVisible: 5,
         leaps: true,
         firstLastUse: true,
-        //first: '←',
-        //last: '→',
         wrapClass: 'pagination',
         activeClass: 'active',
         disabledClass: 'disabled',
@@ -16,7 +14,8 @@ $(document).ready(function(){
         lastClass: 'last',
         firstClass: 'first'
     }).on("page", function(event, num){
-    	var posts_page_url = root + "/posts/page/" + num;
+    	var pagination_type="posts";
+    	var posts_page_url = root + "/pagination/"+num+"/"+pagination_type ;
     	$.get(posts_page_url, function(data) {
     		$( ".blog-post" ).remove();
     		var post = data.pagePosts;

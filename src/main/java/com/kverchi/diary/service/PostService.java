@@ -15,5 +15,5 @@ public interface PostService {
 	ServiceResponse updatePost(Post post);
 	void deletePost(int post_id);
 	List<Post> getSightPosts(int sight_id);
-	Pagination getPostsPage(int page_index, int num_posts_on_page);
+	/*Pagination getPostsPage(int page_index, int num_posts_on_page);*/
 }

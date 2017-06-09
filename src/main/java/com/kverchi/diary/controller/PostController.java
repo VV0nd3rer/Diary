@@ -37,6 +37,7 @@ import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.CommentService;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.CountryService;
+import com.kverchi.diary.service.PaginationService;
 import com.kverchi.diary.service.PostService;
 import com.kverchi.diary.service.UserService;
 
@@ -63,6 +64,10 @@ public class PostController {
 	@Autowired
 	UserService userService;
 	
+	//???
+	@Autowired
+	PaginationService paginatonService;
+	
 	@RequestMapping("/test-me")
 	public ModelAndView showTestPage() {
 		ModelAndView mv = new ModelAndView("test_page");
@@ -81,19 +86,20 @@ public class PostController {
 	public ModelAndView showPosts() {
 		int num_posts_on_page = 5;
 		int page_index = 1;
-		Pagination pagination = postService.getPostsPage(page_index, num_posts_on_page);
+		//???
+		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts");
 		ModelAndView mv = new ModelAndView(POSTS);
 		mv.addObject("pages_total_num", pagination.getPages_total_num());
-		mv.addObject("post", new Post());
+		//mv.addObject("post", new Post());
 		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
-	@RequestMapping("/page/{page_index}")
+	/*@RequestMapping("/page/{page_index}")
 	public Pagination showPagePosts(@PathVariable("page_index") int page_index) {
 		int num_posts_on_page = 5;
 		Pagination pagination = postService.getPostsPage(page_index, num_posts_on_page);
 		return pagination;
-	}
+	}*/
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
 		
