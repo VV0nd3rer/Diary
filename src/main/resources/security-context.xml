@@ -41,7 +41,7 @@
 		<sec:csrf token-repository-ref="tokenRepository"/>
 		<sec:remember-me/>
 	    <sec:logout logout-success-url="/sights/gmap"/>
-		<sec:intercept-url pattern="/books/*" access="hasRole ('ROLE_ADMIN')" />
+		<sec:intercept-url pattern="/books/*" access="hasRole ('ROLE_TRAVELLER')" />
 		<sec:intercept-url pattern="/posts/*" access="permitAll" />
 		<sec:intercept-url pattern="/media/*" access="hasRole ('ROLE_TRAVELLER')" />
 		<sec:intercept-url pattern="/users/login*" access="isAnonymous()"/>

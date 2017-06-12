@@ -7,17 +7,12 @@
 
 <!-- Navbar -->
 <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
-            <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button> -->
+           
             <a class="navbar-brand" href="#">Diary</a>
-            <p class="navbar-brand" >
-            	Logged user: <span sec:authentication="name">Bob</span>
-            </p>
+            <p class="navbar-brand">Logged user: <span sec:authentication="name">Bob</span></p>
+            <p class="navbar-brand">Roles: <span sec:authentication="principal.authorities"></span></p>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
