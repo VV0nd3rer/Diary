@@ -1,6 +1,8 @@
 package com.kverchi.diary.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -87,10 +89,10 @@ public class PostController {
 		int num_posts_on_page = 5;
 		int page_index = 1;
 		//???
-		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts");
+		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", null);
 		ModelAndView mv = new ModelAndView(POSTS);
 		mv.addObject("pages_total_num", pagination.getPages_total_num());
-		//mv.addObject("post", new Post());
+		mv.addObject("pagination_handler", "posts");
 		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
@@ -103,10 +105,16 @@ public class PostController {
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
 		
-		List<Post> sight_posts = null;
-		sight_posts = postService.getSightPosts(sight_id);
+		//List<Post> sight_posts = null;
+		int page_index = 1;
+		Map<String, Object> search_criteries = new HashMap<String, Object>();
+		search_criteries.put("sight_id", sight_id);
+		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", search_criteries);
+		//sight_posts = postService.getSightPosts(sight_id);
 		ModelAndView mv = new ModelAndView("posts");
-		mv.addObject("posts", sight_posts);
+		mv.addObject("pages_total_num", pagination.getPages_total_num());
+		mv.addObject("pagination_handler", "sight_posts");
+		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
 	@RequestMapping("/single-post/{post_id}")

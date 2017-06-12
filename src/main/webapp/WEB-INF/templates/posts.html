@@ -8,7 +8,8 @@
     <script src="../../../resources/bootpag/jquery.bootpag.min.js" th:src="@{/resources/bootpag/jquery.bootpag.min.js}"></script>
     <script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>
     <title>Posts</title>
-   
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   </head>
 
   <body>
@@ -38,10 +39,14 @@
      <hr class="black-curl">
      <p>This is example of "post" style </p> -->
    	  <div class="row">
+   	   <input type="hidden" th:value="${pagination_handler}" id="pagination_handler"/>
+   	   
    	   <div class="col-sm-8 blog-main">
 		<input type="hidden" th:value="${pages_total_num}" id="pages-total-num"/>
+		
 		<div class="blog-post" th:each="post: ${posts}">
 		  <h2 class="blog-post-title" th:text="${post.title}"></h2>
+		  <input type="hidden" th:value="${post.sight_id}" id="sight_id"/>
 		  <p class="lead">
 			   by <span  th:text="${post.user.username}">someone</span>
 		  </p>

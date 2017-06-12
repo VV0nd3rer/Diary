@@ -3,6 +3,7 @@ package com.kverchi.diary.dao.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -115,14 +116,31 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	}
 
 	@Override
-	public int getNumOfPosts() {
+	public int getNumOfPosts(Map<String, Object> search_criteria) {
 		EntityManager entityManager = null; 
 		int numOfRows = 0;
 		try { 
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
 	    	String str_query = "select count(*) from Post";
+	    	if(search_criteria != null && !search_criteria.isEmpty()) {
+	    		str_query += " where ";
+	    		int i = 0;
+				for (Map.Entry<String, Object> entry : search_criteria.entrySet())
+				{
+				   if(i != 0) {
+					   str_query += " and ";
+				   }
+				   str_query += entry.getKey() + "= :" + entry.getKey();
+				   i++;
+				}
+	    	}
 	    	Query query = entityManager.createQuery(str_query);
+	    	if(search_criteria != null && !search_criteria.isEmpty()) {
+	    		for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+	    			query.setParameter(entry.getKey(), entry.getValue());  
+	    		}
+	    	}
 	    	numOfRows = ((Long)query.getSingleResult()).intValue();
 	    	entityManager.getTransaction().commit();
 		}
@@ -139,14 +157,36 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	}
 
 	@Override
-	public List<Post> getLimitPosts(int limit, int offset) {
+	public List<Post> getLimitPosts(int limit, int offset, Map<String, Object> search_criteria) {
 		EntityManager entityManager = null; 
 		List<Post> limitedPosts = null;
 		try { 
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
-			String str_query = "FROM Post order by post_datetime";
+			//order by post_datetime
+			String str_query = "FROM Post";
+			if(search_criteria != null && !search_criteria.isEmpty()) {
+				str_query += " where ";
+				//final long[] i = {0};
+				//search_criteria.forEach((k, v) -> i[0] += k + v);
+				//search_criteria.forEach((k,v)->System.out.println("Key : " + k + " Value : " + v));
+				int i = 0;
+				for (Map.Entry<String, Object> entry : search_criteria.entrySet())
+				{
+				   if(i != 0) {
+					   str_query += " and ";
+				   }
+				   str_query += entry.getKey() + "= :" + entry.getKey();
+				   i++;
+				}
+			}
+			str_query += " order by post_datetime";
 	    	Query query = entityManager.createQuery(str_query);
+	    	if(search_criteria != null && !search_criteria.isEmpty()) {
+	    		for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+	    			query.setParameter(entry.getKey(), entry.getValue());  
+	    		}
+	    	}
 	    	query.setFirstResult(offset);
 	    	query.setMaxResults(limit);
 	    	limitedPosts = query.getResultList();
