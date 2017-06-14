@@ -27,7 +27,7 @@ $(document).ready(function(){
 		var valid = false;
 	    valid = checkLength(title, "title", 2, 80); 
 		valid = valid && checkLength(description, "description", 2, 80);
-		valid = valid && checkTextEditorLength(postText, "text", 5, 350);
+		valid = valid && checkTextEditorLength(postText, "text", 5, 1000);
 		console.log(valid);
 		var token = $("meta[name='_csrf']").attr("content");
 	 	var header = $("meta[name='_csrf_header']").attr("content");

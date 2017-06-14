@@ -193,8 +193,7 @@ public class PostController {
 		ServiceResponse response = 
 				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
 		
-		//TODO Cross-Site Request Forgery (CSRF) 
-		
+		//TODO Cross-Site Request Forgery (CSRF) 	
 		//Anonymous user
 		User currentUser = userService.getUserFromSession();
 		if(currentUser == null) {
@@ -204,18 +203,10 @@ public class PostController {
 		//New post
 		if(post.getPost_id() == 0) {
 			response = postService.addPost(post);
+			return response;
 		}
 		//Update existing post
-		else {
-			//Check if user is owner of this post
-			Post postFromDB = postService.getPostById(post.getPost_id());
-			String postAuth = postFromDB.getUser().getUsername();
-			boolean isAuthor = currentUser.getUsername().equals(postAuth);
-			if(!isAuthor) {
-				return response;
-			}
-			response = postService.updatePost(post);
-		}
+		response = postService.updatePost(post);
 		return response;
 	}
 	

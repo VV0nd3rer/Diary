@@ -11,8 +11,10 @@
         <div class="navbar-header">
            
             <a class="navbar-brand" href="#">Diary</a>
-            <p class="navbar-brand">Logged user: <span sec:authentication="name">Bob</span></p>
-            <p class="navbar-brand">Roles: <span sec:authentication="principal.authorities"></span></p>
+            <div class="navbar-brand">
+            	Logged user: <span sec:authentication="name">Bob</span>
+            </div>
+            <!-- <span sec:authentication="principal.authorities"></span> -->
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -31,6 +33,7 @@
 				</form>
                 <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
                 <li sec:authorize="isAuthenticated()"><a href="#">Logged user: <span sec:authentication="name">Bob</span></a></li>
+                <li sec:authorize="isAuthenticated()"><a href="#">Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span></a></li>
             </ul>
         </div>      
     </div>

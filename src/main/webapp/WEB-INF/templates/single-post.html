@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
-    <script src="../../../resources/js/text-editor.js" th:src="@{/resources/js/text-editor.js}"></script>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=lk4x1sy9vlt5l5pld7wtxgem69i1gf0iokw9sb3gxj43aue1"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
   	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Post</title>
@@ -15,9 +15,6 @@
     <div th:replace="header :: header">&nbsp;</div>
     <div class="container">
 	 <div class="row">
-	    <span th:if="${ isAuthor }">
-	    	<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
-	    </span>
 	   	<div class="col-lg-8">
 	   		<h4 th:text="${post.title}"/>
 	   		<p id="post_id" th:text="${post.post_id}"/>
@@ -37,6 +34,16 @@
 			<hr>
 			<!-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> -->
 			<div id="post-text" th:utext="${post.text}"></div>
+			<div class="btn-toolbar pull-right">
+				<div class="btn-group">
+					<span th:if="${ isAuthor }">
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+			    	</span>
+			    </div>
+			    <div class="btn-group">
+			    	<span th:insert="footer :: return"></span>
+		    	</div>
+	    	</div>
 			<hr>
 			
 			<!-- Blog Comments -->

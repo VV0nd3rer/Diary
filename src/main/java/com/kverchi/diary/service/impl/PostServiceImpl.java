@@ -94,8 +94,17 @@ public class PostServiceImpl implements PostService {
 		//Single post - user loaded
 		//How is it better to develop this thing?
 		Post postNeedToUpd = postDao.getById(post.getPost_id());
-		//CountriesSight updSightForPost = countriesSightService.getSightById(post.getSight_id());
-		postNeedToUpd.setSight_id(post.getSight_id());
+		//Check if user is owner of this post
+		User currentUser = userService.getUserFromSession();
+		String postAuth = postNeedToUpd.getUser().getUsername();
+		boolean isAuthor = currentUser.getUsername().equals(postAuth);
+		if(!isAuthor) {
+			return response;
+		}
+		//
+		if(post.getSight_id() != -1) {
+			postNeedToUpd.setSight_id(post.getSight_id());
+		}
 		postNeedToUpd.setTitle(post.getTitle());
 		postNeedToUpd.setDescription(post.getDescription());
 		postNeedToUpd.setText(post.getText());
