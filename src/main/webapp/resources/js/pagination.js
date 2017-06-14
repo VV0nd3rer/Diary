@@ -1,7 +1,8 @@
 $(document).ready(function(){
 	var root = '/Diary';
+	var pages_total_num = $('#pages-total-num').val();
 	$('#page-selection').bootpag({
-        total: $('#pages-total-num').val(),
+        total: pages_total_num,
         page: 1,
         maxVisible: 5,
         leaps: true,
@@ -14,11 +15,6 @@ $(document).ready(function(){
         lastClass: 'last',
         firstClass: 'first'
     }).on("page", function(event, num){
-    	//if total page is loaded from db, disabled doesn't work :(
-    	if(num == $('#pages-total-num').val()) {   		
-    		return;
-    	}
-    	//
     	var pagination_type="posts";
     	var paginated_url = root + "/pagination";
     	var pagination_handler = $("#pagination_handler").val(); 
@@ -46,9 +42,9 @@ $(document).ready(function(){
 	     	   success: function(data){
 		     		$( ".blog-post" ).remove();
 		      		var post = data.pagePosts;
-		      		var pages_total_num = data.pages_total_num;
+		      		pages_total_num = data.pages_total_num;
 		      		
-		      		//$("#pages-total-num").val(pages_total_num);
+		      		
 		      		var postHTML = '<div class="col-sm-8 blog-main">';
 		      		$.each(post, function(index) {
 		      			var single_post_url = root +"/posts/single-post/"+post[index].post_id;
@@ -71,6 +67,7 @@ $(document).ready(function(){
 	 	   			alert("DONE");
 	 	   		}
 	     	 });
+    	$(this).bootpag({total: pages_total_num});
         $("#paginator").html("Page " + num); // or some ajax content loading...
     }); 
 });
