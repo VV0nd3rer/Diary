@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var root = '/Diary';
+	var root = '';
 	//var pages_total_num = $('#pages-total-num').val();
 	$('#page-selection').bootpag({
         total: $('#pages-total-num').val(),
