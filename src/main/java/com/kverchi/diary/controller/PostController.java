@@ -96,6 +96,18 @@ public class PostController {
 		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
+	@RequestMapping("/list-test")
+	public ModelAndView showTestPosts() {
+		int num_posts_on_page = 5;
+		int page_index = 1;
+		//???
+		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", null);
+		ModelAndView mv = new ModelAndView("test-posts");
+		mv.addObject("pages_total_num", pagination.getPages_total_num());
+		mv.addObject("pagination_handler", "posts");
+		mv.addObject("posts", pagination.getPagePosts());
+		return mv;
+	}
 	/*@RequestMapping("/page/{page_index}")
 	public Pagination showPagePosts(@PathVariable("page_index") int page_index) {
 		int num_posts_on_page = 5;

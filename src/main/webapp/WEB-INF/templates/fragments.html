@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+</head>
+<body>
+    <input class="btn pull-right btn-success" action="action" th:fragment="return" type="submit" onclick="history.go(-1);" value="Return" />
+    <div class="blog-footer" th:fragment="footer">
+        &copy; 2017 Footer
+    </div>
+    <div id="posts-block" th:fragment="page">
+		  <input type="hidden" th:value="${pages_total_num}"
+					id="pages-total-num" />
+			<div class="post" th:each="post: ${posts}">
+				
+				<!-- Each post -->
+				<div class="panel">
+					<div class="panel-heading">
+						<div class="text-center">
+							<div class="row">
+								<input type="hidden" th:value="${post.sight_id}" id="sight_id" />
+								<div class="col-sm-9">
+									<h4 class="pull-left" th:text="${post.title}">Welcome</h4>
+								</div>
+								<div class="col-sm-3">
+									<p class="pull-right">
+										by <span th:text="${post.user.username}">someone</span> <small><em
+											th:text="${post.post_datetime}"></em></small>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+	
+					<div class="panel-body" th:text="${post.description}">Lorem
+						ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+						minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+						aliquip ex ea commodo consequat. Duis aute irure dolor in...</div>
+	
+	
+	
+					<div class="panel-footer">
+						<span><a href="#"
+							th:href="@{/posts/single-post/{post_id}(post_id=${post.post_id}) }">Read
+								more</a></span>
+					</div>
+				</div>
+				<!-- end of post -->
+			</div>
+	 </div>
+</body>
+</html>

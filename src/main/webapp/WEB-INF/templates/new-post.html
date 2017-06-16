@@ -65,12 +65,12 @@
 			    <input class="btn pull-right btn-success" type="submit" id="create-post-ok-btn" value="OK">
 		    </div>
 		    <div class="btn-group">
-			    <span th:insert="footer :: return"></span>
+			    <span th:insert="fragments :: return"></span>
 	        </div>
         </div>
      </form>
     </div>
-  <div class="blog-footer" th:replace="footer :: footer">&copy; Kverchi</div>
+  <div class="blog-footer" th:replace="fragments :: footer">&copy; Kverchi</div>
   </body>
   
 </html>
