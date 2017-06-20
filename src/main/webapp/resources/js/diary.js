@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var root = '/Diary';
+	var root = '';
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
