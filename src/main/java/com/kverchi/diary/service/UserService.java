@@ -13,7 +13,7 @@ public interface UserService {
 	ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;
 	void activateAccount(User user);
 	boolean updatePassword(User user);
-	boolean createResetPasswordToken(String email);
+	boolean createAndSendResetPasswordToken(String email);
 	User getResetPasswordToken(String token);
 	User getUserFromSession();
 }

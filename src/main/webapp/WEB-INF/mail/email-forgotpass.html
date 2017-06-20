@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all">Password reminder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <h3 th:text="#{greeting(${name})}">
+      Hello, Someone!
+    </h3>
+    <hr>
+    
+     <p>
+       You have sent request to reset your password.<br />
+       <b>If it was you, please click on the next link: <a th:href="@{${link}}"> <span th:text="${link}"></span></a>.</b><br />
+       The link above is valid only 24h. 
+    </p>
+    <p><i>Have a nice day :)</i></p>
+       
+      Regards, <br />
+      <em>Kverchi Team</em>
+    </p>
+  </body>
+</html>

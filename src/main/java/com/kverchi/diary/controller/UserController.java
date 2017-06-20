@@ -1,6 +1,7 @@
 package com.kverchi.diary.controller;
 
 import org.apache.log4j.Logger;
+import org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class UserController {
 			}
 		}
 //		TODO return error info with error page
-			return new ModelAndView("/posts/test-me");
+			return new ModelAndView("error");
 	}
 	@RequestMapping(value="/login")
 	public ModelAndView login() {
@@ -69,7 +70,7 @@ public class UserController {
 	@RequestMapping(value="/reset-password", method = RequestMethod.POST)
 	public ModelAndView resetPassword(@ModelAttribute ForgotPasswordForm forgotPasswordForm) {
 		String email = forgotPasswordForm.getEmail();
-		boolean res = userService.createResetPasswordToken(email);
+		boolean res = userService.createAndSendResetPasswordToken(email);
 		if(res) {
 			//TODO return info about reset link
 			return new ModelAndView("login");

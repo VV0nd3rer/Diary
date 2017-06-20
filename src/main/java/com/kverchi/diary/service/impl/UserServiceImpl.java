@@ -1,5 +1,7 @@
 package com.kverchi.diary.service.impl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -8,6 +10,7 @@ import java.util.Date;
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.kverchi.diary.custom.exception.ServiceException;
 import com.kverchi.diary.dao.PasswordChangeRequestDao;
@@ -37,6 +42,13 @@ import com.kverchi.diary.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 	final static Logger logger = Logger.getLogger(UserServiceImpl.class);
+	final static String CHANGE_PASS_LINK = "users/change-password/";
+	final static String REGISTER_USER_LINK = "users/confirm-registration/";
+	final static String EMAIL_FORGOTPASS_TEMPLATE = "email-forgotpass";
+	final static String EMAIL_REGISTER_TEMPLATE="email-registration";
+	
+	@Autowired
+	ServletContext context;  
 	
 	@Autowired 
 	private UserDao userDao;
@@ -45,8 +57,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private PasswordChangeRequestDao passwordChangeRequestDao;
 	@Autowired
-	//private JavaMailSender mailSender;
 	private EmailService emailService;
+	@Autowired
+    private TemplateEngine emailTemplateEngine;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	 
@@ -58,11 +71,6 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public ServiceResponse registerAccount(RegistrationForm user) throws ServiceException {
-		/*if(!user.getPassword().equals(user.getMatchingPassword())) {
-			logger.debug("Passwords are not matching. ");
-			//throw new ServiceException("Passwords are not matching.");
-			
-		}*/
 		ServiceResponse response = 
 				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
 		if(userDao.getUserByUsername(user.getUsername()) != null) {
@@ -79,13 +87,21 @@ public class UserServiceImpl implements UserService {
 			response.setRespMsg(ServiceMessageResponse.USER_EMAIL_ALREADY_EXIST.toString());
 			return response;
 		}
-		
-		// Sending email implementation needs to be here as 'isRegistrationEmailSent'
 		boolean isRegistrationEmailSent = false;
-		String emailText = "Dear " + user.getUsername() + ", thank you for your registration. " +
-						   "Please activate your account by clicking <a href='http://localhost:8080/Diary/users/confirm-registration/" + 
-						   user.getUsername() + "'>here</a>.";
-		isRegistrationEmailSent = /*sendEmail*/emailService.sendEmailFromAdmin(user.getEmail(), emailText);
+		try {
+			String link = "http:/" + context.getResource("/").getPath();
+			link += REGISTER_USER_LINK + user.getUsername();
+			final Context ctx = new Context();
+			ctx.setVariable("name", user.getUsername());
+			ctx.setVariable("link", link);
+			//if(id > 0 /*id == token*/) {
+			final String emailContent = emailTemplateEngine.process(EMAIL_REGISTER_TEMPLATE, ctx);
+			isRegistrationEmailSent = emailService.sendSimpleHTMLEmail(user.getEmail(), "Registration", emailContent);
+			//}
+			//return false;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 		
 		//TODO if account is created then send an email 
 		//in case of some internal error email will not be sent
@@ -120,8 +136,9 @@ public class UserServiceImpl implements UserService {
 		}
 		//return response;
 	}
+	
 	@Override
-	public boolean createResetPasswordToken(String email) {
+	public boolean createAndSendResetPasswordToken(String email) {
 		User user = null;
 		user = userDao.getUserByEmail(email);
 		if(user == null) {
@@ -134,12 +151,27 @@ public class UserServiceImpl implements UserService {
 		passChangeReq.setCreatedTime(new Date());
 		//String id = (String)passwordChangeRequestDao.create(passChangeReq);
 		passwordChangeRequestDao.persist(passChangeReq);
-		//if(id > 0 /*id == token*/) {
-			String emailText = "Reset pass link is http://localhost:8080/Diary/users/change-password/"+token;
-			/*sendEmail*/emailService.sendEmailFromAdmin(user.getEmail(), emailText);
-			return true;
-		//}
-		//return false;
+		
+		try {
+			URL urlLink = context.getResource("/");
+			logger.debug("----- URL link ------");
+			logger.debug("ref: " + urlLink.getRef());
+			logger.debug("path: " + urlLink.getPath());
+			logger.debug("port: " +  urlLink.getPort());
+			String link = "http:/" + urlLink.getPath();//context.getResource("/").toString();
+			link += CHANGE_PASS_LINK + token;
+			final Context ctx = new Context();
+			ctx.setVariable("name", user.getUsername());
+			ctx.setVariable("link", link);
+			//if(id > 0 /*id == token*/) {
+			final String emailContent = this.emailTemplateEngine.process(EMAIL_FORGOTPASS_TEMPLATE, ctx);
+			emailService.sendSimpleHTMLEmail(user.getEmail(), "Resetting password", emailContent);
+			//}
+			//return false;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 	@Override
 	public User getResetPasswordToken(String token) {

@@ -1,6 +1,7 @@
 package com.kverchi.diary.service.impl;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import com.kverchi.diary.service.EmailService;
 
@@ -26,45 +29,16 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Override
-	public boolean sendEmailFromAdmin(final String toAddr, final String text) {
-		/*boolean res = false;
-		AdminEmailAddress adminEmail = null;
-		adminEmail = emailDao.getById(ADMIN_EMAIL);
-		if(adminEmail == null) {
-			return res;
-		}
-		logger.info("Encoded pass is " + passwordEncoder.encode("n1c3_w0r1d"));
-		if(mailSender instanceof JavaMailSenderImpl) {
-			JavaMailSenderImpl javaMailSender = (JavaMailSenderImpl)mailSender;
-			javaMailSender.setUsername(adminEmail.getEmail());
-			javaMailSender.setPassword(adminEmail.getPassword());
-			
-		
-		
-			MimeMessagePreparator preparator = new MimeMessagePreparator() {
-				@Override
-				public void prepare(MimeMessage mimeMessage) throws Exception {
-					mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddr));
-					mimeMessage.setFrom(new InternetAddress("kverchi24@gmail.com"));
-					mimeMessage.setText(text);
-				}
-			};
-			try {
-				javaMailSender.send(preparator);
-				res = true;
-			} catch(MailException ex) {
-				//logger.error(ex);
-			}
-		}
-		return res;*/
-		
+	public boolean sendEmailFromAdmin(final String toAddr, final String subject, final String text) {		
 		boolean res = false;
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			@Override
 			public void prepare(MimeMessage mimeMessage) throws Exception {
-				mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddr));
-				mimeMessage.setFrom(new InternetAddress(ADMIN_EMAIL));
-				mimeMessage.setText(text);
+				final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+				message.setSubject(subject);
+				message.setTo(toAddr);
+				message.setFrom(new InternetAddress(ADMIN_EMAIL));
+				message.setText(text, true);
 			}
 		};
 		try {
@@ -75,6 +49,34 @@ public class EmailServiceImpl implements EmailService {
 			logger.error(ex);
 		}
 		return res;
-		
+	}
+	
+	@Override
+	public boolean sendSimpleHTMLEmail(String toAddr, String subject, String text) {
+		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+       
+        try {
+        	 message.setSubject(subject);
+             message.setFrom(ADMIN_EMAIL);
+			 message.setTo(toAddr);
+			 message.setText(text, true);
+			 mailSender.send(mimeMessage);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean sendTextEmail(String toAddr, String subject, String text) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean sendHTMLWithAttachmentEmail(String toAddr, String subject, String text) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

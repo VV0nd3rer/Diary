@@ -24,7 +24,7 @@ public class Role implements Serializable {
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}
-	
+	@Column(name = "role")
 	public String getRole() {
 		return role;
 	}

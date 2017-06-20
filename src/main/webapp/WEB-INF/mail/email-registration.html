@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all">Password reminder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <h3 th:text="#{greeting(${name})}">
+      Hello, Someone!
+    </h3>
+    
+     <p>
+       Thank you for your registration.<br />
+       <b>Please activate your account by clicking: <a th:href="@{${link}}"> <span th:text="${link}"></span></a>.</b><br />
+       <i>Welcome to the wide world of travelling!</i>
+    </p>
+    <p><i>Have a nice day :)</i></p>
+       
+      Regards, <br />
+      <em>Kverchi Team</em>
+    </p>
+  </body>
+</html>

@@ -20,7 +20,7 @@ public class RoleDaoImpl extends GenericDaoImpl<Role> implements RoleDao {
 		try { 
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
-			String str_query = " FROM Role r WHERE r.role = :role_name";
+			String str_query = " FROM Role r WHERE r.role = :role";
 			Query query = entityManager.createQuery(str_query);
 			query.setParameter("role", role_name);   
 			role = (Role)query.getSingleResult();
