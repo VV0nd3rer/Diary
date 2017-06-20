@@ -88,21 +88,15 @@ public class UserServiceImpl implements UserService {
 			return response;
 		}
 		boolean isRegistrationEmailSent = false;
-		try {
-			String link = "http:/" + context.getResource("/").getPath();
-			link += REGISTER_USER_LINK + user.getUsername();
-			final Context ctx = new Context();
-			ctx.setVariable("name", user.getUsername());
-			ctx.setVariable("link", link);
-			//if(id > 0 /*id == token*/) {
-			final String emailContent = emailTemplateEngine.process(EMAIL_REGISTER_TEMPLATE, ctx);
-			isRegistrationEmailSent = emailService.sendSimpleHTMLEmail(user.getEmail(), "Registration", emailContent);
-			//}
-			//return false;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
+
+		String link = "https://super-diary.herokuapp.com/" + REGISTER_USER_LINK + user.getUsername();
+
+		final Context ctx = new Context();
+		ctx.setVariable("name", user.getUsername());
+		ctx.setVariable("link", link);
+		final String emailContent = emailTemplateEngine.process(EMAIL_REGISTER_TEMPLATE, ctx);
+		isRegistrationEmailSent = emailService.sendSimpleHTMLEmail(user.getEmail(), "Registration", emailContent);
+
 		//TODO if account is created then send an email 
 		//in case of some internal error email will not be sent
 		if(isRegistrationEmailSent) {
@@ -151,27 +145,14 @@ public class UserServiceImpl implements UserService {
 		passChangeReq.setCreatedTime(new Date());
 		//String id = (String)passwordChangeRequestDao.create(passChangeReq);
 		passwordChangeRequestDao.persist(passChangeReq);
+		String link = "https://super-diary.herokuapp.com/" + CHANGE_PASS_LINK + token; 
+		final Context ctx = new Context();
+		ctx.setVariable("name", user.getUsername());
+		ctx.setVariable("link", link);
+		final String emailContent = this.emailTemplateEngine.process(EMAIL_FORGOTPASS_TEMPLATE, ctx);
+		boolean isSended = emailService.sendSimpleHTMLEmail(user.getEmail(), "Resetting password", emailContent);
+		return isSended;
 		
-		try {
-			URL urlLink = context.getResource("/");
-			logger.debug("----- URL link ------");
-			logger.debug("ref: " + urlLink.getRef());
-			logger.debug("path: " + urlLink.getPath());
-			logger.debug("port: " +  urlLink.getPort());
-			String link = "http:/" + urlLink.getPath();//context.getResource("/").toString();
-			link += CHANGE_PASS_LINK + token;
-			final Context ctx = new Context();
-			ctx.setVariable("name", user.getUsername());
-			ctx.setVariable("link", link);
-			//if(id > 0 /*id == token*/) {
-			final String emailContent = this.emailTemplateEngine.process(EMAIL_FORGOTPASS_TEMPLATE, ctx);
-			emailService.sendSimpleHTMLEmail(user.getEmail(), "Resetting password", emailContent);
-			//}
-			//return false;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		return true;
 	}
 	@Override
 	public User getResetPasswordToken(String token) {
