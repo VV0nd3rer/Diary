@@ -76,7 +76,7 @@ public class UserController {
 			return new ModelAndView("login");
 		}
 //		TODO return error info with error page
-		return new ModelAndView("posts/test-me");
+		return new ModelAndView("error");
 	}
 	@RequestMapping(value="/change-password/{UUID}")
 	public ModelAndView changePassword(@PathVariable String UUID) {
@@ -91,7 +91,7 @@ public class UserController {
 			return mv;
 		}
 //		TODO return error info with error page
-		return new ModelAndView("posts/test-me");
+		return new ModelAndView("error");
 	}
 	@RequestMapping(value="/update-password", method = RequestMethod.POST)
 	public ModelAndView updatePassword(@ModelAttribute NewPasswordForm newPasswordForm) {
@@ -104,7 +104,7 @@ public class UserController {
 			return new ModelAndView("login");
 		}
 //		TODO return error info with error page
-		return new ModelAndView("posts/test-me");
+		return new ModelAndView("error");
 	}
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<String> exceptionHandler(Exception ex) {
