@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.CountriesSightDao;
 import com.kverchi.diary.domain.CountriesSight;
 
@@ -21,7 +23,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	
 	@Transactional
 	@Override
-	public List<CountriesSight> getCountrySights(String contry_code) {
+	public List<CountriesSight> getCountrySights(String contry_code) throws DatabaseException {
 		EntityManager entityManager = null; 
 		List<CountriesSight> sights = null;
 		try {
@@ -33,9 +35,9 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	        sights = query.getResultList();
 	        entityManager.getTransaction().commit();
 	       } 
-	       catch (Exception e) {
-	    	   logger.error(e.getMessage());
-	    	   e.printStackTrace();
+	       catch (PersistenceException e) {
+	    	   logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+	    	   throw new DatabaseException(e);
 	       } 
 	       finally {
 	    	   if (entityManager != null && entityManager.isOpen()) {
@@ -46,7 +48,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 	@Override
-	public CountriesSight getSightByCoord(float x, float y) {
+	public CountriesSight getSightByCoord(float x, float y) throws DatabaseException {
 		EntityManager entityManager = null; 
 		CountriesSight sight = null;
 		try {
@@ -59,9 +61,9 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	        sight = (CountriesSight) query.getSingleResult();
 	        entityManager.getTransaction().commit();
 	       } 
-	       catch (Exception e) {
-	    	   logger.error(e.getMessage());
-	    	   e.printStackTrace();
+	       catch (PersistenceException e) {
+	    	   logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+	    	   throw new DatabaseException(e);
 	       } 
 	       finally {
 	    	   if (entityManager != null && entityManager.isOpen()) {
@@ -70,6 +72,4 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	       }
 		return sight;
 	}
-
-
 }

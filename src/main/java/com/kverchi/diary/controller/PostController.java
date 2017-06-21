@@ -27,6 +27,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.domain.Comment;
 import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
@@ -97,23 +98,11 @@ public class PostController {
 		return mv;
 	}
 	@RequestMapping("/list-test")
-	public ModelAndView showTestPosts() {
-		int num_posts_on_page = 5;
-		int page_index = 1;
-		//???
-		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", null);
+	public ModelAndView showTestPosts() {		
 		ModelAndView mv = new ModelAndView("test-posts");
-		mv.addObject("pages_total_num", pagination.getPages_total_num());
-		mv.addObject("pagination_handler", "posts");
-		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
-	/*@RequestMapping("/page/{page_index}")
-	public Pagination showPagePosts(@PathVariable("page_index") int page_index) {
-		int num_posts_on_page = 5;
-		Pagination pagination = postService.getPostsPage(page_index, num_posts_on_page);
-		return pagination;
-	}*/
+	
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
 		
@@ -132,11 +121,12 @@ public class PostController {
 	@RequestMapping("/single-post/{post_id}")
 	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
 		ModelAndView mv = new ModelAndView(SINGLE_POST);
+
 		Post post = postService.getPostById(post_id);
 		Set<Comment> comments = post.getPost_comments();
 		CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
 		//Add sight ID to the session
-		
+
 		mv.addObject("post", post);
 		mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
@@ -146,8 +136,29 @@ public class PostController {
 			isAuthor = currentUser.getUsername().equals(post.getUser().getUsername());
 		}
 		mv.addObject("isAuthor", isAuthor);
+		
 		return mv;
 	}
+	/*@RequestMapping("/print-post/{post_id}")
+	public ModelAndView printSinglePost(@PathVariable("post_id") int post_id) throws DatabaseException {
+		ModelAndView mv =  new ModelAndView(SINGLE_POST);
+		
+			Post post = postService.getPostByKey(post_id);
+			Set<Comment> comments = post.getPost_comments();
+			CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
+			//Add sight ID to the session
+			
+			mv.addObject("post", post);
+			mv.addObject("sight", sight);
+			mv.addObject("comments", comments);
+			boolean isAuthor = false;
+			User currentUser = userService.getUserFromSession();
+			if(currentUser != null) {
+				isAuthor = currentUser.getUsername().equals(post.getUser().getUsername());
+			}
+			mv.addObject("isAuthor", isAuthor);
+		return mv;
+	}*/
 	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")
 	public List<Post> firstPost() {
 		List<Post> all_posts = postService.getAllPosts();

@@ -1,12 +1,14 @@
 package com.kverchi.diary.dao.impl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import org.apache.log4j.Logger;
 import javax.persistence.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.domain.User;
 
@@ -15,7 +17,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	final static Logger logger = Logger.getLogger(UserDaoImpl.class);
 	
 	@Override
-	public User getUserByUsername(String username) {
+	public User getUserByUsername(String username) throws DatabaseException {
 		EntityManager entityManager = null; 
 		User user = null;
 		try { 
@@ -26,9 +28,9 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 			query.setParameter("username", username);   
 			user = (User)query.getSingleResult();
 	    	entityManager.getTransaction().commit();   
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {
@@ -39,7 +41,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	}
 
 	@Override
-	public User getUserByEmail(String email) {
+	public User getUserByEmail(String email) throws DatabaseException {
 		EntityManager entityManager = null; 
 		User user = null;
 		try { 
@@ -50,9 +52,9 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 			query.setParameter("email", email);   
 			user = (User)query.getSingleResult();
 	    	entityManager.getTransaction().commit();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {

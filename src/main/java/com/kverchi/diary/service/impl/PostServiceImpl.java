@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
+import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.dao.impl.PostDaoImpl;
@@ -44,7 +45,6 @@ public class PostServiceImpl implements PostService {
 		return postDao.getAllRecords();
 		//murrr
 	}
-	
 	public Post getPostById(int post_id) {
 		return postDao.getById(post_id);
 	}
@@ -147,7 +147,4 @@ public class PostServiceImpl implements PostService {
 		Pagination pagination = new Pagination(pagePosts, numOfPages);
 		return pagination;
 	}*/
-
-
-
 }

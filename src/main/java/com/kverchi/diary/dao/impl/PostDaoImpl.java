@@ -2,10 +2,12 @@ package com.kverchi.diary.dao.impl;
 
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.PaginationDao;
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.domain.Post;
@@ -32,7 +35,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	final static Logger logger = Logger.getLogger(PostDaoImpl.class);
 
 	@Override
-	public Post getById(Serializable id) {
+	public Post getById(Serializable id) throws DatabaseException {
 		EntityManager entityManager = null; 
 		Post obj = null;
 		try {
@@ -42,9 +45,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 			Hibernate.initialize(obj.getPost_comments());
 			Hibernate.initialize(obj.getUser());
 			entityManager.getTransaction().commit();
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} finally {
 			if (entityManager != null && entityManager.isOpen()) {
 				entityManager.close();
@@ -52,10 +55,10 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 		}
 		return obj;
 	}
-	
+
 	@Transactional
 	@Override
-	public List<Post> getAllRecords() {
+	public List<Post> getAllRecords() throws DatabaseException {
 	 EntityManager entityManager = null; 
 	 List<Post> objList = null;
 	 try {
@@ -74,19 +77,19 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
  		   Hibernate.initialize(post.getUser());
  	    }
 	    entityManager.getTransaction().commit();
-	 } catch (Exception e) {
-		 logger.error(e.getMessage());
-		 e. printStackTrace();
+	 } catch(PersistenceException  e) {
+		 logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+		 throw new DatabaseException(e);
 	 } finally {
 		 if (entityManager != null && entityManager.isOpen()) {
-				entityManager.close();
-	     }
+			 entityManager.close();
+		 }
 	 }
 	 return objList;
 	}
 
 	@Override
-	public List<Post> getSightPosts(int sight_id) {
+	public List<Post> getSightPosts(int sight_id) throws DatabaseException {
 		EntityManager entityManager = null; 
 		List<Post> sight_posts = null;
 		try { 
@@ -103,9 +106,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	    	}
 	    	entityManager.getTransaction().commit();
 		}
-		catch (Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {
@@ -116,7 +119,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	}
 
 	@Override
-	public int getNumOfPosts(Map<String, Object> search_criteria) {
+	public int getNumOfPosts(Map<String, Object> search_criteria) throws DatabaseException {
 		EntityManager entityManager = null; 
 		int numOfRows = 0;
 		try { 
@@ -144,9 +147,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	    	numOfRows = ((Long)query.getSingleResult()).intValue();
 	    	entityManager.getTransaction().commit();
 		}
-		catch (Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {
@@ -157,7 +160,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	}
 
 	@Override
-	public List<Post> getLimitPosts(int limit, int offset, Map<String, Object> search_criteria) {
+	public List<Post> getLimitPosts(int limit, int offset, Map<String, Object> search_criteria) throws DatabaseException {
 		EntityManager entityManager = null; 
 		List<Post> limitedPosts = null;
 		try { 
@@ -197,9 +200,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 	    	}
 	    	entityManager.getTransaction().commit();
 		}
-		catch (Exception e) {
-			logger.error(e.getMessage());
-			e. printStackTrace();
+		catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
 		} 
 		finally {
 			if (entityManager != null && entityManager.isOpen()) {

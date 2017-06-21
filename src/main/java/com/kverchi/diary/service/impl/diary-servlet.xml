@@ -38,7 +38,18 @@
 	  <property name="templateEngine" ref="templateEngine" />
 	  <property name="order" value="1" />
 	</bean>
-			
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <property name="exceptionMappings">
+        <props>
+            <prop key="com.kverchi.diary.custom.exception.DatabaseException">
+                error/transaction-error
+            </prop>
+        </props>
+    </property>
+    <property name="defaultErrorView" value="error/generic-error"/>
+	</bean>	
+	
 	<mvc:resources mapping="/resources/**" location="/resources/"/>
 	
 	<mvc:annotation-driven />
