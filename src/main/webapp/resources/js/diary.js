@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var root = '';
+	var root = '/Diary';
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
@@ -258,8 +258,6 @@ $(document).ready(function(){
    $("#register-ok-btn").click(function(event) {   	   	
 	   event.preventDefault();
 	   remErrMsg();
-	  /* var token = $("meta[name='_csrf']").attr("content");
-	   var header = $("meta[name='_csrf_header']").attr("content");*/
 	   
 	   var username = $("#username");
 	   var email = $("#email");
