@@ -97,10 +97,15 @@ public class PostController {
 		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
-	@RequestMapping("/list-test")
-	public ModelAndView showTestPosts() {		
-		ModelAndView mv = new ModelAndView("test-posts");
+	@RequestMapping("/posts-test")
+	public ModelAndView getTestList() {
+		ModelAndView mv = new ModelAndView("posts-test");
 		return mv;
+	}
+	@RequestMapping(value = "/list-test", method = RequestMethod.GET, headers="Accept=application/json")
+	public List<Post> showTestPosts() {		
+		List<Post> posts = postService.getAllPosts();
+		return posts;
 	}
 	
 	@RequestMapping("/sight/{sight_id}")
