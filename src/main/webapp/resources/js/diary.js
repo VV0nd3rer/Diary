@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	var root = '/Diary';
+	var root = '';
+
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
@@ -140,7 +141,7 @@ $(document).ready(function(){
     $("#delete-book-btn").click(function() {
     	$("#modal-dialog").modal();
     });
-    $("#delete-sight-btn").click(function() {F
+    $("#delete-sight-btn").click(function() {
     	$("#modal-dialog").modal();
     });
     $("#modal-dialog-ok-btn").click(function(event) {

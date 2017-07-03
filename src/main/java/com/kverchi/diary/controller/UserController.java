@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,18 +30,37 @@ public class UserController {
 	final static Logger logger = Logger.getLogger(UserController.class);
 	@Autowired
 	UserService userService;
-	
-	@RequestMapping(value="/registration")
-	public ModelAndView registration() {
-		ModelAndView mv = new ModelAndView("registration");
-		mv.addObject("regForm", new RegistrationForm());
+
+	@RequestMapping(value="/sign-up")
+	public ModelAndView signup() {
+		ModelAndView mv = new ModelAndView("sign-up");
 		return mv;
 	}
+
+	@RequestMapping(value="/username-exists/{username}")
+	public boolean isUsernamePresent(@PathVariable("username") String username) {
+		boolean isUsernamePresent = userService.isValuePresent("username", username);
+		return isUsernamePresent;
+	}
+
+	/*If use GET request with email as part of URL, need to specify a content negotiation manager
+	  https://blog.georgovassilis.com/2015/10/29/spring-mvc-rest-controller-says-406-when-emails-are-part-url-path/
+	 */
+	@RequestMapping(value="/email-exists", method=RequestMethod.POST, headers = "content-type=text/*")
+	public boolean isEmailPresent(@RequestBody String email) {
+		boolean isEmailPresent = userService.isValuePresent("email", email);
+		logger.debug("isEmailPresent: " + isEmailPresent);
+		return isEmailPresent;
+	}
+
 	@RequestMapping(value="/add-user", method = RequestMethod.POST)
 	public ServiceResponse addUser(@RequestBody RegistrationForm regForm) throws ServiceException {
-		ServiceResponse response = userService.registerAccount(regForm);
+		ServiceResponse response = userService.registerAccount(regForm); //userService.testRegisterAccount(regForm);
 		if(response.getRespCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 			throw new ServiceException(response.getRespMsg()); 
+		}
+		else if(response.getRespCode() == HttpStatus.PRECONDITION_FAILED) {
+			throw new ServiceException(response.getRespMsg());
 		}
 		return response;
 	}
@@ -80,8 +100,7 @@ public class UserController {
 	}
 	@RequestMapping(value="/change-password/{UUID}")
 	public ModelAndView changePassword(@PathVariable String UUID) {
-		User user = null;
-		user = userService.getResetPasswordToken(UUID);
+		User user = userService.getResetPasswordToken(UUID);
 		if(user != null) {
 			ModelAndView mv = new ModelAndView("new-password");
 			NewPasswordForm newPassForm = new NewPasswordForm();

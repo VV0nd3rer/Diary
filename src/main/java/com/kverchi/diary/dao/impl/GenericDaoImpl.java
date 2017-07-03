@@ -2,22 +2,17 @@ package com.kverchi.diary.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
+import javax.persistence.metamodel.EntityType;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,5 +140,33 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	 }
 	 return objList;
 	}
-	
+	public boolean isRecordPresent(String key, Object value) throws DatabaseException {
+		EntityManager entityManager = null;
+		boolean isRecordPresent = false;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+			Root<T> c = criteriaQuery.from(type);
+			EntityType<T> obj = c.getModel();
+			criteriaQuery.select(builder.countDistinct(c));
+			criteriaQuery.where(
+					builder.equal(c.get(obj.getSingularAttribute(key)), value)
+			);
+			long count = entityManager.createQuery(criteriaQuery).getSingleResult();
+			if(count > 0) {
+				isRecordPresent = true;
+			}
+
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		}
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return isRecordPresent;
+	}
 }

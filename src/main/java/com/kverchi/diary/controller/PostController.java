@@ -97,11 +97,7 @@ public class PostController {
 		mv.addObject("posts", pagination.getPagePosts());
 		return mv;
 	}
-	@RequestMapping("/posts-test")
-	public ModelAndView getTestList() {
-		ModelAndView mv = new ModelAndView("posts-test");
-		return mv;
-	}
+
 	@RequestMapping(value = "/list-test", method = RequestMethod.GET, headers="Accept=application/json")
 	public List<Post> showTestPosts() {		
 		List<Post> posts = postService.getAllPosts();
@@ -144,26 +140,7 @@ public class PostController {
 		
 		return mv;
 	}
-	/*@RequestMapping("/print-post/{post_id}")
-	public ModelAndView printSinglePost(@PathVariable("post_id") int post_id) throws DatabaseException {
-		ModelAndView mv =  new ModelAndView(SINGLE_POST);
-		
-			Post post = postService.getPostByKey(post_id);
-			Set<Comment> comments = post.getPost_comments();
-			CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
-			//Add sight ID to the session
-			
-			mv.addObject("post", post);
-			mv.addObject("sight", sight);
-			mv.addObject("comments", comments);
-			boolean isAuthor = false;
-			User currentUser = userService.getUserFromSession();
-			if(currentUser != null) {
-				isAuthor = currentUser.getUsername().equals(post.getUser().getUsername());
-			}
-			mv.addObject("isAuthor", isAuthor);
-		return mv;
-	}*/
+
 	@RequestMapping(value = "/list-posts", /*method = RequestMethod.GET,*/ produces = "application/json")
 	public List<Post> firstPost() {
 		List<Post> all_posts = postService.getAllPosts();

@@ -69,6 +69,50 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.getUserByUsername(username);
 		return user;
 	}
+
+	@Override
+	public boolean isValuePresent(String key, Object value) {
+		boolean isValuePresent = userDao.isRecordPresent(key, value);
+		return isValuePresent;
+	}
+	@Override
+	public ServiceResponse testRegisterAccount(RegistrationForm user) throws ServiceException {
+		ServiceResponse response =
+				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
+		if(userDao.getUserByUsername(user.getUsername()) != null) {
+			logger.debug("Username " + user.getUsername() + " already exists.");
+			//throw new ServiceException("Username " + user.getUsername() + " already exists.");
+			response.setRespCode(HttpStatus.PRECONDITION_FAILED);
+			response.setRespMsg(ServiceMessageResponse.USER_USERNAME_ALREADY_EXIST.toString());
+			return response;
+		}
+		if(userDao.getUserByEmail(user.getEmail()) != null) {
+			logger.debug("Email " + user.getEmail() + " already exists.");
+			//throw new ServiceException("Email " + user.getEmail() + " already exists.");
+			response.setRespCode(HttpStatus.PRECONDITION_FAILED);
+			response.setRespMsg(ServiceMessageResponse.USER_EMAIL_ALREADY_EXIST.toString());
+			return response;
+		}
+		boolean isRegistrationEmailSent = false;
+
+		String link = "https://super-diary.herokuapp.com/" + REGISTER_USER_LINK + user.getUsername();
+
+		final Context ctx = new Context();
+		ctx.setVariable("name", user.getUsername());
+		ctx.setVariable("link", link);
+		final String emailContent = emailTemplateEngine.process(EMAIL_REGISTER_TEMPLATE, ctx);
+		isRegistrationEmailSent = emailService.sendSimpleHTMLEmail(user.getEmail(), "Registration", emailContent);
+
+		//TODO if account is created then send an email
+		//in case of some internal error email will not be sent
+		if(isRegistrationEmailSent) {
+			response.setRespCode(HttpStatus.OK);
+			response.setRespMsg(ServiceMessageResponse.OK.toString());
+
+		}
+		return response;
+	}
+
 	@Override
 	public ServiceResponse registerAccount(RegistrationForm user) throws ServiceException {
 		ServiceResponse response = 

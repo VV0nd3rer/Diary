@@ -1,6 +1,6 @@
 <html>
 <body>
-<h2>Hi :)</h2>
+<h2>Hi, I need some changes!</h2>
 
 <h3>
 	<ul>
@@ -23,7 +23,7 @@
 	    <a href="users/login">Login</a>
 	  </li>
 	  <li>
-	  	<a href="users/registration">Registration</a>
+	  	<a href="users/sign-up">Registration</a>
 	  </li>
 	</ul>
 </h3>

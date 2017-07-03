@@ -12,6 +12,11 @@ public class MainController {
 		mv.addObject("result", "Error");
 		return mv;
 	}*/
+	@RequestMapping("/transaction-error")
+	public ModelAndView showTransactionErrorPage() {
+		ModelAndView mv = new ModelAndView("error/transaction-error");
+		return mv;
+	}
 	@RequestMapping("/denied")
 	public ModelAndView showDeniedPage() {
 		ModelAndView mv = new ModelAndView("error/denied-error");

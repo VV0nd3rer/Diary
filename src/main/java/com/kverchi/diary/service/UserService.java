@@ -11,9 +11,11 @@ import com.kverchi.diary.form.RegistrationForm;
 public interface UserService {
 	User getUserByUsername(String username);
 	ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;
+	ServiceResponse testRegisterAccount(RegistrationForm user) throws ServiceException;
 	void activateAccount(User user);
 	boolean updatePassword(User user);
 	boolean createAndSendResetPasswordToken(String email);
 	User getResetPasswordToken(String token);
 	User getUserFromSession();
+	boolean isValuePresent(String key, Object value);
 }
