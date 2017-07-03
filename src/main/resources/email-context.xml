@@ -20,7 +20,7 @@
 		<property name="templateResolver" ref="htmlTemplateResolver" />
 	</bean>
 	<bean id="htmlTemplateResolver"
-		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
 		<property name="order" value="2"/>
 		<!-- <property name="resolvablePatterns" value="html/*"/> -->
 		<property name="prefix" value="/WEB-INF/mail/" />
