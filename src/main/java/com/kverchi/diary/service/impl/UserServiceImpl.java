@@ -108,7 +108,6 @@ public class UserServiceImpl implements UserService {
 		if(isRegistrationEmailSent) {
 			response.setRespCode(HttpStatus.OK);
 			response.setRespMsg(ServiceMessageResponse.OK.toString());
-
 		}
 		return response;
 	}

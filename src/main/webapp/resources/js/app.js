@@ -1,6 +1,8 @@
 var signupApp = angular.module('signup', ['ngMaterial','ngMessages']);
 
-signupApp.controller('userController', function($scope, $http, $window) {
+signupApp.controller('userController',
+
+	function($scope, $http) {
 
 	$scope.addUser = function addUser() {
 		console.log('username: ' + $scope.username);
@@ -18,17 +20,25 @@ signupApp.controller('userController', function($scope, $http, $window) {
 		});
 		var success_url = '/users/login';
 		var error_url = '/transaction-error';
+
+		$scope.isLoading = true;
+
 		$http.post('/users/add-user',  JSON.stringify(user))
-			.then(function successCallback(response) {
-			console.log('response respCode: ' + response.data.respCode);
-				if(response.data.respCode == 'OK') {
-					$window.location.href= success_url;
-				}
+			.then(function(response) {
+				$scope.isLoading = false;
+				console.log(JSON.stringify(response));
+				angular.element('#signupForm').remove();
+				angular.element('#signupResult').replaceWith(response.data);
+			});/*function successCallback(response) {
+				$scope.isLoading = false;
+				console.log(JSON.stringify(response));
+				angular.element('#signupForm').remove();
+				angular.element('#signupResult').replaceWith(response.data);
 		}, function errorCallback(response) {
-				console.log(response.data.status);
-			console.log(response.data.respCode);
-				$window.location.href=error_url;
-		});
+				$scope.isLoading = false;
+				angular.element('#signupForm').remove();
+				angular.element('#signupResult').replaceWith(response.data);
+		});*/
 	}
 });
 signupApp.directive('usernameAvailable',function($timeout, $q) {

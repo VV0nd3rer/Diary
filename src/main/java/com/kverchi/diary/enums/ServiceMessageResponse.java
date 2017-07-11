@@ -7,7 +7,8 @@ public enum ServiceMessageResponse {
 	TRANSACTION_PROBLEM("Transaction is failed."),
 	EMAIL_SENDING_PROBLEM("Sending email failed."),
 	UKNOWN_PROBLEM("Uknown problem"),
-	OK("Well done");
+	OK("Well done"),
+	ERROR("Error");
 	private final String msg;
 	ServiceMessageResponse(final String msg) {
 		this.msg = msg;

@@ -5,10 +5,13 @@
 <head>
 </head>
 <body>
+	<!-- Return button fragment -->
     <input class="btn pull-right btn-success" action="action" th:fragment="return" type="submit" onclick="history.go(-1);" value="Return" />
-    <div class="blog-footer" th:fragment="footer">
+    <!-- Footer fragment -->
+	<div class="blog-footer" th:fragment="footer">
         &copy; 2017 Footer
     </div>
+	<!-- Page fragment for pagination -->
     <div id="posts-block" th:fragment="page">
 		  <input type="hidden" th:value="${pages_total_num}"
 					id="pages-total-num" />
@@ -50,5 +53,6 @@
 				<!-- end of post -->
 			</div>
 	 </div>
+	<!-- End of page fragment for pagination -->
 </body>
 </html>

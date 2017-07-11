@@ -54,16 +54,19 @@ public class UserController {
 	}
 
 	@RequestMapping(value="/add-user", method = RequestMethod.POST)
-	public ServiceResponse addUser(@RequestBody RegistrationForm regForm) throws ServiceException {
-		ServiceResponse response = userService.registerAccount(regForm); //userService.testRegisterAccount(regForm);
+	public ModelAndView addUser(@RequestBody RegistrationForm regForm) throws ServiceException {
+		ModelAndView mv = new ModelAndView("fragment/signup-result :: content");
+		ServiceResponse response = userService.registerAccount(regForm); /*userService.testRegisterAccount(regForm);*/
 		if(response.getRespCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
-			throw new ServiceException(response.getRespMsg()); 
+			throw new ServiceException(response.getRespMsg());
 		}
 		else if(response.getRespCode() == HttpStatus.PRECONDITION_FAILED) {
 			throw new ServiceException(response.getRespMsg());
 		}
-		return response;
+		mv.addObject("message", response);
+		return mv;
 	}
+
 	@RequestMapping(value="/confirm-registration/{username}")
 	public ModelAndView confirmRegistration(@PathVariable("username") String username) {
 		User registeredUser = new User();
