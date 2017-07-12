@@ -23,7 +23,7 @@
 	    <a href="users/login">Login</a>
 	  </li>
 	  <li>
-	  	<a href="users/sign-up">Registration</a>
+	  	<a href="users/signup">Registration</a>
 	  </li>
 	</ul>
 </h3>

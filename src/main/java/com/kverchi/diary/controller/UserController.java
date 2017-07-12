@@ -31,9 +31,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value="/sign-up")
+	@RequestMapping(value="/signup")
 	public ModelAndView signup() {
-		ModelAndView mv = new ModelAndView("sign-up");
+		ModelAndView mv = new ModelAndView("signup");
 		return mv;
 	}
 

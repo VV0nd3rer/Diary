@@ -254,68 +254,7 @@ $(document).ready(function(){
 	   window.location.replace("posts/sight_posts?sight_id="+id);
    });
    //--- End of Books page CRUD functionality	
-   
-   //Registration 
-   $("#register-ok-btn").click(function(event) {   	   	
-	   event.preventDefault();
-	   remErrMsg();
-	   
-	   var username = $("#username");
-	   var email = $("#email");
-	   var password = $("#password");
-	   var matchingPassword = $("#matchingPassword");
 
-	   var data = {}
-	   data["username"] = username.val();
-	   data["email"] = email.val();
-	   data["password"] = password.val();
-	   data["matchingPassword"] = matchingPassword.val();
-
-	   tips = $( ".validateTips" );
-	   var regMail = /^([_a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+([a-zA-Z]{2,3})$/;
-	   var valid = true;
-	   valid = valid && checkLength( username, "username", 4, 16 );
-	   valid = valid && checkLength( password, "password", 6, 16 );
-	   valid = valid && checkRegexp( email, regMail, "email");
-	   valid = valid && (password.val() == matchingPassword.val());
-	   
-	   var token = $("meta[name='_csrf']").attr("content");
-	   var header = $("meta[name='_csrf_header']").attr("content");
-	    $(document).ajaxSend(function(e, xhr, options) {
-	        xhr.setRequestHeader(header, token);
-	    });
-
-	   
-	   if(valid) {
-		   $.ajax({
-			   url: root+"/users/add-user",
-			   type:"POST",
-			   data: JSON.stringify(data),
-			   contentType:"application/json; charset=utf-8",
-			   dataType:"json",
-			   success: function(res){
-				   console.log(res.respCode);
-				   console.log(res.respMsg);
-				   if(res.respCode == 'OK') {   
-					   $("#regField").empty();
-					   $("#regField").append("<p>"+res.respMsg+"</p>");
-				   }
-				   else if(res.respCode == 'PRECONDITION_FAILED') {
-					   addErrMsg(res.respMsg);
-				   }
-				   	  		
-			   },
-			   error : function(e) {
-				   console.log("Error: ", e);
-				   //TODO Error page for internal service error
-				   window.location.href = "/posts/test-me";
-			   },
-			   done : function(e) {
-				   alert("DONE");
-			   }
-		   });
-	   }
-   });
 });
 //End of document.ready
 function hideModalDialog() {

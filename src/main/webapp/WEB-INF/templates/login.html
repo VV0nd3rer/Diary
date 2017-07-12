@@ -1,40 +1,59 @@
-
 <!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/sitelayout" ng-app="login">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="UTF-8">
     <object th:include="include-res::links" th:remove="tag"/>
-    <title>Login</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/resources/js/app.js}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Sigh up</title>
 </head>
 <body>
-    <div th:replace="header :: header">&nbsp;</div>
-	<div class="container">
-	        <div class="row main">
-	          <div class="col-md-6 col-md-offset-4">
-	            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
-	            <p id="profile-name" class="profile-name-card"></p>
-	            <form class="form-horizontal" th:action="@{/login}" method="post">
-	                <span id="reauth-email" class="reauth-email"></span>
-	                <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
-	                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-	                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	                <div id="remember" class="checkbox">
-	                    <label>
-	                        <input type="checkbox" name="_spring_security_remember_me" value="remember-me"> Remember me
-	                    </label>
-	                </div>
-	               
-	                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-	            </form><!-- /form -->
-	            <a href="#" th:href="@{/users/forgot-password}" class="forgot-password">
-	                Forgot the password?
-	            </a>
-	          </div>
-	        </div><!-- /row-main -->
-	    </div><!-- /container -->
-	<div class="blog-footer" th:replace="fragments :: footer">&copy; Kverchi</div>
+<div th:replace="header :: header">&nbsp;</div>
+
+<div class="container">
+    <div class="row" ng-controller="userController">
+        <div class="col-md-6 col-md-offset-4">
+            <md-content layout-padding>
+                <form name="loginForm" id="loginForm"  th:action="@{/login}" method="post">
+                    <md-input-container class="md-block">
+                        <label>Username</label>
+                        <input md-maxlength="30" required name="username" ng-model="username">
+                        <div ng-messages="loginForm.username.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="md-maxlength">The description must be less than 30 characters long.</div>
+                            <span ng-show="loginForm.username.$invalid">This field is invalid </span>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Password</label>
+                        <input required type="password" name="password" ng-model="password"
+                               minlength="6" maxlength="12"/>
+
+                        <div ng-messages="loginForm.password.$error" role="alert">
+                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                Your password must be between 6 and 12 characters long.
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <div>
+                        <md-button type="submit" ng-disabled="loginForm.$invalid">Submit</md-button>
+                    </div>
+                </form>
+                <div id="loginResult"></div>
+            </md-content>
+        </div>
+    </div>
+</div>
+
+</div>
 </body>
 </html>
-	    

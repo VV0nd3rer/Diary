@@ -1,5 +1,8 @@
 var signupApp = angular.module('signup', ['ngMaterial','ngMessages']);
+var loginApp = angular.module('login', ['ngMaterial','ngMessages']);
+loginApp.controller('userController', function($scope) {
 
+});
 signupApp.controller('userController',
 
 	function($scope, $http) {
