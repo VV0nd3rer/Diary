@@ -78,7 +78,7 @@ public class UserController {
 			}
 		}
 //		TODO return error info with error page
-			return new ModelAndView("error");
+			return new ModelAndView("error/generic-error");
 	}
 	@RequestMapping(value="/login")
 	public ModelAndView login() {
@@ -99,7 +99,7 @@ public class UserController {
 			return new ModelAndView("login");
 		}
 //		TODO return error info with error page
-		return new ModelAndView("error");
+		return new ModelAndView("error/generic-error");
 	}
 	@RequestMapping(value="/change-password/{UUID}")
 	public ModelAndView changePassword(@PathVariable String UUID) {
@@ -113,7 +113,7 @@ public class UserController {
 			return mv;
 		}
 //		TODO return error info with error page
-		return new ModelAndView("error");
+		return new ModelAndView("error/generic-error");
 	}
 	@RequestMapping(value="/update-password", method = RequestMethod.POST)
 	public ModelAndView updatePassword(@ModelAttribute NewPasswordForm newPasswordForm) {
@@ -126,7 +126,7 @@ public class UserController {
 			return new ModelAndView("login");
 		}
 //		TODO return error info with error page
-		return new ModelAndView("error");
+		return new ModelAndView("error/generic-error");
 	}
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<String> exceptionHandler(Exception ex) {

@@ -21,6 +21,7 @@
 <div class="container">
     <div class="row" ng-controller="userController">
         <div class="col-md-6 col-md-offset-4">
+            <legend>Login</legend>
             <md-content layout-padding>
                 <form name="loginForm" id="loginForm"  th:action="@{/login}" method="post">
                     <md-input-container class="md-block">
@@ -48,7 +49,9 @@
                         <md-button type="submit" ng-disabled="loginForm.$invalid">Submit</md-button>
                     </div>
                 </form>
-                <div id="loginResult"></div>
+                <a href="#" th:href="@{/users/forgot-password}" class="forgot-password">
+                    Forgot the password?
+                </a>
             </md-content>
         </div>
     </div>
