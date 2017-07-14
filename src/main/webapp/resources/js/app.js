@@ -2,8 +2,31 @@ var signupApp = angular.module('signup', ['ngMaterial','ngMessages']);
 var loginApp = angular.module('login', ['ngMaterial','ngMessages']);
 var forgotPassApp = angular.module('forgotPass', ['ngMaterial','ngMessages']);
 var resetPassApp = angular.module('resetPass', ['ngMaterial','ngMessages']);
-loginApp.controller('userController', function($scope) {
 
+loginApp.controller('userController', function($scope, $window, $timeout, $q) {
+	angular.element('#login-btn').click(function() {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(header, token);
+		});
+		var defer = $q.defer();
+		$.ajax({
+			url: '/login',
+			type:"POST",
+			data: $("#loginForm").serialize(),
+			dataType:"json",
+			success: function(res){
+				$window.location.href= '/posts/list';
+
+			}, error : function(e) {
+				$timeout(function() {
+					$scope.loginForm.$setValidity("loginFailed", false);
+					defer.resolve;
+				}, 1000);
+			}
+		});
+	});
 });
 forgotPassApp.controller('userController', function($scope) {
 
@@ -150,31 +173,14 @@ signupApp.directive('passwordVerify', function() {
 		}
 	}
 });
-resetPassApp.directive('passwordVerify', function() {
+
+loginApp.directive('loginResult',function() {
 	return {
-		restrict: 'A', // only activate on element attribute
-		require: '?ngModel', // get a hold of NgModelController
-		link: function(scope, elem, attrs, ngModel) {
-			if (!ngModel) return; // do nothing if no ng-model
-
-			// watch own value and re-validate on change
-			scope.$watch(attrs.ngModel, function() {
-				validate();
+		restrict: 'A',
+		link: function (scope, element, attrs) {
+			scope.$watch(attrs.ngModel, function () {
+				scope.loginForm.$setValidity("loginFailed", true);
 			});
-
-			// observe the other value and re-validate on change
-			attrs.$observe('passwordVerify', function(val) {
-				validate();
-			});
-
-			var validate = function() {
-				// values
-				var val1 = ngModel.$viewValue;
-				var val2 = attrs.passwordVerify;
-
-				// set validity
-				ngModel.$setValidity('passwordVerify', val1 === val2);
-			};
 		}
 	}
 });

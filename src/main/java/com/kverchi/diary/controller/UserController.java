@@ -90,6 +90,7 @@ public class UserController {
 		mv.addObject("forgotPasswordForm", new ForgotPasswordForm());
 		return mv;
 	}
+
 	@RequestMapping(value="/reset-password", method = RequestMethod.POST)
 	public ModelAndView resetPassword(@ModelAttribute ForgotPasswordForm forgotPasswordForm) {
 		String email = forgotPasswordForm.getEmail();

@@ -30,13 +30,16 @@
 	   <property name="password" value="<your_pass>" /> -->
 	</bean>
 	
-	<sec:global-method-security pre-post-annotations="enabled" />
-	
-	<sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true" >
-	    <sec:access-denied-handler error-page="/denied"/>
-		<sec:form-login login-page="/users/login"
-									authentication-failure-url="/users/login?failed=true"
-								    default-target-url="/posts/list"/>
+
+	<bean id="successHandler" class="com.kverchi.diary.security.AuthSuccessHandler">
+	</bean>
+	<bean id="failureHandler" class="com.kverchi.diary.security.AuthFailureHandler">
+	</bean>
+	<sec:http auto-config="false" use-expressions="true" disable-url-rewriting="true">
+		<sec:access-denied-handler error-page="/denied"/>
+		
+		<sec:form-login authentication-failure-handler-ref="failureHandler"
+						authentication-success-handler-ref="successHandler"/>
 								    
 		<sec:csrf token-repository-ref="tokenRepository"/>
 		<sec:remember-me/>
@@ -49,7 +52,7 @@
 		<!-- <sec:intercept-url pattern="/posts/test-me" access="isAnonymous()"/> -->
 	</sec:http>
 	
-	<sec:authentication-manager>
+	<sec:authentication-manager alias="authenticationManager">
 	  <sec:authentication-provider user-service-ref="userDetailsService">
 	   <sec:password-encoder ref="passwordEncoder">
 				<!-- <salt-source ref="saltSource" /> -->
