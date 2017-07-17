@@ -11,11 +11,12 @@
 		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		
 	<context:component-scan base-package="com.kverchi.diary.**" />
-	
+
 	<!-- Thymeleaf -->
 	<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
 		<property name="prefix" value="/WEB-INF/templates/" />
 		<property name="suffix" value=".html" />
+		<property name="characterEncoding" value="UTF-8" />
 		<property name="templateMode" value="HTML5" />
 	</bean>
 	<!-- <bean id="templateResolver"
@@ -49,6 +50,31 @@
     </property>
     <property name="defaultErrorView" value="error/generic-error"/>
 	</bean>
+
+	<!-- Internationalization -->
+	<bean id="localeResolver"
+		  class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<!-- Registr *.properties files -->
+	<bean id="messageSource"
+		  class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+		 <value>locale/messages</value>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="localeChangeInterceptor"
+				  class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="language" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 	<mvc:resources mapping="/resources/**" location="/resources/"/>
 	
