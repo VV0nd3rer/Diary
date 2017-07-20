@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
@@ -49,8 +50,6 @@ public class UserServiceImpl implements UserService {
     final static String EMAIL_FORGOTPASS_TEMPLATE = "email-forgotpass";
     final static String EMAIL_REGISTER_TEMPLATE = "email-registration";
 
-    private Locale locale = LocaleContextHolder.getLocale();
-
     @Autowired
     ServletContext context;
 
@@ -66,8 +65,8 @@ public class UserServiceImpl implements UserService {
     private TemplateEngine emailTemplateEngine;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-
+    @Value("${app.domain.url}")
+    private String appDomainUrl;
     @Override
     public User getUserByUsername(String username) {
         User user = userDao.getUserByUsername(username);
@@ -100,9 +99,9 @@ public class UserServiceImpl implements UserService {
         }
         boolean isRegistrationEmailSent = false;
 
-        String link = "https://super-diary.herokuapp.com/" + REGISTER_USER_LINK + user.getUsername();
-
-        final Context ctx = new Context();
+        String link = appDomainUrl + REGISTER_USER_LINK + user.getUsername();
+        Locale locale = LocaleContextHolder.getLocale();
+        final Context ctx = new Context(locale);
         ctx.setVariable("name", user.getUsername());
         ctx.setVariable("link", link);
         final String emailContent = emailTemplateEngine.process(EMAIL_REGISTER_TEMPLATE, ctx);
@@ -137,8 +136,8 @@ public class UserServiceImpl implements UserService {
         }
         boolean isRegistrationEmailSent = false;
 
-        String link = "https://super-diary.herokuapp.com/" + REGISTER_USER_LINK + user.getUsername();
-
+        String link = appDomainUrl + REGISTER_USER_LINK + user.getUsername();
+        Locale locale = LocaleContextHolder.getLocale();
         final Context ctx = new Context(locale);
         ctx.setVariable("name", user.getUsername());
         ctx.setVariable("link", link);
@@ -191,7 +190,8 @@ public class UserServiceImpl implements UserService {
         passChangeReq.setCreatedTime(new Date());
         //String id = (String)passwordChangeRequestDao.create(passChangeReq);
         passwordChangeRequestDao.persist(passChangeReq);
-        String link = "http://localhost:8080/" + CHANGE_PASS_LINK + token;
+        Locale locale = LocaleContextHolder.getLocale();
+        String link = appDomainUrl + CHANGE_PASS_LINK + token;
         final Context ctx = new Context(locale);
         ctx.setVariable("name", user.getUsername());
         ctx.setVariable("link", link);

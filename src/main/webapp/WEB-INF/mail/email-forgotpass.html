@@ -9,6 +9,12 @@
       Hello, Someone!
     </h3>
     <hr>
-    <div th:text="#{resetting.password.email(${link})}"></div>
+    <div>
+      <span th:text="#{resetting.password.email.info}"></span><br/>
+        <a th:href="@{${link}}"><span th:text="${link}"></span> </a>.</b><br />
+       <b th:text="#{resetting.password.email.link.description}"></b><br/>
+       <i th:text="#{email.end}"></i><br/>
+       <i th:text="#{email.author}"></i>
+    </div>
   </body>
 </html>

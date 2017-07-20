@@ -8,16 +8,14 @@
     <h3 th:text="#{greeting(${name})}">
       Hello, Someone!
     </h3>
-    
-     <p>
-       Thank you for your registration.<br />
-       <b>Please activate your account by clicking: <a th:href="@{${link}}"> <span th:text="${link}"></span></a>.</b><br />
-       <i>Welcome to the wide world of travelling!</i>
-    </p>
-    <p><i>Have a nice day :)</i></p>
-       
-      Regards, <br />
-      <em>Kverchi Team</em>
-    </p>
+
+    <div>
+      <span th:text="#{registering.user.email.info}"></span><br/>
+      <a th:href="@{${link}}"><span th:text="${link}"></span> </a>.</b><br />
+      <b th:text="#{registering.user.email.link.description}"></b><br/>
+      <i th:text="#{email.end}"></i><br/>
+      <i th:text="#{email.author}"></i>
+    </div>
+
   </body>
 </html>
