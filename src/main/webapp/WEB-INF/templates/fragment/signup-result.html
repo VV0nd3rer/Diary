@@ -8,6 +8,6 @@
     <!-- OK registration fragment -->
     <div id="signupResult" th:fragment="content">
         <p th:text="${message.respMsg}"></p>
-        <p th:if="${message.respCode == T(org.springframework.http.HttpStatus).OK}">Please, check your email :) </p>
+        <p th:if="${message.respCode == T(org.springframework.http.HttpStatus).OK}" th:text="#{signup.ok.text}">Please, check your email :) </p>
     </div>
 </body>

@@ -13,7 +13,7 @@
     <script type="text/javascript" th:src="@{/resources/js/app.js}"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Sigh up</title>
+    <title th:text="#{signup}">Sigh up</title>
 </head>
 <body>
     <div th:replace="header :: header">&nbsp;</div>
@@ -21,7 +21,7 @@
     <div class="container">
         <div class="row" ng-controller="userController">
             <div class="col-md-6 col-md-offset-4">
-                <legend>Registration</legend>
+                <legend th:text="#{signup.label}">Registration</legend>
                 <md-content layout-padding>
                     <div th:replace="fragment/signupForm :: form"></div>
                     <div id="signupResult"></div>
