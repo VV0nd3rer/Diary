@@ -65,12 +65,7 @@ public class CountriesSight implements Serializable {
 	public void setCountry(Country country) {
 		this.country = country;
 	}
-	/*public String getCountry_code() {
-		return country_code;
-	}
-	public void setCountry_code(String country_code) {
-		this.country_code = country_code;
-	}*/
+
 	public String getImg_url() {
 		return img_url;
 	}
@@ -83,25 +78,7 @@ public class CountriesSight implements Serializable {
 	public void setSight_description(String sight_description) {
 		this.sight_description = sight_description;
 	}
-	/*public Set<Post> getSight_posts() {
-		return sight_posts;
-	}
-	public void setSight_posts(Set<Post> sight_posts) {
-		this.sight_posts = sight_posts;
-	}*/
-	/*@Override
-	public boolean equals(Object obj) {
-		if(obj == this)
-			return true;
-		if(!(obj instanceof CountriesSight))
-			return false;
-		CountriesSight c_s = (CountriesSight)obj;
-		return c_s.getSight_id()==this.getSight_id();
-	}
-	@Override
-    public int hashCode() { 
-      return Objects.hash(this.getSight_id());
-    }*/
+
 	public float getMap_coord_x() {
 		return map_coord_x;
 	}

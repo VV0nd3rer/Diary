@@ -168,7 +168,7 @@ public class PostController {
 	   
        ModelAndView mv = new ModelAndView(NEW_POST);
        mv.addObject("post", post);
-       mv.addObject("sight", sight);
+       mv.addObject("currentSight", sight);
        mv.addObject("sightList", sightList);
        return mv;
     }
@@ -218,9 +218,9 @@ public class PostController {
 	@RequestMapping(value="/new-post") 
 	public ModelAndView newPost() {
 		User currentUser = userService.getUserFromSession();
-		if(currentUser == null) {
+		/*if(currentUser == null) {
 			return new ModelAndView(LOGIN);
-		}
+		}*/
 		
 		List<CountriesSight> sightList = null;
 		sightList = countriesSightService.getAllSights();

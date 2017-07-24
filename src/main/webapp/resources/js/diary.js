@@ -12,7 +12,7 @@ $(document).ready(function(){
 		var id = $("#id");
 		var sight_id = $("#sight").find(":selected");
 		var title = $("#title");
-		var description = $ ("#description");
+		var description = $("#description");
 		console.log("id: " + id.val());
 		console.log("sight id: " + sight_id.val());
 		var data = {}
@@ -28,8 +28,8 @@ $(document).ready(function(){
 		var valid = false;
 	    valid = checkLength(title, "title", 2, 80); 
 		valid = valid && checkLength(description, "description", 2, 80);
-		valid = valid && checkTextEditorLength(postText, "text", 5, 1000);
-		console.log(valid);
+		valid = valid && checkTextEditorLength(postText, $("#editor1"), "text", 5, 1000);
+
 		var token = $("meta[name='_csrf']").attr("content");
 	 	var header = $("meta[name='_csrf_header']").attr("content");
 	 	$(document).ajaxSend(function(e, xhr, options) {
@@ -291,10 +291,10 @@ function checkLength( o, n, min, max ) {
       return true;
     }
   }
-function checkTextEditorLength( o, n, min, max ) {
-	if (o.length > max || o.length < min) {
-	      o.addClass( "alert alert-danger" );
-	      addErrMsg( "Length of " + n + " must be between " +
+function checkTextEditorLength( content, field, field_title, min, max ) {
+	if (content.length > max || content.length < min) {
+		field.addClass( "alert alert-danger" );
+	      addErrMsg( "Length of " + field_title + " must be between " +
 	        min + " and " + max + "." );
 	      return false;
 	    } else {
