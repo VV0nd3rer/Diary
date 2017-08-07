@@ -103,7 +103,7 @@ public class PostController {
 		List<Post> posts = postService.getAllPosts();
 		return posts;
 	}
-	
+
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
 		
@@ -113,10 +113,21 @@ public class PostController {
 		search_criteries.put("sight_id", sight_id);
 		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", search_criteries);
 		//sight_posts = postService.getSightPosts(sight_id);
+
 		ModelAndView mv = new ModelAndView("posts");
 		mv.addObject("pages_total_num", pagination.getPages_total_num());
 		mv.addObject("pagination_handler", "sight_posts");
 		mv.addObject("posts", pagination.getPagePosts());
+
+		CountriesSight sight = countriesSightService.getSightById(sight_id);
+		mv.addObject("currentSight", sight);
+		Map modelMap = mv.getModel();
+		logger.debug("--- Model data ---");
+		for (Object modelKey : modelMap.keySet()) {
+			Object modelValue = modelMap.get(modelKey);
+			logger.debug(modelKey + " -- " + modelValue);
+		}
+
 		return mv;
 	}
 	@RequestMapping("/single-post/{post_id}")
