@@ -10,33 +10,19 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.domain.Comment;
 import com.kverchi.diary.domain.CountriesSight;
-import com.kverchi.diary.domain.Country;
 import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
-import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.CommentService;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.CountryService;
@@ -46,14 +32,15 @@ import com.kverchi.diary.service.UserService;
 
 @RestController
 @RequestMapping("posts")
+@SessionAttributes("currentSight")
 public class PostController {
-	final static Logger logger = Logger.getLogger(PostController.class);
-	
-	final static String LOGIN = "login";
-	final static String POSTS = "posts";
-	final static String NEW_POST = "new-post";
-	final static String SINGLE_POST = "single-post";
-	final static String REDIRECT_TO_POSTS = "redirect:/posts/list";
+	private final static Logger logger = Logger.getLogger(PostController.class);
+
+	private final static String LOGIN = "login";
+	private final static String POSTS = "posts";
+	private final static String NEW_POST = "new-post";
+	private final static String SINGLE_POST = "single-post";
+	private final static String REDIRECT_TO_POSTS = "redirect:/posts/list";
 	
 	String message = "Welcome";
 	@Autowired
@@ -70,7 +57,12 @@ public class PostController {
 	//???
 	@Autowired
 	PaginationService paginatonService;
-	
+
+	@ModelAttribute("currentSight")
+	public CountriesSight getCurrentSight () {
+		return new CountriesSight();
+	}
+
 	@RequestMapping("/test-me")
 	public ModelAndView showTestPage() {
 		ModelAndView mv = new ModelAndView("test_page");
@@ -86,11 +78,17 @@ public class PostController {
 	}
 	
 	@RequestMapping("/list")
-	public ModelAndView showPosts() {
-		int num_posts_on_page = 5;
+	public ModelAndView showPosts(SessionStatus sessionStatus, @ModelAttribute("currentSight") CountriesSight currentSight) {
+		if(currentSight != null) {
+			logger.debug("Session attribute 'currentSight' is NOT NULL");
+			logger.debug("currentSight label is " + currentSight.getSight_label());
+		}
+		sessionStatus.setComplete();
+		//currentSight = null;
+		logger.debug("Session status is set to complete...");
+		logger.debug("Session attribute 'currentSight->label' is " + currentSight.getSight_label());
 		int page_index = 1;
-		//???
-		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", null);
+		Pagination pagination = paginatonService.getPaginatedPage(page_index, "posts", null);
 		ModelAndView mv = new ModelAndView(POSTS);
 		mv.addObject("pages_total_num", pagination.getPages_total_num());
 		mv.addObject("pagination_handler", "posts");
@@ -138,7 +136,6 @@ public class PostController {
 		Set<Comment> comments = post.getPost_comments();
 		CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
 		//Add sight ID to the session
-
 		mv.addObject("post", post);
 		mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
@@ -171,16 +168,12 @@ public class PostController {
 	   if(!isAuthor) {
 		   return new ModelAndView(REDIRECT_TO_POSTS);
 	   }
-       
-       List<CountriesSight> sightList = null;
-       sightList = countriesSightService.getAllSights();
       
 	   CountriesSight sight =  countriesSightService.getSightById(post.getSight_id());
 	   
        ModelAndView mv = new ModelAndView(NEW_POST);
        mv.addObject("post", post);
-       mv.addObject("currentSight", sight);
-       mv.addObject("sightList", sightList);
+       mv.addObject("sight", sight);
        return mv;
     }
 	
@@ -205,7 +198,7 @@ public class PostController {
 		return res;
 	}
 	@RequestMapping(value="/add-post", method = RequestMethod.POST)
-	public ServiceResponse addPost(@RequestBody Post post) {
+	public ServiceResponse addPost(@RequestBody Post post, @ModelAttribute("currentSight") CountriesSight currentSight) {
 		ServiceResponse response = 
 				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
 		
@@ -215,7 +208,11 @@ public class PostController {
 		if(currentUser == null) {
 			return response;
 		}
-		
+		if(currentSight.getSight_label() == null) {
+			logger.debug("Session sight's label is NULL");
+			return  response;
+		}
+		post.setSight_id(currentSight.getSight_id());
 		//New post
 		if(post.getPost_id() == 0) {
 			response = postService.addPost(post);
@@ -227,17 +224,18 @@ public class PostController {
 	}
 	
 	@RequestMapping(value="/new-post") 
-	public ModelAndView newPost() {
+	public ModelAndView newPost(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		User currentUser = userService.getUserFromSession();
 		/*if(currentUser == null) {
 			return new ModelAndView(LOGIN);
 		}*/
-		
-		List<CountriesSight> sightList = null;
-		sightList = countriesSightService.getAllSights();
+		if(currentSight.getSight_label() == null) {
+			logger.debug("Session sight's label is NULL");
+			return new ModelAndView(REDIRECT_TO_POSTS);
+		}
 		ModelAndView mv = new ModelAndView(NEW_POST);
 		mv.addObject("post", new Post());
-		mv.addObject("sightList", sightList);
+		mv.addObject("sight", currentSight);
 		return mv;
 	}
 	@RequestMapping(value="/add-comment", method = RequestMethod.POST)
