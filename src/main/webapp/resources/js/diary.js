@@ -36,7 +36,7 @@ $(document).ready(function(){
 	        xhr.setRequestHeader(header, token);
 	    });
 	 	if(valid) {
-	 		var add_post_url = root + "/posts/add-post";
+	 		var add_post_url = root + "/posts/save-post";
 	 		var posts_list_url =  root + "/posts/list";
 	 		$.ajax({
 		     	   url: add_post_url,

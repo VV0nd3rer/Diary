@@ -83,8 +83,8 @@ public class PostController {
 			logger.debug("Session attribute 'currentSight' is NOT NULL");
 			logger.debug("currentSight label is " + currentSight.getSight_label());
 		}
-		sessionStatus.setComplete();
-		//currentSight = null;
+		//sessionStatus.setComplete();
+		currentSight = new CountriesSight();
 		logger.debug("Session status is set to complete...");
 		logger.debug("Session attribute 'currentSight->label' is " + currentSight.getSight_label());
 		int page_index = 1;
@@ -93,6 +93,7 @@ public class PostController {
 		mv.addObject("pages_total_num", pagination.getPages_total_num());
 		mv.addObject("pagination_handler", "posts");
 		mv.addObject("posts", pagination.getPagePosts());
+		mv.addObject("currentSight", currentSight);
 		return mv;
 	}
 
@@ -119,25 +120,19 @@ public class PostController {
 
 		CountriesSight sight = countriesSightService.getSightById(sight_id);
 		mv.addObject("currentSight", sight);
-		Map modelMap = mv.getModel();
-		logger.debug("--- Model data ---");
-		for (Object modelKey : modelMap.keySet()) {
-			Object modelValue = modelMap.get(modelKey);
-			logger.debug(modelKey + " -- " + modelValue);
-		}
-
 		return mv;
 	}
 	@RequestMapping("/single-post/{post_id}")
-	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id) {
+	public ModelAndView showSinglePost(@PathVariable("post_id") int post_id, @ModelAttribute("currentSight") CountriesSight currentSight) {
 		ModelAndView mv = new ModelAndView(SINGLE_POST);
 
 		Post post = postService.getPostById(post_id);
 		Set<Comment> comments = post.getPost_comments();
-		CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
+		//CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
 		//Add sight ID to the session
 		mv.addObject("post", post);
-		mv.addObject("sight", sight);
+		mv.addObject("currentSight", currentSight);
+		//mv.addObject("sight", sight);
 		mv.addObject("comments", comments);
 		boolean isAuthor = false;
 		User currentUser = userService.getUserFromSession();
@@ -156,7 +151,7 @@ public class PostController {
 	}
 	
 	@RequestMapping("/edit/{post_id}")
-    public ModelAndView editPost(@PathVariable("post_id") int post_id){
+    public ModelAndView editPostForm(@PathVariable("post_id") int post_id){
        Post post = postService.getPostById(post_id);
        
        User currentUser = userService.getUserFromSession();
@@ -197,8 +192,8 @@ public class PostController {
 		res = "OK";
 		return res;
 	}
-	@RequestMapping(value="/add-post", method = RequestMethod.POST)
-	public ServiceResponse addPost(@RequestBody Post post, @ModelAttribute("currentSight") CountriesSight currentSight) {
+	@RequestMapping(value="/save-post", method = RequestMethod.POST)
+	public ServiceResponse savePost(@RequestBody Post post, @ModelAttribute("currentSight") CountriesSight currentSight) {
 		ServiceResponse response = 
 				new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());
 		
@@ -208,10 +203,10 @@ public class PostController {
 		if(currentUser == null) {
 			return response;
 		}
-		if(currentSight.getSight_label() == null) {
+		/*if(currentSight.getSight_label() == null) {
 			logger.debug("Session sight's label is NULL");
 			return  response;
-		}
+		}*/
 		post.setSight_id(currentSight.getSight_id());
 		//New post
 		if(post.getPost_id() == 0) {
@@ -224,7 +219,7 @@ public class PostController {
 	}
 	
 	@RequestMapping(value="/new-post") 
-	public ModelAndView newPost(@ModelAttribute("currentSight") CountriesSight currentSight) {
+	public ModelAndView newPostForm(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		User currentUser = userService.getUserFromSession();
 		/*if(currentUser == null) {
 			return new ModelAndView(LOGIN);

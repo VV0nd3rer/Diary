@@ -27,9 +27,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label" for="title" th:text="#{sight}">Sight</label>
             <div class="col-sm-10">
-                <span th:if="${sight != null}">
-                    <label class="col-sm-2 control-label" th:text="${sight.sight_label}">Sight label</label>
-                </span>
+                <span th:if="${sight != null}" th:text="${sight.sight_label}"></span>
                 <!--<select id="sight" th:if="${not #lists.isEmpty(sightList) and sightList != null}">
                     <span th:if="${currentSight != null}">
                       <option th:each="sight: ${sightList}" th:value="${sight.sight_id}" th:text="${sight.sight_label}"

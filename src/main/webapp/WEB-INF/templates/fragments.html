@@ -28,8 +28,8 @@
 								</div>
 								<div class="col-sm-3">
 									<p class="pull-right">
-										by <span th:text="${post.user.username}">someone</span> <small><em
-											th:text="${post.post_datetime}"></em></small>
+										by <span th:text="${post.user.username}">someone</span>
+										<small><em th:text="${#temporals.format(post.post_datetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
 									</p>
 								</div>
 							</div>

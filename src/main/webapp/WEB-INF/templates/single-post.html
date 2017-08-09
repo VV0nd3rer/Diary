@@ -13,10 +13,44 @@
   </head>
    <body>
     <div th:replace="header :: header">&nbsp;</div>
+	<div class="container" th:if="${currentSight.sight_label != null}">
+		<h2>
+            <span class="label label-warning">
+                <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.sight_label}"></span>
+            </span>
+		</h2>
+	</div>
     <div class="container">
 	 <div class="row">
 	   	<div class="col-lg-8">
-	   		<h4 th:text="${post.title}"/>
+			<div class="span8">
+				<h1 th:text="${post.title}">Alice in Wonderland, part dos</h1>
+				<p id="post-text" th:utext="${post.text}">'You ought to be ashamed of yourself for asking such a simple question,' added the Gryphon; and then they both sat silent and looked at poor Alice, who felt ready to sink into the earth. At last the Gryphon said to the Mock Turtle, 'Drive on, old fellow! Don't be all day about it!' and he went on in these words:
+					'Yes, we went to school in the sea, though you mayn't believe it—'
+					'I never said I didn't!' interrupted Alice.
+					'You did,' said the Mock Turtle.</p>
+				<div>
+					<span class="badge badge-success">
+						<span th:text="#{post.author}">Author</span>
+						<span  th:text="${post.user.username}">someone</span>
+						<span th:text="${#temporals.format(post.post_datetime, 'dd-MMM-yyyy')}">Posted 2012-08-02 20:47:04</span>
+					</span>
+					<!--<div class="pull-right"><span class="label" th:text="${sight.sight_label}"></span></div>-->
+				</div>
+				<div class="btn-toolbar pull-right">
+					<div class="btn-group">
+					<span th:if="${ isAuthor }">
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+			    	</span>
+					</div>
+					<div class="btn-group">
+						<span th:insert="fragments :: return"></span>
+					</div>
+				</div>
+				<hr>
+
+			</div>
+	   		<!--<h4 th:text="${post.title}"/>
 	   		<p id="post_id" th:text="${post.post_id}"/>
 	   		
 	   		<p th:if="${sight != null}"  th:text="${sight.sight_label}"/>
@@ -25,14 +59,14 @@
 			</p>
 			<hr>
 			<p>
-			<span class="glyphicon glyphicon-time" th:text="${post.post_datetime}">Posted on August 24, 2013 at 9:00 PM</span>
-				
+			<span class="glyphicon glyphicon-time" th:text="${#temporals.format(post.post_datetime, 'dd-MMM-yyyy')}">Posted on August 24, 2013 at 9:00 PM</span>
+
 			</p>
 			<hr>
-			<!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
+			&lt;!&ndash; <img class="img-responsive" src="http://placehold.it/900x300" alt=""> &ndash;&gt;
 			
 			<hr>
-			<!-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> -->
+			&lt;!&ndash; <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p> &ndash;&gt;
 			<div id="post-text" th:utext="${post.text}"></div>
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
@@ -44,7 +78,7 @@
 			    	<span th:insert="fragments :: return"></span>
 		    	</div>
 	    	</div>
-			<hr>
+			<hr>-->
 			
 			<!-- Blog Comments -->
 
@@ -64,22 +98,6 @@
                 <hr>
 
                 <!-- Posted Comments -->
-
-                <!-- Comment -->
-               <!--  <div class="media" id="comment-section" th:if="${not #lists.isEmpty(comments)}" th:each="comment: ${comments}">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Start Bootstrap
-                        	
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        <p th:text="${comment.comment_datetime}"/>
-                        <p th:text="${comment.user.username}"/>
-                        <p th:text="${comment.text}"/>
-                    </div>
-				</div> -->
 			 <div id="comment-section" >
 				<div class="row" th:if="${not #lists.isEmpty(comments) and comments != null}" th:each="comment: ${comments}">
 					<div class="col-sm-1">
