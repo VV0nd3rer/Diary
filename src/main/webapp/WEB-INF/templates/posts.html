@@ -46,7 +46,7 @@
         <h1 th:text="#{posts.exclamation}">Share your feelings!</h1>
         <p th:text="#{posts.intro}">Do you like to discover new places on Earth? Are you happy to learn something new?</p>
         <p th:if="${currentSight.sight_label != null}">
-            <a class="btn btn-info btn-lg" href="/posts/new-post" role="button" th:text="#{posts.sight.create.new.link}">Create great post &raquo;</a>
+            <a class="btn btn-info btn-lg" href="/posts/save-post" role="button" th:text="#{posts.sight.create.new.link}">Create great post &raquo;</a>
         </p>
         <p th:if="${currentSight.sight_label == null}">
             <a class="btn btn-info btn-lg" href="/sights/gmap" role="button" th:text="#{posts.list.go.to.map.link}">Find great place on map and share with us your experience!</a>

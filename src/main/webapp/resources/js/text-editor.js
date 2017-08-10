@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	tinymce.init({ 
 		mode : "exact", 
-		elements : "editor1",
+		elements : "textEditor",
 		plugins: [
 		          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
 		          'searchreplace wordcount visualblocks visualchars code fullscreen',
@@ -16,5 +16,15 @@ $(document).ready(function(){
 		          { title: 'Test template 2', content: 'Test 2' }
 		        ]
 	
+	});
+	tinymce.init({
+		selector : "#descrEditor",
+		plugins: [
+			'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+			'searchreplace wordcount visualblocks visualchars code fullscreen',
+			'insertdatetime media nonbreaking save table contextmenu directionality',
+			'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'
+		],
+		toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
 	});
 });

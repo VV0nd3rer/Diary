@@ -161,9 +161,9 @@ $("#modal-form-save-sight-btn").click(function(event) {
 	   
     tips = $( ".validateTips" );
     var valid = false;
-    valid = checkLength( code, "code", 2, 2 );
-    valid = valid && checkLength( label, "label", 3, 80 );
-    valid = valid && checkLength( description, "description", 3, 80 );
+    valid = checkMinMaxLength( code, "code", 2, 2 );
+    valid = valid && checkMinMaxLength( label, "label", 3, 80 );
+    valid = valid && checkMinMaxLength( description, "description", 3, 80 );
     
     var token = $("meta[name='_csrf']").attr("content");
 	   var header = $("meta[name='_csrf_header']").attr("content");

@@ -3,32 +3,29 @@ $(document).ready(function(){
 
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
-		var postText = tinyMCE.get('editor1').getContent();//CKEDITOR.instances.editor1.getData();
-		/*alert(postText);
-		var postRawText = tinyMCE.get('editor1').getContent({format : 'raw'});
-		var postTrulyText = tinyMCE.get('editor1').getContent({format : 'text'});
-		alert(postRawText);
-		alert(postTrulyText);*/
+		var description = tinyMCE.get('descrEditor').getContent();
+		var postText = tinyMCE.get('textEditor').getContent();
 		var id = $("#id");
-		var sight_id = $("#sight").find(":selected");
+		//var sight_id = $("#sight").find(":selected");
 		var title = $("#title");
-		var description = $("#description");
+		//var description = $("#description");
 		console.log("id: " + id.val());
-		console.log("sight id: " + sight_id.val());
+		//console.log("sight id: " + sight_id.val());
 		var data = {}
 		var sight = {}
-		data["sight_id"] = sight_id.val();
+		//data["sight_id"] = sight_id.val();
 		data["post_id"] = id.val();
 		data["title"] = title.val();
-		data["description"] = description.val();
+		data["description"] = description;//description.val();
 		data["text"] = postText;
 		
 		tips = $( ".validateTips" );
 		
 		var valid = false;
-	    valid = checkLength(title, "title", 2, 80); 
-		valid = valid && checkLength(description, "description", 2, 80);
-		valid = valid && checkTextEditorLength(postText, $("#editor1"), "text", 5, 1000);
+	    valid = checkMinMaxLength(title, "title", 2, 80);
+		//valid = valid && checkMinMaxLength(description, "description", 2, 80);
+		valid = valid && checkTextEditorMinMaxLength(description, $("#descrEditor"), "text", 5, 1000);
+		valid = valid && checkTextEditorMinLength(postText, $("#textEditor"), "text", 10);
 
 		var token = $("meta[name='_csrf']").attr("content");
 	 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -76,7 +73,7 @@ $(document).ready(function(){
 	
 		tips = $( ".validateTips" );
 	    var valid = false;
-	    valid = checkLength(text, "text", 2, 80); 
+	    valid = checkMinMaxLength(text, "text", 2, 80);
 	    var token = $("meta[name='_csrf']").attr("content");
  	    var header = $("meta[name='_csrf_header']").attr("content");
         $(document).ajaxSend(function(e, xhr, options) {
@@ -204,9 +201,9 @@ $(document).ready(function(){
         
         tips = $( ".validateTips" );
         var valid = true;
-        valid = valid && checkLength( title, "title", 3, 30 );
-        valid = valid && checkLength( description, "description", 3, 80 );
-        valid = valid && checkLength( author, "author", 3, 80 );
+        valid = valid && checkMinMaxLength( title, "title", 3, 30 );
+        valid = valid && checkMinMaxLength( description, "description", 3, 80 );
+        valid = valid && checkMinMaxLength( author, "author", 3, 80 );
         
         var token = $("meta[name='_csrf']").attr("content");
  	    var header = $("meta[name='_csrf_header']").attr("content");
@@ -280,7 +277,7 @@ function remErrMsg() {
 	tips.empty();
 }
 
-function checkLength( o, n, min, max ) {
+function checkMinMaxLength(o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min /*|| o.length > max || o.length < min*/) {
       o.addClass( "alert alert-danger" );
       addErrMsg( "Length of " + n + " must be between " +
@@ -291,7 +288,18 @@ function checkLength( o, n, min, max ) {
       return true;
     }
   }
-function checkTextEditorLength( content, field, field_title, min, max ) {
+function checkTextEditorMinLength(content, field, field_title, min) {
+	if (content.length < min) {
+		field.addClass( "alert alert-danger" );
+		addErrMsg( "Length of " + field_title + " must be mere than " +
+			min + "." );
+		return false;
+	} else {
+		remErrMsg();
+		return true;
+	}
+}
+function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 	if (content.length > max || content.length < min) {
 		field.addClass( "alert alert-danger" );
 	      addErrMsg( "Length of " + field_title + " must be between " +

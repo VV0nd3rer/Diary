@@ -38,7 +38,7 @@ public class PostController {
 
 	private final static String LOGIN = "login";
 	private final static String POSTS = "posts";
-	private final static String NEW_POST = "new-post";
+	private final static String NEW_POST = "save-post";
 	private final static String SINGLE_POST = "single-post";
 	private final static String REDIRECT_TO_POSTS = "redirect:/posts/list";
 	
@@ -222,7 +222,7 @@ public class PostController {
 		return response;
 	}
 	
-	@RequestMapping(value="/new-post") 
+	@RequestMapping(value="/save-post")
 	public ModelAndView newPostForm(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		User currentUser = userService.getUserFromSession();
 		/*if(currentUser == null) {

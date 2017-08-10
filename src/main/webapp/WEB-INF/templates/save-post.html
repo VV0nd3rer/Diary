@@ -57,6 +57,9 @@
         <div class="form-group">
             <label class="col-sm-2 control-label" for="description" th:text="#{post.description}">Description</label>
             <div class="col-sm-10">
+                <textarea name="descrEditor" id="descrEditor" class="form-control">
+                    <span th:text="${post.description}">Some brief description</span>
+                </textarea>
                 <input type="text" id="description" placeholder="Description" class="form-control"
                        th:value="${post.description}">
             </div>
@@ -67,7 +70,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label" th:text="#{post.text}">Text</label>
             <div class="col-sm-10">
-				 <textarea name="editor1" id="editor1" rows="10" cols="80" class="form-control">
+				 <textarea name="textEditor" id="textEditor" rows="10" cols="80" class="form-control">
 	               <span th:text="${post.text}">Write down your feelings.</span>
 	         	 </textarea>
             </div>

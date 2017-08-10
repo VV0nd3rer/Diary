@@ -47,7 +47,7 @@
 		<sec:remember-me/>
 	    <sec:logout logout-success-url="/sights/gmap"/>
 		<sec:intercept-url pattern="/books/*" access="hasAnyRole('ROLE_TRAVELLER', 'ROLE_ADMIN')" />
-		<sec:intercept-url pattern="/posts/new-post" access="hasAnyRole('ROLE_USER', 'ROLE_TRAVELLER', 'ROLE_ADMIN')" />
+		<sec:intercept-url pattern="/posts/save-post" access="hasAnyRole('ROLE_USER', 'ROLE_TRAVELLER', 'ROLE_ADMIN')" />
 		<sec:intercept-url pattern="/posts/**" access="permitAll" />
 		<sec:intercept-url pattern="/media/*" access="hasRole('ROLE_ADMIN')" />
 		<sec:intercept-url pattern="/users/login*" access="isAnonymous()"/>
