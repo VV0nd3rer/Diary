@@ -37,7 +37,9 @@ public class Post {
 	private String title;
 	private String description;
 	private String text;
-	private int sight_id;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JoinColumn(name="sight_id")
+	private CountriesSight countriesSight;
 	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name="user_id")
 	private User user;
@@ -51,6 +53,7 @@ public class Post {
 		this.title = title;
 		this.text = text;
 	}
+
 	public int getPost_id() {
 		return post_id;
 	}
@@ -89,12 +92,12 @@ public class Post {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	public int getSight_id() {
-		return sight_id;
+	public CountriesSight getCountriesSight() {
+		return countriesSight;
 	}
-	public void setSight_id(int sight_id) {
-		this.sight_id = sight_id;
+
+	public void setCountriesSight(CountriesSight countriesSight) {
+		this.countriesSight = countriesSight;
 	}
 	public Set<Comment> getPost_comments() {
 		return post_comments;

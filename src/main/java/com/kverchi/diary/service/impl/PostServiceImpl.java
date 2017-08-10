@@ -102,16 +102,13 @@ public class PostServiceImpl implements PostService {
 			return response;
 		}
 		//
-		if(post.getSight_id() != -1) {
-			postNeedToUpd.setSight_id(post.getSight_id());
-		}
+
 		postNeedToUpd.setTitle(post.getTitle());
 		postNeedToUpd.setDescription(post.getDescription());
 		postNeedToUpd.setText(post.getText());
 		
 		boolean isPostUpdated = postDao.update(postNeedToUpd);
 		if(isPostUpdated) {
-			Post updated_post = postDao.getById(post.getPost_id());
 			response.setRespCode(HttpStatus.OK);
 			response.setRespMsg(ServiceMessageResponse.OK.toString());
 			return response;

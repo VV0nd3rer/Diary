@@ -17,7 +17,8 @@ $(document).ready(function(){
     }).on("page", function(event, num){
     	var pagination_type="posts";
     	var paginated_url = root + "/pagination";
-    	var pagination_handler = $("#pagination_handler").val(); 
+    	var pagination_handler = $("#pagination_handler").val();
+		console.log("pagination handler : " + pagination_handler);
     	var pagination = {};
     	pagination["page_index"] = num;
     	pagination["pagination_type"] = pagination_type;
@@ -25,7 +26,8 @@ $(document).ready(function(){
     		pagination["search_criteria"] = null;
     	}
     	if(pagination_handler == "sight_posts") {
-    		pagination["search_criteria"] = {"sight_id": $("#sight_id").val()};
+			console.log("sight id: " + parseInt($("#sight_id").val()));
+    		pagination["search_criteria"] = {"sight_id": parseInt($("#sight_id").val())};
     	}
 		var token = $("meta[name='_csrf']").attr("content");
 	 	var header = $("meta[name='_csrf_header']").attr("content");

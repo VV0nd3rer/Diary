@@ -21,6 +21,7 @@
                 <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.sight_label}"></span>
             </span>
         </h2>
+
     </div>
     <div class="posts-header-container">
     </div>
@@ -29,6 +30,10 @@
 		<div class="col-md-6">
 			<div th:replace="fragments :: page"></div>
 			<div class="text-center" id="page-selection"></div>
+            <input type="hidden" th:value="${pages_total_num}"
+                   id="pages-total-num" />
+            <input type="hidden" th:value="${pagination_handler}" id="pagination_handler"/>
+            <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>
 	</div>
 

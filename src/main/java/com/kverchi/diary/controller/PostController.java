@@ -164,7 +164,7 @@ public class PostController {
 		   return new ModelAndView(REDIRECT_TO_POSTS);
 	   }
       
-	   CountriesSight sight =  countriesSightService.getSightById(post.getSight_id());
+	   CountriesSight sight =  post.getCountriesSight();
 	   
        ModelAndView mv = new ModelAndView(NEW_POST);
        mv.addObject("post", post);
@@ -207,9 +207,13 @@ public class PostController {
 			logger.debug("Session sight's label is NULL");
 			return  response;
 		}*/
-		post.setSight_id(currentSight.getSight_id());
+		//post.setSight_id(currentSight.getSight_id());
 		//New post
 		if(post.getPost_id() == 0) {
+			if(currentSight.getSight_id() == 0) {
+				return response;
+			}
+			post.setCountriesSight(currentSight);
 			response = postService.addPost(post);
 			return response;
 		}
