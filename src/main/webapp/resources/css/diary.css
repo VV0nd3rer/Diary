@@ -109,3 +109,15 @@ hr.double-bold {
 .nav>li>a:hover, .nav>li>a:focus {
 	background-color: #5bc0de;
 }
+#crud-tbl {
+	margin: 10px 0;
+}
+/*input:disabled {
+	color: grey;
+}*/
+input:disabled,
+input:disabled:hover,
+input:disabled:active,
+input:disabled:focus {
+	color: grey;
+}

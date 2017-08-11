@@ -121,9 +121,9 @@ $(document).ready(function(){
 	$("#add-sight-btn").click(function() {
 		$("#modal-form").modal();
 	});
-    $("#update-book-btn").click(function() {   	   	
+    $("#update-book-btn").click(function() {
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
-    	console.log(id); 
+    	console.log(id);
     	var upd_book_url = root + "/books/edit/"+id;
     	$.get(upd_book_url, function(data) {
     		//event.preventDefault();
@@ -240,6 +240,8 @@ $(document).ready(function(){
  
     $('#crud-tbl').on('click', '.clickable-row', function(event) {
     	  console.log('click on crud-tbl class');
+		  $('#update-book-btn').removeAttr('disabled');
+		  $('#delete-book-btn').removeAttr('disabled');
     	  $(this).addClass('danger').siblings().removeClass('danger');
     	  //var valur =$(this).find('td:first').html();
     	   //alert(value);    
