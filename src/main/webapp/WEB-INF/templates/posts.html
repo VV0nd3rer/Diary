@@ -23,11 +23,10 @@
         </h2>
 
     </div>
-    <div class="posts-header-container">
-    </div>
-	<div class="row">
+    <div class="container">
+        <div class="row">
 		<div class="col-md-1"></div>
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>
 			<div class="text-center" id="page-selection"></div>
             <input type="hidden" th:value="${pages_total_num}"
@@ -36,7 +35,7 @@
             <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>
 	</div>
-
+    </div>
     <div class="container" sec:authorize="isAnonymous()">
         <h2 class="well" th:text="#{posts.invitation}">Log in and take opportunity to add your own experience and leave comments.</h2>
 

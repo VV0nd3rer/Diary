@@ -18,7 +18,7 @@
     <div th:replace="header :: header">&nbsp;</div>
     
   <div class="container">
-      <p>Hello </p>
+      <p th:text="#{map.into}">Hello </p>
 		<form method="post" id="geocoding_form">
 			<label for="address">Address:</label>
 			<div class="input">
