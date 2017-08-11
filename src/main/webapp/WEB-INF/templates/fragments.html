@@ -9,7 +9,7 @@
     <input class="btn pull-right btn-success" action="action" th:fragment="return" type="submit" onclick="history.go(-1);" value="Return" />
     <!-- Footer fragment -->
 	<div class="blog-footer" th:fragment="footer">
-        &copy; 2017 Footer
+        &copy; <span ${#dates.year(#dates.createNow())}></span><span th:text="#{signature}"></span>
     </div>
 	<!-- Page fragment for pagination -->
     <div id="posts-block" th:fragment="page">
@@ -45,7 +45,7 @@
 						<span><a href="#"
 							th:href="@{/posts/single-post/{post_id}(post_id=${post.post_id}) }">Read
 								more</a></span>
-						<span class="pull-right" th:text="${post.countriesSight.sight_label}"></span>
+						<span class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.sight_label}"></em></span>
 					</div>
 				</div>
 				<!-- end of post -->
