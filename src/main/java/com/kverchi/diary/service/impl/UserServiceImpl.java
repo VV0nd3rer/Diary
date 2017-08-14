@@ -44,11 +44,11 @@ import com.kverchi.diary.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-    final static Logger logger = Logger.getLogger(UserServiceImpl.class);
-    final static String CHANGE_PASS_LINK = "users/change-password/";
-    final static String REGISTER_USER_LINK = "users/confirm-registration/";
-    final static String EMAIL_FORGOTPASS_TEMPLATE = "email-forgotpass";
-    final static String EMAIL_REGISTER_TEMPLATE = "email-registration";
+    private final static Logger logger = Logger.getLogger(UserServiceImpl.class);
+    private final static String CHANGE_PASS_LINK = "users/change-password/";
+    private final static String REGISTER_USER_LINK = "users/confirm-registration/";
+    private final static String EMAIL_FORGOTPASS_TEMPLATE = "email-forgotpass";
+    private final static String EMAIL_REGISTER_TEMPLATE = "email-registration";
 
     @Autowired
     ServletContext context;
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
             newAccount.setPassword(
                     passwordEncoder.encode(user.getPassword()));
             newAccount.setEmail(user.getEmail());
-            newAccount.setRoles(Arrays.asList(roleDao.getByName("ROLE_USER")));
+            newAccount.setRoles(Arrays.asList(roleDao.getByName("ROLE_TRAVELLER")));
             newAccount.setEnabled(false);
             //int res = (Integer)userDao.create(newAccount);
             User added_user = (User) userDao.persist(newAccount);
