@@ -173,24 +173,21 @@ public class PostController {
     }
 	
 	@RequestMapping("/remove/{post_id}")
-	public String removePost(@PathVariable("post_id") int post_id) {
-		String res = "NOT OK";
+	public ModelAndView removePost(@PathVariable("post_id") int post_id) {
+		ModelAndView mv = new ModelAndView(REDIRECT_TO_POSTS);
 		User currentUser = userService.getUserFromSession();
 		if(currentUser == null) {
-			return res;
+			return mv;
 		}
 		Post postFromDB = postService.getPostById(post_id);
 		String postAuth = postFromDB.getUser().getUsername();
 		
 		boolean isAuthor = currentUser.getUsername().equals(postAuth);
 		if(!isAuthor) {
-			return res;
+			return mv;
 		}
-		
-		//TODO handling db exception
 		postService.deletePost(post_id);
-		res = "OK";
-		return res;
+		return mv;
 	}
 	@RequestMapping(value="/save-post", method = RequestMethod.POST)
 	public ServiceResponse savePost(@RequestBody Post post, @ModelAttribute("currentSight") CountriesSight currentSight) {

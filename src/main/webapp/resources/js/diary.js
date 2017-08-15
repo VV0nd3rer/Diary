@@ -82,8 +82,6 @@ $(document).ready(function(){
         
         if(valid) {
         	var add_comment_url = root + "/posts/add-comment";
-        	alert(add_comment_url);
-        	alert 
 	        $.ajax({
 	     	   url: add_comment_url,
 	     	   type:"POST",

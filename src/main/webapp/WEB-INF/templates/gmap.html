@@ -22,10 +22,9 @@
   <div class="container">
       <p th:text="#{map.into}">Hello </p>
 		<form method="post" id="geocoding_form">
-			<label for="address">Address:</label>
 			<div class="input">
 				<input type="text" id="address" name="address" />
-				<input type="submit" class="btn" value="Search" />
+				<input type="submit" class="btn" th:value="#{submit}" />
 			</div>
 		</form>
 		<div id="map"></div>

@@ -37,16 +37,16 @@ public class Post {
 	private String title;
 	private String description;
 	private String text;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="sight_id")
 	private CountriesSight countriesSight;
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@JoinColumn(name="post_id")
+	@OneToMany(mappedBy="post_id", fetch=FetchType.LAZY, orphanRemoval=true)
+	//@JoinColumn(name="post_id")
 	private Set<Comment> post_comments;
-	
+
 	public Post() {};
 	public Post(int post_id, String title, String text) {
 		this.post_id = post_id;

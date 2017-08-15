@@ -40,7 +40,12 @@
 				<div class="btn-toolbar pull-right">
 					<div class="btn-group">
 					<span th:if="${ isAuthor }">
-			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn">Update post</a>
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn"><span th:text="#{post.update}">Update post</span></a>
+			    	</span>
+					</div>
+					<div class="btn-group">
+					<span th:if="${ isAuthor }">
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/remove/{post_id}(post_id=${post.post_id}) }" id="remove-post-btn"><span th:text="#{post.remove}">Remove post</span></a>
 			    	</span>
 					</div>
 					<div class="btn-group">
