@@ -16,7 +16,7 @@
     <div th:replace="header :: header">&nbsp;</div>
 
     <div class="container" th:if="${currentSight.sight_label != null}">
-        <h2>
+        <h2 class="sight-label">
             <span class="label label-warning">
                 <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.sight_label}"></span>
             </span>

@@ -6,8 +6,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
     <!--key=AIzaSyCPhRmqIUd3Qx_CC_eWEVuf1Z2-V_MTJG8-->
-    <script src="//maps.google.com/maps/api/js?key=AIzaSyCPhRmqIUd3Qx_CC_eWEVuf1Z2-V_MTJG8"></script>
-	<script th:src="@{/resources/gmaps/gmaps.js}"></script>
+	  <script async defer
+			  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPhRmqIUd3Qx_CC_eWEVuf1Z2-V_MTJG8&callback=initMap">
+	  </script>
+	<!--<script th:src="@{/resources/gmaps/gmaps.js}"></script>-->
 	<script th:src="@{/resources/js/map.js}"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
   	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -45,7 +47,7 @@
 					  <input type="hidden" name="sight_id" value="0" id="sight_id">
 					  <input type="hidden" name="lat" value="0" id="lat">
 					  <input type="hidden" name="lng" value="0" id="lng">
-					  <input type="hidden" name="code" value="" id="country_code">
+					  <input type="hidden" name="country_code" value="" id="country_code">
 			          <!-- Text input-->
 			          <div class="form-group">
 			            <label class="col-sm-2 control-label" for="textinput">Country</label>

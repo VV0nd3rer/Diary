@@ -121,3 +121,8 @@ input:disabled:active,
 input:disabled:focus {
 	color: grey;
 }
+
+.sight-label {
+	padding-bottom: 3%;
+	padding-left: 9%;
+}
