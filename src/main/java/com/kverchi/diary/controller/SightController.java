@@ -51,6 +51,7 @@ public class SightController {
 		List<CountriesSight> sights = countriesSightService.getAllSights();//getCountrySights("CZ");
 		return sights;
 	}
+
 	@RequestMapping("/is-coord-stored") 
 	public boolean isCoordStored(float x, float y) {
 		boolean res = false;

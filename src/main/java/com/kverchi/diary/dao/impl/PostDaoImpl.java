@@ -70,6 +70,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
             Root<Post> obj = criteriaQuery.from(Post.class);
             criteriaQuery.select(obj);
+            criteriaQuery.orderBy(builder.desc(obj.get("post_datetime")));
             TypedQuery<Post> query = entityManager.createQuery(criteriaQuery);
             objList = query.getResultList();
 
@@ -181,7 +182,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                     i++;
                 }
             }
-            str_query += " order by post_datetime";
+            str_query += " order by post_datetime desc";
             Query query = entityManager.createQuery(str_query);
             if (search_criteria != null && !search_criteria.isEmpty()) {
                 for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
