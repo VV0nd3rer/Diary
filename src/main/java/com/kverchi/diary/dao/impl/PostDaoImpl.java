@@ -98,7 +98,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            String str_query = " FROM Post p WHERE p.countriesSight.sight_id = :sight_id";
+            String str_query = "FROM Post p WHERE p.countriesSight.sight_id = :sight_id";
             Query query = entityManager.createQuery(str_query);
             query.setParameter("sight_id", sight_id);
             sight_posts = query.getResultList();
@@ -121,7 +121,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
-    public int getNumOfPosts(Map<String, Object> search_criteria) throws DatabaseException {
+    public int getNumOfRows(Map<String, Object> search_criteria) throws DatabaseException {
         EntityManager entityManager = null;
         int numOfRows = 0;
         try {
@@ -160,7 +160,32 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
-    public List<Post> getLimitPosts(int limit, int offset, Map<String, Object> search_criteria) throws DatabaseException {
+    public int getNumOfRows() throws DatabaseException {
+        EntityManager entityManager = null;
+        int numOfRows = 0;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            String str_query = "select count(*) from Post";
+
+            Query query = entityManager.createQuery(str_query);
+
+            logger.debug("single result: " + query.getSingleResult());
+            numOfRows = ((Long) query.getSingleResult()).intValue();
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return numOfRows;
+    }
+
+    @Override
+    public List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;
         try {
@@ -189,6 +214,42 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                     query.setParameter(entry.getKey(), entry.getValue());
                 }
             }
+            query.setFirstResult(offset);
+            if(limit != 0) {
+                query.setMaxResults(limit);
+            }
+            limitedPosts = query.getResultList();
+
+            for (Post post : limitedPosts) {
+                Hibernate.initialize(post.getPost_comments());
+                Hibernate.initialize(post.getCountriesSight());
+                Hibernate.initialize(post.getUser());
+            }
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return limitedPosts;
+    }
+
+    @Override
+    public List getLimitRows(int limit, int offset) throws DatabaseException {
+        EntityManager entityManager = null;
+        List<Post> limitedPosts = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            //order by post_datetime
+            String str_query = "FROM Post";
+
+            str_query += " order by post_datetime desc";
+            Query query = entityManager.createQuery(str_query);
+
             query.setFirstResult(offset);
             query.setMaxResults(limit);
             limitedPosts = query.getResultList();

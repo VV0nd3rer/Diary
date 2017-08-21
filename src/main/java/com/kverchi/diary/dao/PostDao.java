@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.domain.Post;
 
-public interface PostDao extends GenericDao<Post>, PaginationDao {
+public interface PostDao extends GenericDao<Post>, SearchDao {
 	List<Post> getSightPosts(int sight_id) throws DatabaseException;
 }

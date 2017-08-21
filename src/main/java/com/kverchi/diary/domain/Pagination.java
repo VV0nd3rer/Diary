@@ -1,5 +1,7 @@
 package com.kverchi.diary.domain;
 
+import com.kverchi.diary.enums.PaginationContentHandler;
+
 import java.util.List;
 import java.util.Map;
 //context factory - id of name -> return concrete class
@@ -8,7 +10,7 @@ public class Pagination {
 	private int pages_total_num;
 	private Map<String, Object> search_criteria;
 	private int page_index;
-	private String pagination_type;
+	private PaginationContentHandler pagination_type;
 	
 	
 	public Pagination(){}
@@ -40,10 +42,10 @@ public class Pagination {
 	public void setPage_index(int page_index) {
 		this.page_index = page_index;
 	}
-	public String getPagination_type() {
+	public PaginationContentHandler getPagination_type() {
 		return pagination_type;
 	}
-	public void setPagination_type(String pagination_type) {
+	public void setPagination_type(PaginationContentHandler pagination_type) {
 		this.pagination_type = pagination_type;
 	}
 }

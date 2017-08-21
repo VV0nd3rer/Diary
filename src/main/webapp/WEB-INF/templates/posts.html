@@ -5,8 +5,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
-    <script src="../../../resources/bootpag/jquery.bootpag.min.js" th:src="@{/resources/bootpag/jquery.bootpag.min.js}"></script>
-    <script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>
+     <script src="../../../resources/jQueryPagination/jquery.twbsPagination.min.js" th:src="@{/resources/jQueryPagination/jquery.twbsPagination.min.js}"></script>
+      <script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>
     <title>Posts</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
   	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -28,9 +28,7 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>
-			<div class="text-center" id="page-selection"></div>
-            <input type="hidden" th:value="${pages_total_num}"
-                   id="pages-total-num" />
+			<ul class="text-center pagination-sm" id="page-selection"></ul>
             <input type="hidden" th:value="${pagination_handler}" id="pagination_handler"/>
             <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>

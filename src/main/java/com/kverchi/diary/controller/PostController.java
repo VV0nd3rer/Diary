@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.kverchi.diary.enums.PaginationContentHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,21 +79,10 @@ public class PostController {
 	}
 	
 	@RequestMapping("/list")
-	public ModelAndView showPosts(SessionStatus sessionStatus, @ModelAttribute("currentSight") CountriesSight currentSight) {
-		if(currentSight != null) {
-			logger.debug("Session attribute 'currentSight' is NOT NULL");
-			logger.debug("currentSight label is " + currentSight.getSight_label());
-		}
-		//sessionStatus.setComplete();
+	public ModelAndView showPaginatedPosts(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		currentSight = new CountriesSight();
-		logger.debug("Session status is set to complete...");
-		logger.debug("Session attribute 'currentSight->label' is " + currentSight.getSight_label());
-		int page_index = 1;
-		Pagination pagination = paginatonService.getPaginatedPage(page_index, "posts", null);
 		ModelAndView mv = new ModelAndView(POSTS);
-		mv.addObject("pages_total_num", pagination.getPages_total_num());
-		mv.addObject("pagination_handler", "posts");
-		mv.addObject("posts", pagination.getPagePosts());
+		mv.addObject("pagination_handler", PaginationContentHandler.POSTS);
 		mv.addObject("currentSight", currentSight);
 		return mv;
 	}
@@ -104,20 +94,9 @@ public class PostController {
 	}
 
 	@RequestMapping("/sight/{sight_id}")
-	public ModelAndView showSightPosts(@PathVariable("sight_id") int sight_id) {
-		
-		//List<Post> sight_posts = null;
-		int page_index = 1;
-		Map<String, Object> search_criteries = new HashMap<String, Object>();
-		search_criteries.put("sight_id", sight_id);
-		Pagination pagination = /*postService.*/paginatonService.getPaginatedPage(page_index, "posts", search_criteries);
-		//sight_posts = postService.getSightPosts(sight_id);
-
-		ModelAndView mv = new ModelAndView("posts");
-		mv.addObject("pages_total_num", pagination.getPages_total_num());
-		mv.addObject("pagination_handler", "sight_posts");
-		mv.addObject("posts", pagination.getPagePosts());
-
+	public ModelAndView showPaginatedSightPosts(@PathVariable("sight_id") int sight_id) {
+		ModelAndView mv = new ModelAndView(POSTS);
+		mv.addObject("pagination_handler", PaginationContentHandler.POSTS);
 		CountriesSight sight = countriesSightService.getSightById(sight_id);
 		mv.addObject("currentSight", sight);
 		return mv;
