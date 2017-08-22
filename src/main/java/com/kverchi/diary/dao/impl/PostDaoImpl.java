@@ -3,6 +3,7 @@ package com.kverchi.diary.dao.impl;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
@@ -20,6 +22,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -183,6 +186,48 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         }
         return numOfRows;
     }
+    /*@Override
+    public List strBasedSearch(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
+        EntityManager entityManager = null;
+        List<Post> results = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Post> criteriaQuery = criteriaBuilder.createQuery(Post.class);
+            Root<Post> resultsRoot = criteriaQuery.from(Post.class);
+            List<Predicate> predicates = new ArrayList<>();
+            if (search_criteria != null && !search_criteria.isEmpty()) {
+                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+                    predicates.add(criteriaBuilder.equal(resultsRoot.get(entry.getKey()), entry.getValue()));
+                }
+            }
+            criteriaQuery.select(resultsRoot)
+                    .where(predicates.toArray(new Predicate[]{}));
+            Query query = entityManager.createQuery(criteriaQuery);
+            query.setFirstResult(offset);
+            if(limit != 0) {
+                query.setMaxResults(limit);
+            }
+            results = query.getResultList();
+
+            for (Post post : results) {
+                Hibernate.initialize(post.getPost_comments());
+                Hibernate.initialize(post.getCountriesSight());
+                Hibernate.initialize(post.getUser());
+            }
+            entityManager.getTransaction().commit();
+
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return results;
+    }*/
 
     @Override
     public List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
@@ -192,23 +237,23 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
             //order by post_datetime
-            String str_query = "FROM Post";
+            StringBuilder str_query = new StringBuilder("FROM Post");
             if (search_criteria != null && !search_criteria.isEmpty()) {
-                str_query += " where ";
+                str_query.append(" where ");
                 //final long[] i = {0};
                 //search_criteria.forEach((k, v) -> i[0] += k + v);
                 //search_criteria.forEach((k,v)->System.out.println("Key : " + k + " Value : " + v));
                 int i = 0;
-                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+                for (String key : search_criteria.keySet()) {
                     if (i != 0) {
-                        str_query += " and ";
+                        str_query.append(" and ");
                     }
-                    str_query += entry.getKey() + "= :" + entry.getKey();
+                    str_query.append(key + "= :" + key);
                     i++;
                 }
             }
-            str_query += " order by post_datetime desc";
-            Query query = entityManager.createQuery(str_query);
+            str_query.append(" order by post_datetime desc");
+            Query query = entityManager.createQuery(str_query.toString());
             if (search_criteria != null && !search_criteria.isEmpty()) {
                 for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
                     query.setParameter(entry.getKey(), entry.getValue());
