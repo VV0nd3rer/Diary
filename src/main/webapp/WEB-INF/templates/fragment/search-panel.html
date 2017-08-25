@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+</head>
+<body>
+    <form class="form-horizontal" role="form" th:fragment="datalistSearch">
+        <!--<div class="form-group">
+            <label for="filter">Filter by</label>
+            <select class="form-control">
+                <option value="0" selected>All Snippets</option>
+                <option value="1">Featured</option>
+                <option value="2">Most popular</option>
+                <option value="3">Top rated</option>
+                <option value="4">Most commented</option>
+            </select>
+        </div>-->
+        <input list="catSuggestList" id="catSuggestInput">
+        <datalist id="catSuggestList">
+            <option data-value="42">The answer</option>
+            <option data-value="43">The answer 43</option>
+        </datalist>
+        <input type="hidden" name="answer" id="catSuggestInput-hidden">
+        <!--<div class="form-group">
+        <label th:text="${authLabel}">Author</label>
+        <input class="form-control" type="text" />
+    </div>
+        <div class="form-group">
+            <label th:text="${categoryLabel}">Category</label>
+            <input class="form-control" type="text" />
+        </div>-->
+        <button type="submit" class="btn btn-primary"><span th:text="#{submit}"></span></button>
+    </form>
+</body>
+</html>

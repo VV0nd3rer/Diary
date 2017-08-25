@@ -283,6 +283,11 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
+    public List searchRows(String search_str) throws DatabaseException {
+        return null;
+    }
+
+    @Override
     public List getLimitRows(int limit, int offset) throws DatabaseException {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;

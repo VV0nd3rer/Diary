@@ -9,5 +9,6 @@ public interface SearchDao {
     int getNumOfRows(Map<String, Object> search_criteria) throws DatabaseException;
     int getNumOfRows() throws DatabaseException;
     List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException;
+    List searchRows(String search_str) throws DatabaseException;
     List getLimitRows(int limit, int offset) throws DatabaseException;
 }

@@ -27,6 +27,13 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 		List<CountriesSight> countries_sight = countriesSightDao.getCountrySights(country_id);
 		return countries_sight;
 	}
+
+	@Override
+	public List<CountriesSight> searchSight(String search_str) {
+		List<CountriesSight> countriesSights = countriesSightDao.searchRows(search_str);
+		return  countriesSights;
+	}
+
 	@Override
 	public void deleteSight(int sight_id) {
 		CountriesSight sightToDel = getSightById(sight_id);

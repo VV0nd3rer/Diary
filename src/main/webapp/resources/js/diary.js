@@ -1,6 +1,49 @@
 $(document).ready(function(){
 	var root = '';
 
+	$("#catSuggestInput").keyup(function(e) {
+		if (isLetterOnNumberClicked(e)) {
+			var inputValue = $(this).val();
+			var options = $("option");
+			var inputId = $(this).attr('id');
+			var listId = $(this).attr('list');
+			console.log(listId);
+			var hiddenInput = $(inputId + '-hidden');
+			console.log(inputValue);
+			loadDataList("/sights/search-sight", inputValue, listId);
+			for (var i = 0; i < options.length; i++) {
+				var option = options[i];
+
+				if (option.innerText === inputValue) {
+					hiddenInput.value = option.getAttribute('data-value');
+					console.log("option.getAttribute('data-value'): " + option.getAttribute('data-value'));
+					break;
+				}
+			}
+		}
+	});
+
+	/*document.querySelector('input[list]').addEventListener('input', function(e) {
+		var input = e.target,
+			list = input.getAttribute('list'),
+			options = document.querySelectorAll('#' + list + ' option'),
+			hiddenInput = document.getElementById(input.id + '-hidden'),
+			inputValue = input.value;
+		loadDataList("/sights/search-sight", inputValue);
+		hiddenInput.value = inputValue;
+		console.log("hidden input value: " + hiddenInput.value);
+		for (var i = 0; i < options.length; i++) {
+			var option = options[i];
+
+			if (option.innerText === inputValue) {
+				hiddenInput.value = option.getAttribute('data-value');
+				console.log("option.getAttribute('data-value'): " + option.getAttribute('data-value'));
+				break;
+			}
+		}
+	});*/
+
+
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var description = tinyMCE.get('descrEditor').getContent();
@@ -357,14 +400,20 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
       }
   } 
   
-  //
-/*function loadTable(table_id, data_url) {
-	var myTable = $('#crud-tbl > tbody');
-	var jqresp = $.get( "list-posts", function(data) {
-		$.each(data, function(i, obj) {
-			//alert(obj.title);
-		    myTable.append("<tr><td>"+obj.post_id+"</td><td>"+obj.title+"</td><td>"+obj.text+"</td></tr>");                                
-		});
-	});
-}*/
-
+ function loadDataList(url, search_str, listId) {
+	 ///sights/search-sight
+	 $.get(url, { search_str: search_str }).done (function (data) {
+		 console.log("get data for datalist: ");
+		 var options = '';
+		 $.each(data, function (index, value) {
+			 console.log(JSON.stringify(value));
+			 console.log(value.sight_label);
+			 options += '<option data-value="' + value.sight_id + '">' + value.sight_label + '</option>';
+		 });
+		 $('#'+listId).empty();
+		 $('#'+listId).append(options);
+	 });
+ }
+function isLetterOnNumberClicked(e) {
+	return (e.which <= 90 && e.which >= 48) || (e.which <= 105 && e.which >= 96);
+}

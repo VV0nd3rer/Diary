@@ -52,6 +52,12 @@ public class SightController {
 		return sights;
 	}
 
+	@RequestMapping("/search-sight")
+	public List<CountriesSight> searchSight(@RequestParam("search_str") String search_str) {
+		List<CountriesSight> sights = countriesSightService.searchSight(search_str);
+		return sights;
+	}
+
 	@RequestMapping("/is-coord-stored") 
 	public boolean isCoordStored(float x, float y) {
 		boolean res = false;
