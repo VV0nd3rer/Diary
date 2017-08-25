@@ -84,6 +84,8 @@ public class PostController {
 		ModelAndView mv = new ModelAndView(POSTS);
 		mv.addObject("pagination_handler", PaginationContentHandler.POSTS);
 		mv.addObject("currentSight", currentSight);
+		List<User> users = userService.getAllUsers();
+		mv.addObject("authors", users);
 		return mv;
 	}
 

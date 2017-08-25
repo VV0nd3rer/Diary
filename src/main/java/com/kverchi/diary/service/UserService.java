@@ -8,8 +8,11 @@ import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
 
+import java.util.List;
+
 public interface UserService {
 	User getUserByUsername(String username);
+	List<User> getAllUsers();
 	ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;
 	ServiceResponse testRegisterAccount(RegistrationForm user) throws ServiceException;
 	void activateAccount(User user);

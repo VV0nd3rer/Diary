@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.mail.Message;
@@ -71,6 +72,12 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         User user = userDao.getUserByUsername(username);
         return user;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = userDao.getAllRecords();
+        return users;
     }
 
     @Override

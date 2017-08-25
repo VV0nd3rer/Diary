@@ -3,26 +3,16 @@ $(document).ready(function(){
 
 	$("#catSuggestInput").keyup(function(e) {
 		if (isLetterOnNumberClicked(e)) {
-			var inputValue = $(this).val();
-			var options = $("option");
-			var inputId = $(this).attr('id');
-			var listId = $(this).attr('list');
-			console.log(listId);
-			var hiddenInput = $(inputId + '-hidden');
-			console.log(inputValue);
-			loadDataList("/sights/search-sight", inputValue, listId);
-			for (var i = 0; i < options.length; i++) {
-				var option = options[i];
-
-				if (option.innerText === inputValue) {
-					hiddenInput.value = option.getAttribute('data-value');
-					console.log("option.getAttribute('data-value'): " + option.getAttribute('data-value'));
-					break;
-				}
-			}
+			var url = "/sights/search-sight";
+			loadDataListFromDB(url, $(this));
 		}
 	});
+	$("#search-post-btn").click(function(e) {
 
+	});
+	$("#search-book-btn").click(function(e) {
+
+	});
 	/*document.querySelector('input[list]').addEventListener('input', function(e) {
 		var input = e.target,
 			list = input.getAttribute('list'),
@@ -402,18 +392,39 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
   
  function loadDataList(url, search_str, listId) {
 	 ///sights/search-sight
-	 $.get(url, { search_str: search_str }).done (function (data) {
-		 console.log("get data for datalist: ");
-		 var options = '';
-		 $.each(data, function (index, value) {
-			 console.log(JSON.stringify(value));
-			 console.log(value.sight_label);
-			 options += '<option data-value="' + value.sight_id + '">' + value.sight_label + '</option>';
-		 });
-		 $('#'+listId).empty();
-		 $('#'+listId).append(options);
-	 });
+
  }
+function loadDataListFromDB(url, element) {
+	var inputValue = element.val();
+	/*var options = $("option");
+	var inputId = element.attr('id');*/
+	var listId = element.attr('list');
+	console.log(listId);
+	//var hiddenInput = $(inputId + '-hidden');
+	console.log(inputValue);
+
+	$.get(url, { search_str: inputValue }).done (function (data) {
+		console.log("get data for datalist: ");
+		var options = '';
+		console.log(JSON.stringify(data));
+		$.each(data, function (index, value) {
+			console.log(JSON.stringify(value));
+			console.log(value.sight_label);
+			options += '<option data-value="' + value.sight_id + '">' + value.sight_label + '</option>';
+		});
+		$('#'+listId).empty();
+		$('#'+listId).append(options);
+	});
+	/*for (var i = 0; i < options.length; i++) {
+		var option = options[i];
+
+		if (option.innerText === inputValue) {
+			hiddenInput.value = option.getAttribute('data-value');
+			console.log("option.getAttribute('data-value'): " + option.getAttribute('data-value'));
+			break;
+		}
+	}*/
+}
 function isLetterOnNumberClicked(e) {
 	return (e.which <= 90 && e.which >= 48) || (e.which <= 105 && e.which >= 96);
 }

@@ -24,10 +24,18 @@
         </h2>
 
     </div>
-    <div class="container">
-        <div class="row">
-            <div th:include="fragment/search-panel :: datalistSearch"></div>
 
+    <div class="container">
+        <div>
+            <form class="form-horizontal" role="form">
+                <div th:include="fragment/search-panel :: searchCategory" th:with="catLabel=#{sight}"></div>
+                <div th:include="fragment/search-panel :: searchUser" th:with="authLabel=#{post.author}"></div>
+                <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
+                searchOnlyTitle=#{search.only.title}"></div>
+                <button type="submit" class="btn btn-primary" id="search-post-btn"><span th:text="#{submit}"></span></button>
+            </form>
+        </div>
+        <div class="row">
 		<div class="col-md-1"></div>
 		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>

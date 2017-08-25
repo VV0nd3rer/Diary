@@ -13,7 +13,7 @@
   <body>
     <div th:replace="header :: header">&nbsp;</div>
      
-     <div class="container" th:if="${not #lists.isEmpty(all_books) and all_books != null}">
+     <div class="container" th:if="${not #lists.isEmpty(obj_list) and obj_list != null}">
       
       <!-- Modal dialog -->
       <div class="modal fade" id="modal-dialog" role="dialog">
@@ -93,7 +93,14 @@
      <div class="blog-header">
    		<p class="lead blog-description">Books</p>
    	  </div>
-   	  <p>This is example of table with data </p>
+		 <div>
+			 <form class="form-horizontal" role="form">
+				 <div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>
+				 <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
+                searchOnlyTitle=#{search.only.title}"></div>
+				 <button type="submit" class="btn btn-primary" id="search-book-btn"><span th:text="#{submit}"></span></button>
+			 </form>
+		 </div>
    	  <input id="add-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
    	  <input id="update-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Update" disabled=disabled>
    	  <input id="delete-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Delete" disabled=disabled>
@@ -107,7 +114,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="clickable-row" th:each="book: ${all_books}">
+				<tr class="clickable-row" th:each="book: ${obj_list}">
 					<td th:text="${book.book_id}"></td>
 					<td th:text="${book.author}"></td>
 					<td th:text="${book.book_title}"></td>

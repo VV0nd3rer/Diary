@@ -53,7 +53,7 @@ public class BookController {
 	public ModelAndView showBooks() {
 		List<Book> all_books = bookService.getAllBooks();
 		ModelAndView mv = new ModelAndView("books");
-		mv.addObject("all_books", all_books);
+		mv.addObject("obj_list", all_books);
 		return mv;
 	}
 }
