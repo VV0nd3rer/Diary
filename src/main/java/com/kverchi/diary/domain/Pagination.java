@@ -4,48 +4,52 @@ import com.kverchi.diary.enums.PaginationContentHandler;
 
 import java.util.List;
 import java.util.Map;
-//context factory - id of name -> return concrete class
+
 public class Pagination {
-	private List pagePosts;
-	private int pages_total_num;
-	private Map<String, Object> search_criteria;
-	private int page_index;
-	private PaginationContentHandler pagination_type;
-	
-	
-	public Pagination(){}
-	public Pagination(List pagePosts, int pages_total_num) {
-		this.pagePosts = pagePosts;
-		this.pages_total_num = pages_total_num;
+
+	private int totalPages;
+	private int offset;
+	private int totalRows;
+	private int pageSize;
+	private int currentPage;
+
+	public int getTotalPages() {
+		return totalPages;
 	}
-	public List<Post> getPagePosts() {
-		return pagePosts;
+
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
 	}
-	public void setPagePosts(List pagePosts) {
-		this.pagePosts = pagePosts;
+
+	public int getOffset() {
+		return offset;
 	}
-	public int getPages_total_num() {
-		return pages_total_num;
+
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
-	public void setPages_total_num(int pages_total_num) {
-		this.pages_total_num = pages_total_num;
+
+	public int getTotalRows() {
+		return totalRows;
 	}
-	public Map<String, Object> getSearch_criteria() {
-		return search_criteria;
+
+	public void setTotalRows(int totalRows) {
+		this.totalRows = totalRows;
 	}
-	public void setSearch_criteria(Map<String, Object> search_criteria) {
-		this.search_criteria = search_criteria;
+
+	public int getPageSize() {
+		return pageSize;
 	}
-	public int getPage_index() {
-		return page_index;
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
-	public void setPage_index(int page_index) {
-		this.page_index = page_index;
+
+	public int getCurrentPage() {
+		return currentPage;
 	}
-	public PaginationContentHandler getPagination_type() {
-		return pagination_type;
-	}
-	public void setPagination_type(PaginationContentHandler pagination_type) {
-		this.pagination_type = pagination_type;
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
 	}
 }

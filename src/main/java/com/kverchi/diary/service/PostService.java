@@ -1,13 +1,12 @@
 package com.kverchi.diary.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.kverchi.diary.domain.*;
 import org.springframework.stereotype.Service;
 
 import com.kverchi.diary.custom.exception.DatabaseException;
-import com.kverchi.diary.domain.Pagination;
-import com.kverchi.diary.domain.Post;
-import com.kverchi.diary.domain.ServiceResponse;
 
 public interface PostService {
 	List<Post> getAllPosts();
@@ -16,4 +15,6 @@ public interface PostService {
 	ServiceResponse updatePost(Post post);
 	void deletePost(int post_id);
 	List<Post> getSightPosts(int sight_id);
+
+	SearchResults<Post> search(PostSearchAttributes searchAttributes);
 }

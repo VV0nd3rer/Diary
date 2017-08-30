@@ -1,17 +1,69 @@
 $(document).ready(function(){
 	var root = '';
 
-	$("#catSuggestInput").keyup(function(e) {
+	/*$("#catSuggestInput").keyup(function(e) {
 		if (isLetterOnNumberClicked(e)) {
 			var url = "/sights/search-sight";
 			loadDataListFromDB(url, $(this));
 		}
-	});
-	$("#search-post-btn").click(function(e) {
+	});*/
 
+	$("#authSuggestInput").focusout(function () {
+		var input = $(this);
+		console.log("focusout " + $(this).val());
+		checkDataListInput(input);
+	});
+	$("#catSuggestInput").focusout(function () {
+		var input = $(this);
+		console.log("focusout: " + input.val());
+		checkDataListInput(input);
+	});
+
+	$("#search-post-btn").click(function(e) {
+		e.preventDefault();
+		var catSuggestInput = $('#catSuggestInput');
+		var userSuggestInput = $('#authSuggestInput');
+		var catOptions = $('#' + catSuggestInput.attr('list') + ' option');
+		var userOptions = $('#' + userSuggestInput.attr('list') + ' option');
+		var catSuggestHidden = $('#' + catSuggestInput.attr("id") + '-hidden');
+		var userSuggestHidden = $('#' + userSuggestInput.attr("id") + '-hidden');
+
+		var isSearchCategoryPresent = isDataListInput(catOptions, catSuggestInput.val(), catSuggestHidden);
+		var isSearchUserPresent = isDataListInput(userOptions, userSuggestInput.val(), userSuggestHidden);
+		var searchText = $('#searchInTextInput');
+		var search_criteria = {};
+		if(isSearchCategoryPresent) {
+			search_criteria["sight_id"] = parseInt(catSuggestHidden.val());
+		}
+		if(isSearchUserPresent) {
+			search_criteria["user_id"] = parseInt(userSuggestHidden.val());
+		}
+		if(searchText.val() != '') {
+			search_criteria["text"] = searchText.val();
+		}
+		console.log(JSON.stringify(search_criteria));
+		var pagination_content = $("#pagination_handler").val();
+		getPaginationPage(pagination_content, search_criteria, 1);
 	});
 	$("#search-book-btn").click(function(e) {
+		e.preventDefault();
+		var authSuggestInput = $('#authSuggestInput');
+		var authOptions = $('#' + authSuggestInput.attr('list') + ' option');
+		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
 
+		var isSearchAuthPresent = isDataListInput(authOptions, authSuggestInput.val(), authSuggestHidden);
+		var searchText = $('#searchInTextInput');
+		var search_criteria = {};
+
+		if(isSearchAuthPresent) {
+			search_criteria["author"] = authSuggestInput.val();
+		}
+		if(searchText.val() != '') {
+			search_criteria["book_description"] = searchText.val();
+		}
+		console.log(JSON.stringify(search_criteria));
+		var pagination_content = $("#pagination_handler").val();
+		getPaginationPage(pagination_content, search_criteria, 1);
 	});
 	/*document.querySelector('input[list]').addEventListener('input', function(e) {
 		var input = e.target,
@@ -343,6 +395,43 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 	      return true;
 	    }
 }
+function checkDataListInput(obj) {
+	var val = obj.val();
+	console.log("checking data list input...");
+	console.log("input value: " + val);
+	var listId = obj.attr('list');
+	console.log("list id is " + listId);
+	var options = $('#' + listId + ' option');
+
+	var hiddenInput = $("#" + obj.attr("id") + '-hidden');
+
+	var res = false;
+	tips = $( ".validateTips" );
+	res = isDataListInput(options, val, hiddenInput);
+	if(res) {
+		tips.hide();
+	}
+	else {
+		tips.show();
+	}
+}
+function isDataListInput(options, val, hiddenInput) {
+	var res = false;
+
+	for (var i = 0; i < options.length; i++) {
+		var option = options[i];
+		if (option.innerText === val) {
+			console.log("valid");
+			var dataValAttr = option.getAttribute('data-value');
+			if(dataValAttr != null) {
+				hiddenInput.val(dataValAttr);
+			}
+			res = true;
+			break;
+		}
+	}
+	return res;
+}
   function checkRegexp( o, regexp, n ) {
     if ( !( regexp.test( o.val() ) ) ) {
       o.addClass( "ui-state-error" );
@@ -389,11 +478,7 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
         //  updateTips("Passwords Do Not Match!");
       }
   } 
-  
- function loadDataList(url, search_str, listId) {
-	 ///sights/search-sight
 
- }
 function loadDataListFromDB(url, element) {
 	var inputValue = element.val();
 	/*var options = $("option");

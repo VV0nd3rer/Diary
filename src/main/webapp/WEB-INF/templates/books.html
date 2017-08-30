@@ -95,6 +95,7 @@
    	  </div>
 		 <div>
 			 <form class="form-horizontal" role="form">
+				 <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
 				 <div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>
 				 <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
                 searchOnlyTitle=#{search.only.title}"></div>

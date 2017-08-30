@@ -14,35 +14,16 @@ import com.kverchi.diary.enums.PaginationContentHandler;
 
 @Service
 public class PaginationServiceImpl implements PaginationService {
-	@Autowired
-	private PostDao postDao;
-	@Autowired
-	private BookDao bookDao;
-	
+
 	@Override
-	public Pagination getPaginatedPage(int page_index, PaginationContentHandler pagination_type, Map<String, Object> search_criteria) {
-		SearchDao pageDao = null;
-		
-		switch (pagination_type) {
-			case POSTS:
-				pageDao = postDao;
-				break;
-			/*case "books":
-				pageDao = bookDao;
-				break;*/
-			default:		
+	public Pagination calculatePagination(Pagination pagination) {
+		int totalPages = pagination.getTotalRows()/pagination.getPageSize();
+		if(totalPages % pagination.getPageSize() != 0) {
+			totalPages += 1;
 		}
-		int num_posts_on_page = 5;
-		int numOfPosts = pageDao.getNumOfRows(search_criteria);
-		int numOfPages = numOfPosts/num_posts_on_page;
-		if(numOfPosts % num_posts_on_page != 0) {
-			numOfPages += 1;
-		}
-		int posts_row_offset = num_posts_on_page * page_index - num_posts_on_page;
-	
-		List<Post> pagePosts = pageDao.searchRows(search_criteria, num_posts_on_page, posts_row_offset);
-		Pagination pagination = new Pagination(pagePosts, numOfPages);
+		int offset = pagination.getPageSize() * pagination.getCurrentPage() - pagination.getPageSize();
+		pagination.setTotalPages(totalPages);
+		pagination.setOffset(offset);
 		return pagination;
 	}
-
 }

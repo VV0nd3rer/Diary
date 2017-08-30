@@ -1,8 +1,12 @@
 package com.kverchi.diary.service.impl;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.kverchi.diary.domain.*;
+import com.kverchi.diary.service.PaginationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,16 +16,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.PostDao;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.dao.impl.PostDaoImpl;
-import com.kverchi.diary.domain.CountriesSight;
-import com.kverchi.diary.domain.Pagination;
-import com.kverchi.diary.domain.Post;
-import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.PostService;
 import com.kverchi.diary.service.UserService;
@@ -36,6 +35,8 @@ public class PostServiceImpl implements PostService {
 	private UserService userService;
 	@Autowired
 	private CountriesSightService countriesSightService;
+	@Autowired
+	private PaginationService paginationService;
 	
 	/*public void setPostDao(PostDao postDao) {
 		this.postDao = postDao;
@@ -129,19 +130,39 @@ public class PostServiceImpl implements PostService {
 		  List<Post> sightPosts = postDao.getSightPosts(sight_id);
 		  return sightPosts;
 	}
-	/*@Override
-	public Pagination getPostsPage(int page_index, int num_posts_on_page) {
-		int numOfPosts = postDao.getNumOfPosts();
-		int numOfPages = numOfPosts/num_posts_on_page;
-		if(numOfPosts % num_posts_on_page != 0) {
-			numOfPages += 1;
+
+	@Override
+	public SearchResults<Post> search(PostSearchAttributes searchAttributes) {
+		Pagination pagination = new Pagination();
+		pagination.setPageSize(searchAttributes.getPageSize());
+		pagination.setCurrentPage(searchAttributes.getCurrentPage());
+
+		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
+		Map<String, Object> hasAttributes = new HashMap<>();
+		Map<String, String> containsAttributes = new HashMap<>();
+		if(searchCriteria != null && !searchCriteria.isEmpty()) {
+			for (Map.Entry<PostSearchAttributes.PostSearchType, Object> entry : searchCriteria.entrySet()) {
+				switch (entry.getKey()) {
+					case BY_USER_ID:
+						hasAttributes.put("user_id", entry.getValue());
+						break;
+					case BY_SIGHT_ID:
+						hasAttributes.put("sight_id", entry.getValue());
+						break;
+					case BY_TEXT:
+						containsAttributes.put("text", entry.getValue().toString());
+						break;
+				}
+			}
 		}
-		int posts_row_offset = num_posts_on_page * page_index - num_posts_on_page;
-		logger.debug("number of all posts is " + numOfPosts);
-		logger.debug("row offset " + posts_row_offset);
-		logger.debug("numOfPages: " + numOfPages);
-		List<Post> pagePosts = postDao.getLimitPosts(num_posts_on_page, posts_row_offset);
-		Pagination pagination = new Pagination(pagePosts, numOfPages);
-		return pagination;
-	}*/
+		int totalRows = postDao.getRowsNumber(hasAttributes, containsAttributes);
+		pagination.setTotalRows(totalRows);
+		pagination = paginationService.calculatePagination(pagination);
+		PostSearchResults searchResults = new PostSearchResults();
+		searchResults.setTotalPages(pagination.getTotalPages());
+		List results = postDao.search(hasAttributes, containsAttributes, pagination);
+		searchResults.setResults(results);
+		return searchResults;
+	}
+
 }

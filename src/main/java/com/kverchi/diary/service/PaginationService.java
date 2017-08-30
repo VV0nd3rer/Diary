@@ -7,5 +7,5 @@ import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.enums.PaginationContentHandler;
 
 public interface PaginationService {
-	Pagination getPaginatedPage(int page_index, PaginationContentHandler pagination_type, Map<String, Object> search_criteria);
+	Pagination calculatePagination(Pagination pagination);
 }

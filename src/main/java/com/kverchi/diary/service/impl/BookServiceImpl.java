@@ -2,6 +2,8 @@ package com.kverchi.diary.service.impl;
 
 import java.util.List;
 
+import com.kverchi.diary.domain.SearchAttributes;
+import com.kverchi.diary.domain.SearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +55,11 @@ public class BookServiceImpl implements BookService {
 	public void deleteBook(int book_id) {
 		Book bookToDel = bookDao.getById(book_id);
 		bookDao.delete(bookToDel);
+	}
+
+	@Override
+	public SearchResults<Book> search(SearchAttributes searchAttributes) {
+		return null;
 	}
 
 }

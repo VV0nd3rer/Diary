@@ -2,6 +2,7 @@ var signupApp = angular.module('signup', ['ngMaterial','ngMessages']);
 var loginApp = angular.module('login', ['ngMaterial','ngMessages']);
 var forgotPassApp = angular.module('forgotPass', ['ngMaterial','ngMessages']);
 var resetPassApp = angular.module('resetPass', ['ngMaterial','ngMessages']);
+var searchApp = angular.module('search', ['ngMaterial','ngMessages']);
 
 loginApp.controller('userController', function($scope, $window, $timeout, $q) {
 	angular.element('#login-btn').click(function() {
@@ -75,12 +76,44 @@ signupApp.controller('userController',
 		});*/
 	}
 });
+
+/*searchApp.directive('inputVerify', function($timeout, $q){
+	return {
+		restrict: 'AE',
+		require: 'ngModel',
+		link: function(scope, elm, attr, model) {
+			console.log("calling directive... ");
+			model.$asyncValidators.inputFromList = function(catSuggestInput) {
+				console.log("calling directive... ");
+				var isValid = false;
+				var defer = $q.defer();
+				var listId = attr.list;
+				var options = $('#' + listId + ' option');
+				for (var i = 0; i < options.length; i++) {
+					var option = options[i];
+					if (option.innerText === catSuggestInput) {
+						isValid = true;
+						break;
+					}
+				}
+				$timeout(function() {
+					model.$setValidity('inputFromList', isValid);
+					defer.resolve;
+				}, 1000);
+
+				return defer.promise;
+			};
+		}
+	}
+});*/
 signupApp.directive('usernameAvailable',function($timeout, $q) {
 	return {
 		restrict: 'AE',
 		require: 'ngModel',
 		link: function(scope, elm, attr, model) {
+			console.log("calling directive... ");
 			model.$asyncValidators.usernameExists = function(username) {
+				console.log("calling directive... ");
 				/*var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
 				$(document).ajaxSend(function(e, xhr, options) {

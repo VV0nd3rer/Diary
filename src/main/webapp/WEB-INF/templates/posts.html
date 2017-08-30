@@ -5,6 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+
      <script src="../../../resources/jQueryPagination/jquery.twbsPagination.min.js" th:src="@{/resources/jQueryPagination/jquery.twbsPagination.min.js}"></script>
       <script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>
 
@@ -27,7 +28,8 @@
 
     <div class="container">
         <div>
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" role="form" name="searchForm" id="searchForm">
+                <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
                 <div th:include="fragment/search-panel :: searchCategory" th:with="catLabel=#{sight}"></div>
                 <div th:include="fragment/search-panel :: searchUser" th:with="authLabel=#{post.author}"></div>
                 <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
@@ -40,7 +42,6 @@
 		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>
 			<ul class="text-center pagination-sm" id="page-selection"></ul>
-            <input type="hidden" th:value="${pagination_handler}" id="pagination_handler"/>
             <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>
 	</div>

@@ -28,11 +28,7 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 		return countries_sight;
 	}
 
-	@Override
-	public List<CountriesSight> searchSight(String search_str) {
-		List<CountriesSight> countriesSights = countriesSightDao.searchRows(search_str);
-		return  countriesSights;
-	}
+
 
 	@Override
 	public void deleteSight(int sight_id) {

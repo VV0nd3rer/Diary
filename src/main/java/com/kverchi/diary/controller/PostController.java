@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.kverchi.diary.domain.*;
 import com.kverchi.diary.enums.PaginationContentHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kverchi.diary.domain.Comment;
-import com.kverchi.diary.domain.CountriesSight;
-import com.kverchi.diary.domain.Pagination;
-import com.kverchi.diary.domain.Post;
-import com.kverchi.diary.domain.ServiceResponse;
-import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.service.CommentService;
 import com.kverchi.diary.service.CountriesSightService;
@@ -82,17 +77,19 @@ public class PostController {
 	public ModelAndView showPaginatedPosts(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		currentSight = new CountriesSight();
 		ModelAndView mv = new ModelAndView(POSTS);
-		mv.addObject("pagination_handler", PaginationContentHandler.POSTS);
 		mv.addObject("currentSight", currentSight);
-		List<User> users = userService.getAllUsers();
-		mv.addObject("authors", users);
+		if(currentSight.getSight_label() != null) {
+			//...
+			mv.addObject("totalPages", 5);
+		}
+		mv.addObject("authors", userService.getAllUsers());
+		mv.addObject("sights", countriesSightService.getAllSights());
 		return mv;
 	}
 
-	@RequestMapping(value = "/list-test", method = RequestMethod.GET, headers="Accept=application/json")
-	public List<Post> showTestPosts() {		
-		List<Post> posts = postService.getAllPosts();
-		return posts;
+	@RequestMapping(value = "/pagination-posts", method = RequestMethod.POST, headers="Accept=application/json")
+	public SearchResults showTestPosts(@RequestBody PostSearchAttributes searchAttributes) {
+		return postService.search(searchAttributes);
 	}
 
 	@RequestMapping("/sight/{sight_id}")

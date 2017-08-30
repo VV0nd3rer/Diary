@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import com.kverchi.diary.domain.CountriesSight_;
+import com.kverchi.diary.domain.Pagination;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -80,16 +81,17 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 	@Override
-	public int getNumOfRows(Map<String, Object> search_criteria) throws DatabaseException {
+	public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) {
 		return 0;
 	}
 
 	@Override
-	public int getNumOfRows() throws DatabaseException {
-		return 0;
+	public List search(Map<String, Object> hasAttributes, Map<String, String> containsAttributes, Pagination pagination) {
+		return null;
 	}
 
-	@Override
+
+	/*@Override
 	public List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
 		EntityManager entityManager = null;
 		List<CountriesSight> result = null;
@@ -134,8 +136,9 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 			}
 		}
 		return result;
-	}
-	@Override
+	}*/
+
+	/*@Override
 	public List searchRows(String search_str) throws DatabaseException {
 		EntityManager entityManager = null;
 		List<CountriesSight> result = null;
@@ -164,10 +167,6 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 			}
 		}
 		return result;
-	}
+	}*/
 
-	@Override
-	public List getLimitRows(int limit, int offset) throws DatabaseException {
-		return null;
-	}
 }

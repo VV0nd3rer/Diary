@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.kverchi.diary.domain.Pagination;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -124,100 +125,51 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
-    public int getNumOfRows(Map<String, Object> search_criteria) throws DatabaseException {
+    public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) throws DatabaseException {
         EntityManager entityManager = null;
-        int numOfRows = 0;
+        int rowsNumber = 0;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            String str_query = "select count(*) from Post";
-            if (search_criteria != null && !search_criteria.isEmpty()) {
-                str_query += " where ";
-                int i = 0;
-                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
-                    if (i != 0) {
-                        str_query += " and ";
+            StringBuilder str_query = new StringBuilder("select count(*) from Post");
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+
+                for (String key : hasAttributes.keySet()) {
+                    if(str_query.indexOf(" where") == -1) {
+                        str_query.append(" where");
                     }
-                    str_query += entry.getKey() + "= :" + entry.getKey();
-                    i++;
+                    else {
+                        str_query.append(" and");
+                    }
+                    str_query.append(key + "= :" + key);
                 }
             }
-            Query query = entityManager.createQuery(str_query);
-            if (search_criteria != null && !search_criteria.isEmpty()) {
-                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+            if(containsAttributes != null && !containsAttributes.isEmpty()) {
+                for(String key : containsAttributes.keySet()) {
+                    if(str_query.indexOf(" where") == -1) {
+                        str_query.append(" where");
+                    }
+                    else {
+                        str_query.append(" and");
+                    }
+                    str_query.append(key + " like ?");
+                }
+
+            }
+            Query query = entityManager.createQuery(str_query.toString());
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
                     query.setParameter(entry.getKey(), entry.getValue());
                 }
             }
-            logger.debug("single result: " + query.getSingleResult());
-            numOfRows = ((Long) query.getSingleResult()).intValue();
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return numOfRows;
-    }
-
-    @Override
-    public int getNumOfRows() throws DatabaseException {
-        EntityManager entityManager = null;
-        int numOfRows = 0;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            String str_query = "select count(*) from Post";
-
-            Query query = entityManager.createQuery(str_query);
-
-            logger.debug("single result: " + query.getSingleResult());
-            numOfRows = ((Long) query.getSingleResult()).intValue();
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return numOfRows;
-    }
-    /*@Override
-    public List strBasedSearch(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
-        EntityManager entityManager = null;
-        List<Post> results = null;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Post> criteriaQuery = criteriaBuilder.createQuery(Post.class);
-            Root<Post> resultsRoot = criteriaQuery.from(Post.class);
-            List<Predicate> predicates = new ArrayList<>();
-            if (search_criteria != null && !search_criteria.isEmpty()) {
-                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
-                    predicates.add(criteriaBuilder.equal(resultsRoot.get(entry.getKey()), entry.getValue()));
+            if (containsAttributes != null && !containsAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), "%"+entry.getValue()+"%");
                 }
             }
-            criteriaQuery.select(resultsRoot)
-                    .where(predicates.toArray(new Predicate[]{}));
-            Query query = entityManager.createQuery(criteriaQuery);
-            query.setFirstResult(offset);
-            if(limit != 0) {
-                query.setMaxResults(limit);
-            }
-            results = query.getResultList();
-
-            for (Post post : results) {
-                Hibernate.initialize(post.getPost_comments());
-                Hibernate.initialize(post.getCountriesSight());
-                Hibernate.initialize(post.getUser());
-            }
+            logger.debug("single result: " + query.getSingleResult());
+            rowsNumber = ((Long) query.getSingleResult()).intValue();
             entityManager.getTransaction().commit();
-
         } catch (PersistenceException e) {
             logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
             throw new DatabaseException(e);
@@ -226,11 +178,11 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                 entityManager.close();
             }
         }
-        return results;
-    }*/
+        return rowsNumber;
+    }
 
     @Override
-    public List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
+    public List search(Map<String, Object> hasAttributes, Map<String, String> containsAttributes, Pagination pagination) {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;
         try {
@@ -238,30 +190,43 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             entityManager.getTransaction().begin();
             //order by post_datetime
             StringBuilder str_query = new StringBuilder("FROM Post");
-            if (search_criteria != null && !search_criteria.isEmpty()) {
-                str_query.append(" where ");
-                //final long[] i = {0};
-                //search_criteria.forEach((k, v) -> i[0] += k + v);
-                //search_criteria.forEach((k,v)->System.out.println("Key : " + k + " Value : " + v));
-                int i = 0;
-                for (String key : search_criteria.keySet()) {
-                    if (i != 0) {
-                        str_query.append(" and ");
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                for (String key : hasAttributes.keySet()) {
+                    if (str_query.indexOf(" where") == -1) {
+                        str_query.append(" where");
+                    } else {
+                        str_query.append(" and");
                     }
                     str_query.append(key + "= :" + key);
-                    i++;
                 }
+            }
+            if(containsAttributes != null && !containsAttributes.isEmpty()) {
+                for (String key : containsAttributes.keySet()) {
+                    if(str_query.indexOf(" where") == -1) {
+                        str_query.append(" where");
+                    }
+                    else {
+                        str_query.append(" and");
+                    }
+                    str_query.append(key + " like ?");
+                }
+
             }
             str_query.append(" order by post_datetime desc");
             Query query = entityManager.createQuery(str_query.toString());
-            if (search_criteria != null && !search_criteria.isEmpty()) {
-                for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
                     query.setParameter(entry.getKey(), entry.getValue());
                 }
             }
-            query.setFirstResult(offset);
-            if(limit != 0) {
-                query.setMaxResults(limit);
+            if (containsAttributes != null && !containsAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), "%"+entry.getValue()+"%");
+                }
+            }
+            query.setFirstResult(pagination.getOffset());
+            if(pagination.getPageSize() != 0) {
+                query.setMaxResults(pagination.getPageSize());
             }
             limitedPosts = query.getResultList();
 
@@ -282,42 +247,5 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         return limitedPosts;
     }
 
-    @Override
-    public List searchRows(String search_str) throws DatabaseException {
-        return null;
-    }
 
-    @Override
-    public List getLimitRows(int limit, int offset) throws DatabaseException {
-        EntityManager entityManager = null;
-        List<Post> limitedPosts = null;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            //order by post_datetime
-            String str_query = "FROM Post";
-
-            str_query += " order by post_datetime desc";
-            Query query = entityManager.createQuery(str_query);
-
-            query.setFirstResult(offset);
-            query.setMaxResults(limit);
-            limitedPosts = query.getResultList();
-
-            for (Post post : limitedPosts) {
-                Hibernate.initialize(post.getPost_comments());
-                Hibernate.initialize(post.getCountriesSight());
-                Hibernate.initialize(post.getUser());
-            }
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return limitedPosts;
-    }
 }

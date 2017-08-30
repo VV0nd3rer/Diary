@@ -17,29 +17,41 @@
         </div>-->
         <div class="form-group" th:fragment="searchCategory">
             <label th:text="${catLabel}">Category</label>
-            <input class="form-control" list="catSuggestList" id="catSuggestInput">
+            <input type="text" id="catSuggestInput" list="catSuggestList" />
             <datalist id="catSuggestList">
+                <option th:each="sight : ${sights}" th:attr="data-value=${sight.sight_id}"><span th:text="${sight.sight_label}"></span> </option>
             </datalist>
             <input type="hidden" name="answer" id="catSuggestInput-hidden">
         </div>
+        <!--<md-input-container class="md-block" th:fragment="searchCategory">
+            <label th:text="${catLabel}">Category</label>
+            <input name="catSuggestInput" id="catSuggestInput"
+                   ng-model="catSuggestInput" input-verify  ng-model-options="{ updateOn: 'blur' }"
+                   list="catSuggestList" />
+            <datalist id="catSuggestList">
+            </datalist>
+            <input type="hidden" name="answer" id="catSuggestInput-hidden">
+            <div ng-if="searchForm.$error.inputFromList" th:text="#{search.datalist.error}">Please select value from list</div>
+        </md-input-container>-->
 
         <div class="form-group" th:fragment="searchUser">
             <label th:text="${authLabel}">Author</label>
-            <input class="form-control" list="authSuggestList" type="text" id="authSuggestInput"/>
+            <input class="form-control" list="authSuggestList" type="text" id="authSuggestInput" />
             <datalist id="authSuggestList">
-                <option data-value="${auth.user_id}" th:each="auth: ${authors}"><span th:text="${auth.username}"></span></option>
+                <option th:each="auth: ${authors}" th:attr="data-value=${auth.userId}"><span th:text="${auth.username}"></span></option>
             </datalist>
+            <input type="hidden" name="answer" id="authSuggestInput-hidden">
         </div>
         <div class="form-group" th:fragment="searchAuthor">
             <label th:text="${authLabel}">Author</label>
-            <input class="form-control" list="authSuggestList" type="text" id="authSuggestInput"/>
+            <input class="form-control" list="authSuggestList" type="text" id="authSuggestInput" />
             <datalist id="authSuggestList">
                 <option th:each="element: ${obj_list}"><span th:text="${element.author}"></span></option>
             </datalist>
         </div>
         <div class="form-group" th:fragment="searchInTextWithCheckBox">
             <label th:text="${searchInText}">Search in text</label>
-            <input class="form-control" type="text" id="searchInTextInput"/>
+            <input class="form-control" type="text" id="searchInTextInput" />
             <input type="checkbox" id="searchCondition" value=""><span th:text="${searchOnlyTitle}"></span> <br>
         </div>
 
