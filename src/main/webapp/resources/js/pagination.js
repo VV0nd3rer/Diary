@@ -1,27 +1,50 @@
 $(document).ready(function(){
 
-	//Loading POSTS page with pagination
 	var searchCriteria = checkSightSeachCriteria();
+	console.log("search criteria: " + JSON.stringify(searchCriteria));
 
-	//var searchResult = getPaginationPage(searchCriteria, 1, '/posts/pagination-posts');
+	var defaultOpts = {
+		totalPages: 20,
+		visiblePages: 3,
+		initiateStartPageClick: false,
+		onPageClick: function (event, page) {
+			var searchAttributes = {};
+			searchAttributes['searchCriteria'] = searchCriteria;
+			searchAttributes['currentPage'] = page;
 
-	var totalPagesVal = $('#pages-total-num').val();
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
 
-	console.log("totalPagesVal: " + totalPagesVal);
-	renderPagination(totalPagesVal);
+			$.ajax({
+				url: '/posts/pagination-posts',
+				type:"POST",
+				data: JSON.stringify(searchAttributes),
+				contentType:"application/json; charset=utf-8",
+				success: function(data){
+					$("#posts-block").replaceWith(data);
 
-	function renderPagination(totalPages) {
-		$('#page-selection').twbsPagination({
-			totalPages: totalPages,
-			visiblePages: 3,
-			onPageClick: function (event, page) {
-				console.log('pagination tab is clicked, page # ' + page);
-				searchResult = getPaginationPage(searchCriteria, page, '/posts/pagination-posts');
-				totalPages = searchResult.totalPages;
-			}
-		});
-	}
+					postPagination.twbsPagination('destroy');
+					postPagination.twbsPagination($.extend({}, defaultOpts, {
+						totalPages: $('#total-pages').val(),
+						startPage: page
+					}));
 
+				},
+				error : function(e) {
+					console.log(e);
+				},
+				done : function(e) {
+					//alert("DONE");
+				}
+			});
+		}
+	};
+	var postPagination = $('#page-selection');
+	postPagination.twbsPagination(defaultOpts);
+	postPagination.trigger('page');
 });
 
 function checkSightSeachCriteria() {
@@ -33,34 +56,3 @@ function checkSightSeachCriteria() {
 	return searchCriteria;
 }
 
-function getPaginationPage(searchCriteria, currentPage, requestUrl) {
-	var searchAttributes = {};
-	searchAttributes['searchCriteria'] = searchCriteria;
-	searchAttributes['currentPage'] = currentPage;
-
-	var seachResult = null;
-
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	$(document).ajaxSend(function(e, xhr, options) {
-		xhr.setRequestHeader(header, token);
-	});
-
-	$.ajax({
-		url: requestUrl,
-		type:"POST",
-		data: JSON.stringify(searchAttributes),
-		contentType:"application/json; charset=utf-8",
-		success: function(data){
-			$("#posts-block").replaceWith(data.results);
-			seachResult = data;
-		},
-		error : function(e) {
-			console.log(e);
-		},
-		done : function(e) {
-			//alert("DONE");
-		}
-	});
-	return seachResult;
-}

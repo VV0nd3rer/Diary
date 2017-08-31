@@ -8,62 +8,118 @@ $(document).ready(function(){
 		}
 	});*/
 
+	var searchCriteria = checkSightSeachCriteria();
+
+
+	var postPagination = $('#page-selection');
+	postPagination.twbsPagination(renderPaginationPlagin());
+	postPagination.trigger('page');
+
+	renderPaginationPlagin();
+	console.log("searchCriteria" + JSON.stringify(searchCriteria));
+	function renderPaginationPlagin() {
+		var defaultOpts = {
+			totalPages: 20,
+			visiblePages: 3,
+			initiateStartPageClick: false,
+			onPageClick: function (event, page) {
+				console.log("pgn clicked " + page);
+				var searchAttributes = {};
+				searchAttributes['searchCriteria'] = searchCriteria;
+				searchAttributes['currentPage'] = page;
+
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+
+				$.ajax({
+					url: '/posts/pagination-posts',
+					type:"POST",
+					data: JSON.stringify(searchAttributes),
+					contentType:"application/json; charset=utf-8",
+					success: function(data){
+						$("#posts-block").replaceWith(data);
+
+						postPagination.twbsPagination('destroy');
+						postPagination.twbsPagination($.extend({}, defaultOpts, {
+							totalPages: $('#total-pages').val(),
+							startPage: page
+						}));
+
+					},
+					error : function(e) {
+						console.log(e);
+					},
+					done : function(e) {
+						//alert("DONE");
+					}
+				});
+			}
+		};
+		return defaultOpts;
+	}
+
+	var authCorrectInput = null;
+	var catCorrectInput = null;
+
 	$("#authSuggestInput").focusout(function () {
 		var input = $(this);
 		console.log("focusout " + $(this).val());
-		checkDataListInput(input);
+		if(checkDataListInput(input)) {
+			authCorrectInput = input;
+		}
 	});
 	$("#catSuggestInput").focusout(function () {
 		var input = $(this);
-		console.log("focusout: " + input.val());
-		checkDataListInput(input);
+		console.log("focusout: " + $(this).val());
+		if(checkDataListInput(input)) {
+			catCorrectInput = input;
+		}
 	});
 
 	$("#search-post-btn").click(function(e) {
 		e.preventDefault();
-		var catSuggestInput = $('#catSuggestInput');
-		var userSuggestInput = $('#authSuggestInput');
-		var catOptions = $('#' + catSuggestInput.attr('list') + ' option');
-		var userOptions = $('#' + userSuggestInput.attr('list') + ' option');
+		var catSuggestInput = $("#catSuggestInput");
+		var authSuggestInput = $("#authSuggestInput");
+	    console.log("authSuggestInput.attr id " + authSuggestInput.attr("id"));
 		var catSuggestHidden = $('#' + catSuggestInput.attr("id") + '-hidden');
-		var userSuggestHidden = $('#' + userSuggestInput.attr("id") + '-hidden');
-
-		var isSearchCategoryPresent = isDataListInput(catOptions, catSuggestInput.val(), catSuggestHidden);
-		var isSearchUserPresent = isDataListInput(userOptions, userSuggestInput.val(), userSuggestHidden);
+		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
+		console.log("authSuggestHidde: " + authSuggestHidden.val());
+		console.log("catSuggestHidden: " + catSuggestHidden.val());
 		var searchText = $('#searchInTextInput');
-		var search_criteria = {};
-		if(isSearchCategoryPresent) {
-			search_criteria["sight_id"] = parseInt(catSuggestHidden.val());
+		searchCriteria = {};
+
+		if(catCorrectInput != null) {
+			searchCriteria["BY_SIGHT_ID"] = parseInt(catSuggestHidden.val());
 		}
-		if(isSearchUserPresent) {
-			search_criteria["user_id"] = parseInt(userSuggestHidden.val());
+		if(authCorrectInput != null) {
+			searchCriteria["BY_USER_ID"] = parseInt(authSuggestHidden.val());
 		}
 		if(searchText.val() != '') {
-			search_criteria["text"] = searchText.val();
+			searchCriteria["BY_TEXT"] = searchText.val();
 		}
-		console.log(JSON.stringify(search_criteria));
-		var pagination_content = $("#pagination_handler").val();
-		getPaginationPage(pagination_content, search_criteria, 1);
+		console.log("searchCriteria" + JSON.stringify(searchCriteria));
+		postPagination.trigger('page');
 	});
+
+
 	$("#search-book-btn").click(function(e) {
 		e.preventDefault();
-		var authSuggestInput = $('#authSuggestInput');
-		var authOptions = $('#' + authSuggestInput.attr('list') + ' option');
+		var authSuggestInput = $("#authSuggestInput");
 		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
 
-		var isSearchAuthPresent = isDataListInput(authOptions, authSuggestInput.val(), authSuggestHidden);
 		var searchText = $('#searchInTextInput');
-		var search_criteria = {};
+		searchCriteria = {};
 
-		if(isSearchAuthPresent) {
-			search_criteria["author"] = authSuggestInput.val();
+		if(authCorrectInput != null) {
+			//searchCriteria["BY_AUTHOR_ID"] = authSuggestInput.val();
 		}
 		if(searchText.val() != '') {
-			search_criteria["book_description"] = searchText.val();
+			searchCriteria["BY_TEXT"] = searchText.val();
 		}
-		console.log(JSON.stringify(search_criteria));
-		var pagination_content = $("#pagination_handler").val();
-		getPaginationPage(pagination_content, search_criteria, 1);
+		postPagination.trigger('page');
 	});
 	/*document.querySelector('input[list]').addEventListener('input', function(e) {
 		var input = e.target,
@@ -414,12 +470,15 @@ function checkDataListInput(obj) {
 	else {
 		tips.show();
 	}
+	return res;
 }
 function isDataListInput(options, val, hiddenInput) {
 	var res = false;
 
 	for (var i = 0; i < options.length; i++) {
 		var option = options[i];
+		console.log("option.innerText " + option.innerText);
+		console.log("value: " + val);
 		if (option.innerText === val) {
 			console.log("valid");
 			var dataValAttr = option.getAttribute('data-value');
@@ -512,4 +571,12 @@ function loadDataListFromDB(url, element) {
 }
 function isLetterOnNumberClicked(e) {
 	return (e.which <= 90 && e.which >= 48) || (e.which <= 105 && e.which >= 96);
+}
+function checkSightSeachCriteria() {
+	var searchCriteria = null;
+	var sightIdVal = $("#sight_id").val();
+	if(typeof sightIdVal != 'undefined') {
+		searchCriteria = {'BY_SIGHT_ID' : parseInt(sightIdVal)};
+	}
+	return searchCriteria;
 }

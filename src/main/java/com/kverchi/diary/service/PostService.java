@@ -16,5 +16,6 @@ public interface PostService {
 	void deletePost(int post_id);
 	List<Post> getSightPosts(int sight_id);
 
-	SearchResults<Post> search(PostSearchAttributes searchAttributes);
+	PostSearchResults search(PostSearchAttributes searchAttributes);
+	int getPagesNum();
 }

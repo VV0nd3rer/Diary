@@ -13,8 +13,7 @@
     </div>
 	<!-- Page fragment for pagination -->
     <div id="posts-block" th:fragment="page">
-		<input type="hidden" th:value="${totalPages}"
-			   id="pages-total-num" />
+			<input id="total-pages" th:value="${totalPages}"/>
 			<div class="post" th:each="post: ${posts}">
 				<!-- Each post -->
 				<div class="panel">

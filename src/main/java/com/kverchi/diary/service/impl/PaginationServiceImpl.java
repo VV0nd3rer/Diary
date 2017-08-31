@@ -22,7 +22,9 @@ public class PaginationServiceImpl implements PaginationService {
 			totalPages += 1;
 		}
 		int offset = pagination.getPageSize() * pagination.getCurrentPage() - pagination.getPageSize();
-		pagination.setTotalPages(totalPages);
+		if(totalPages > 0) {
+			pagination.setTotalPages(totalPages);
+		}
 		pagination.setOffset(offset);
 		return pagination;
 	}

@@ -74,28 +74,27 @@ public class PostController {
 	}
 	
 	@RequestMapping("/list")
-	public ModelAndView showPaginatedPosts(@ModelAttribute("currentSight") CountriesSight currentSight) {
+	public ModelAndView showPosts(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		currentSight = new CountriesSight();
 		ModelAndView mv = new ModelAndView(POSTS);
 		mv.addObject("currentSight", currentSight);
-		if(currentSight.getSight_label() != null) {
-			//...
-			mv.addObject("totalPages", 5);
-		}
 		mv.addObject("authors", userService.getAllUsers());
 		mv.addObject("sights", countriesSightService.getAllSights());
 		return mv;
 	}
 
-	@RequestMapping(value = "/pagination-posts", method = RequestMethod.POST, headers="Accept=application/json")
-	public SearchResults showTestPosts(@RequestBody PostSearchAttributes searchAttributes) {
-		return postService.search(searchAttributes);
+	@RequestMapping(value = "/pagination-posts", method = RequestMethod.POST)
+	public ModelAndView showPaginationPosts(@RequestBody PostSearchAttributes searchAttributes) {
+		PostSearchResults results = postService.search(searchAttributes);
+		ModelAndView mv = new ModelAndView("fragments :: page");
+		mv.addObject("posts", results.getResults());
+		mv.addObject("totalPages", results.getTotalPages());
+		return mv;
 	}
 
 	@RequestMapping("/sight/{sight_id}")
 	public ModelAndView showPaginatedSightPosts(@PathVariable("sight_id") int sight_id) {
 		ModelAndView mv = new ModelAndView(POSTS);
-		mv.addObject("pagination_handler", PaginationContentHandler.POSTS);
 		CountriesSight sight = countriesSightService.getSightById(sight_id);
 		mv.addObject("currentSight", sight);
 		return mv;

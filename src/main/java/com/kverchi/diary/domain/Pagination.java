@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Pagination {
 
-	private int totalPages;
+	private int totalPages = 1;
 	private int offset;
 	private int totalRows;
 	private int pageSize;

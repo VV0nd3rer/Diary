@@ -136,10 +136,10 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 
                 for (String key : hasAttributes.keySet()) {
                     if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where");
+                        str_query.append(" where ");
                     }
                     else {
-                        str_query.append(" and");
+                        str_query.append(" and ");
                     }
                     str_query.append(key + "= :" + key);
                 }
@@ -147,10 +147,10 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             if(containsAttributes != null && !containsAttributes.isEmpty()) {
                 for(String key : containsAttributes.keySet()) {
                     if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where");
+                        str_query.append(" where ");
                     }
                     else {
-                        str_query.append(" and");
+                        str_query.append(" and ");
                     }
                     str_query.append(key + " like ?");
                 }
@@ -193,9 +193,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             if (hasAttributes != null && !hasAttributes.isEmpty()) {
                 for (String key : hasAttributes.keySet()) {
                     if (str_query.indexOf(" where") == -1) {
-                        str_query.append(" where");
+                        str_query.append(" where ");
                     } else {
-                        str_query.append(" and");
+                        str_query.append(" and ");
                     }
                     str_query.append(key + "= :" + key);
                 }
@@ -203,10 +203,10 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             if(containsAttributes != null && !containsAttributes.isEmpty()) {
                 for (String key : containsAttributes.keySet()) {
                     if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where");
+                        str_query.append(" where ");
                     }
                     else {
-                        str_query.append(" and");
+                        str_query.append(" and ");
                     }
                     str_query.append(key + " like ?");
                 }

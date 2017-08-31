@@ -132,7 +132,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public SearchResults<Post> search(PostSearchAttributes searchAttributes) {
+	public PostSearchResults search(PostSearchAttributes searchAttributes) {
 		Pagination pagination = new Pagination();
 		pagination.setPageSize(searchAttributes.getPageSize());
 		pagination.setCurrentPage(searchAttributes.getCurrentPage());
@@ -164,5 +164,7 @@ public class PostServiceImpl implements PostService {
 		searchResults.setResults(results);
 		return searchResults;
 	}
-
+	public int getPagesNum() {
+		return 7;
+	}
 }

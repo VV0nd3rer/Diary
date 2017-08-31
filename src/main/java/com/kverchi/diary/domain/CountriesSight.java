@@ -1,5 +1,7 @@
 package com.kverchi.diary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="countries_sights")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CountriesSight implements Serializable {
 	@Id
 	@Column(name="sight_id")

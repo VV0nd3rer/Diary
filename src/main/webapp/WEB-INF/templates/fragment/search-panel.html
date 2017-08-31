@@ -19,7 +19,7 @@
             <label th:text="${catLabel}">Category</label>
             <input type="text" id="catSuggestInput" list="catSuggestList" />
             <datalist id="catSuggestList">
-                <option th:each="sight : ${sights}" th:attr="data-value=${sight.sight_id}"><span th:text="${sight.sight_label}"></span> </option>
+                <option th:each="sight: ${sights}" th:attr="data-value=${sight.sight_id}"><span th:text="${sight.sight_label}"></span></option>
             </datalist>
             <input type="hidden" name="answer" id="catSuggestInput-hidden">
         </div>
