@@ -96,6 +96,7 @@ public class PostController {
 	public ModelAndView showPaginatedSightPosts(@PathVariable("sight_id") int sight_id) {
 		ModelAndView mv = new ModelAndView(POSTS);
 		CountriesSight sight = countriesSightService.getSightById(sight_id);
+		mv.addObject("authors", userService.getAllUsers());
 		mv.addObject("currentSight", sight);
 		return mv;
 	}

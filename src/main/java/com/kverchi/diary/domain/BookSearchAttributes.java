@@ -11,15 +11,15 @@ public class BookSearchAttributes extends SearchAttributes {
         BY_AUTHOR_ID,
         BY_TEXT
     };
-    private Map<PostSearchAttributes, Object> searchCriteria = new HashMap<>();
+    private Map<BookSearchType, Object> searchCriteria = new HashMap<>();
     private int author_id;
     private String text;
 
-    public Map<PostSearchAttributes, Object> getSearchCriteria() {
+    public Map<BookSearchType, Object> getSearchCriteria() {
         return searchCriteria;
     }
 
-    public void setSearchCriteria(Map<PostSearchAttributes, Object> searchCriteria) {
+    public void setSearchCriteria(Map<BookSearchType, Object> searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 

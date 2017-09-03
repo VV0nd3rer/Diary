@@ -1,15 +1,13 @@
-$(document).ready(function(){
-
-	var searchCriteria = checkSightSeachCriteria();
-	console.log("search criteria: " + JSON.stringify(searchCriteria));
+$(document).ready(function() {
 
 	var defaultOpts = {
-		totalPages: 20,
+		//totalPages: 20,
 		visiblePages: 3,
 		initiateStartPageClick: false,
 		onPageClick: function (event, page) {
+			console.log("pgn clicked " + page);
 			var searchAttributes = {};
-			searchAttributes['searchCriteria'] = searchCriteria;
+			searchAttributes['searchCriteria'] = null;
 			searchAttributes['currentPage'] = page;
 
 			var token = $("meta[name='_csrf']").attr("content");
@@ -19,15 +17,18 @@ $(document).ready(function(){
 			});
 
 			$.ajax({
-				url: '/posts/pagination-posts',
+				url: '/books/pagination-books',
 				type:"POST",
 				data: JSON.stringify(searchAttributes),
 				contentType:"application/json; charset=utf-8",
 				success: function(data){
-					$("#posts-block").replaceWith(data);
+					console.log("pgn clicked after success " + page);
+					$("#books-block").replaceWith(data);
 
-					postPagination.twbsPagination('destroy');
-					postPagination.twbsPagination($.extend({}, defaultOpts, {
+					$('#book-pagination').twbsPagination('destroy');
+					console.log('start page: ' + page);
+					console.log('total pages: ' + $('#total-pages').val());
+					$('#book-pagination').twbsPagination($.extend({}, defaultOpts, {
 						totalPages: $('#total-pages').val(),
 						startPage: page
 					}));
@@ -42,17 +43,6 @@ $(document).ready(function(){
 			});
 		}
 	};
-	var postPagination = $('#page-selection');
-	postPagination.twbsPagination(defaultOpts);
-	postPagination.trigger('page');
+	$('#book-pagination').twbsPagination(defaultOpts);
+	$('#book-pagination').trigger('page');
 });
-
-function checkSightSeachCriteria() {
-	var searchCriteria = null;
-	var sightIdVal = $("#sight_id").val();
-	if(typeof sightIdVal != 'undefined') {
-		searchCriteria = {'BY_SIGHT_ID' : parseInt(sightIdVal)};
-	}
-	return searchCriteria;
-}
-

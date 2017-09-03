@@ -140,7 +140,7 @@ public class PostServiceImpl implements PostService {
 		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> containsAttributes = new HashMap<>();
-		if(searchCriteria != null && !searchCriteria.isEmpty()) {
+		if (searchCriteria != null && !searchCriteria.isEmpty()) {
 			for (Map.Entry<PostSearchAttributes.PostSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
 					case BY_USER_ID:
@@ -163,8 +163,5 @@ public class PostServiceImpl implements PostService {
 		List results = postDao.search(hasAttributes, containsAttributes, pagination);
 		searchResults.setResults(results);
 		return searchResults;
-	}
-	public int getPagesNum() {
-		return 7;
 	}
 }

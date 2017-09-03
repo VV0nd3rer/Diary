@@ -11,15 +11,35 @@ $(document).ready(function(){
 	var searchCriteria = checkSightSeachCriteria();
 
 
-	var postPagination = $('#page-selection');
-	postPagination.twbsPagination(renderPaginationPlagin());
-	postPagination.trigger('page');
 
-	renderPaginationPlagin();
+	/*var postPagination = $('#post-pagination');
+	var bookPagination = $('#book-pagination');*/
+	var paginationElement;
+	var paginationURL;
+	var paginationChangingBlock;
+	if($('#post-pagination').length) {
+		paginationElement = $('#post-pagination');
+		paginationURL = '/posts/pagination-posts';
+		paginationChangingBlock = 'posts-block';
+		initializePaginationPlagin();
+	}
+	if($('#book-pagination').length) {
+		paginationElement = $('#book-pagination');
+		paginationURL = '/books/pagination-books';
+		paginationChangingBlock = 'books-block';
+		initializePaginationPlagin();
+	}
 	console.log("searchCriteria" + JSON.stringify(searchCriteria));
+	function initializePaginationPlagin() {
+		var defOpts = renderPaginationPlagin();
+		paginationElement.twbsPagination(defOpts);
+		paginationElement.trigger('page');
+
+		//renderPaginationPlagin(url, blockID);
+	}
 	function renderPaginationPlagin() {
 		var defaultOpts = {
-			totalPages: 20,
+			//totalPages: 20,
 			visiblePages: 3,
 			initiateStartPageClick: false,
 			onPageClick: function (event, page) {
@@ -35,15 +55,18 @@ $(document).ready(function(){
 				});
 
 				$.ajax({
-					url: '/posts/pagination-posts',
+					url: paginationURL,//'/posts/pagination-posts',
 					type:"POST",
 					data: JSON.stringify(searchAttributes),
 					contentType:"application/json; charset=utf-8",
 					success: function(data){
-						$("#posts-block").replaceWith(data);
+						console.log("pgn clicked after success " + page);
+						$("#"+paginationChangingBlock).replaceWith(data);
 
-						postPagination.twbsPagination('destroy');
-						postPagination.twbsPagination($.extend({}, defaultOpts, {
+						paginationElement.twbsPagination('destroy');
+						console.log('start page: ' + page);
+						console.log('total pages: ' + $('#total-pages').val());
+						paginationElement.twbsPagination($.extend({}, defaultOpts, {
 							totalPages: $('#total-pages').val(),
 							startPage: page
 						}));

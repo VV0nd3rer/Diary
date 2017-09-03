@@ -30,7 +30,7 @@
         <div>
             <form class="form-horizontal" role="form" name="searchForm" id="searchForm">
                 <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
-                <div th:include="fragment/search-panel :: searchCategory" th:with="catLabel=#{sight}"></div>
+                <div th:if="${currentSight.sight_id == 0}" th:include="fragment/search-panel :: searchCategory" th:with="catLabel=#{sight}"></div>
                 <div th:include="fragment/search-panel :: searchUser" th:with="authLabel=#{post.author}"></div>
                 <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
                 searchOnlyTitle=#{search.only.title}"></div>
@@ -41,8 +41,8 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>
-			<ul class="text-center pagination-sm" id="page-selection"></ul>
-            <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
+			<ul class="text-center pagination-sm" id="post-pagination"></ul>
+            <input th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>
 	</div>
     </div>

@@ -18,7 +18,7 @@ public class PaginationServiceImpl implements PaginationService {
 	@Override
 	public Pagination calculatePagination(Pagination pagination) {
 		int totalPages = pagination.getTotalRows()/pagination.getPageSize();
-		if(totalPages % pagination.getPageSize() != 0) {
+		if(pagination.getTotalRows() % pagination.getPageSize() != 0) {
 			totalPages += 1;
 		}
 		int offset = pagination.getPageSize() * pagination.getCurrentPage() - pagination.getPageSize();

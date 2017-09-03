@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.kverchi.diary.domain.Pagination;
+import com.kverchi.diary.domain.Post_;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -123,7 +124,48 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         }
         return sight_posts;
     }
+    @Override
+    public int getTestRowsNum(Map<String, String> containsAttributes) throws DatabaseException {
+        EntityManager entityManager = null;
+        int rowsNumber = 0;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            StringBuilder str_query = new StringBuilder("select count(*) from Post");
+            if(containsAttributes != null && !containsAttributes.isEmpty()) {
+                for (String key : containsAttributes.keySet()) {
+                    if(str_query.indexOf(" where") == -1) {
+                        str_query.append(" where ");
+                    }
+                    else {
+                        str_query.append(" and ");
+                    }
+                    str_query.append(key + " like :" + key);
+                }
+            }
 
+            //str_query.append(" where text like :text");
+            Query query = entityManager.createQuery(str_query.toString());
+
+            if (containsAttributes != null && !containsAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), entry.getValue().toString());
+                }
+            }
+            //query.setParameter("text", "square");
+            logger.debug("single result: " + query.getSingleResult());
+            rowsNumber = ((Long) query.getSingleResult()).intValue();
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return rowsNumber;
+    }
     @Override
     public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) throws DatabaseException {
         EntityManager entityManager = null;
@@ -152,7 +194,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                     else {
                         str_query.append(" and ");
                     }
-                    str_query.append(key + " like ?");
+                    str_query.append(key + " like :" + key);
                 }
 
             }
@@ -164,7 +206,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             }
             if (containsAttributes != null && !containsAttributes.isEmpty()) {
                 for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue()+"%");
+                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
                 }
             }
             logger.debug("single result: " + query.getSingleResult());
@@ -208,7 +250,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                     else {
                         str_query.append(" and ");
                     }
-                    str_query.append(key + " like ?");
+                    str_query.append(key + " like :" + key);
                 }
 
             }
@@ -221,7 +263,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             }
             if (containsAttributes != null && !containsAttributes.isEmpty()) {
                 for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue()+"%");
+                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
                 }
             }
             query.setFirstResult(pagination.getOffset());

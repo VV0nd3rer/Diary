@@ -2,130 +2,132 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <object th:include="include-res::links" th:remove="tag"/>
+    <script src="../../../resources/jQueryPagination/jquery.twbsPagination.min.js" th:src="@{/resources/jQueryPagination/jquery.twbsPagination.min.js}"></script>
+    <!--<script src="../../../resources/js/pagination.js" th:src="@{/resources/js/pagination.js}"></script>-->
+
     <meta name="_csrf" th:content="${_csrf.token}"/>
-  	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Books</title>
-  </head>
+</head>
 
-  <body>
-    <div th:replace="header :: header">&nbsp;</div>
-     
-     <div class="container" th:if="${not #lists.isEmpty(obj_list) and obj_list != null}">
-      
-      <!-- Modal dialog -->
-      <div class="modal fade" id="modal-dialog" role="dialog">
-		 <div class="modal-dialog">
-		  <div class="modal-content">
-		   <div class="modal-body" style="padding:40px 50px;">
-		     <p th:text="#{modal.dialog.confirm}">Are you sure?</p>
-		     <div class="form-group">
-			    <div class="col-sm-offset-2 col-sm-10">
-			      <div class="pull-right">
-			         <button type="submit" class="btn btn-default" id="modal-dialog-cancel-btn" th:text="#{cancel}">Cancel</button>
-			         <button type="submit" class="btn btn-primary" id="modal-dialog-ok-btn" th:text="#{submit}">OK</button>
-			      </div>
-			    </div>
-			 </div>
-		   </div>
-		  </div>
-		 </div>
-	  </div>
-      
-      <!-- Modal form -->
-	  <div class="modal fade" id="modal-form" role="dialog">
-		 <div class="modal-dialog">
-		  <div class="modal-content">
-		   <div class="modal-body" style="padding:40px 50px;">
-			 <div class="row">
-			    
-			      <form class="form-horizontal" role="form">
-			        <fieldset>
-			
-			          <!-- Form Name -->
-			          <legend th:text="#{book.details}">Book Details</legend>
-					  <p class="validateTips" th:text="#{required}">All form fields are required.</p>
-					  <input type="hidden" name="id" value="0" id="id">
-			          <!-- Text input-->
-			          <div class="form-group">
-			            <label class="col-sm-2 control-label" for="textinput" th:text="#{book.title}">Title</label>
-			            <div class="col-sm-10">
-			              <input type="text" id="title" placeholder="Title" class="form-control">
-			            </div>
-			          </div>
-			
-					  <!-- Text input-->
-			          <div class="form-group">
-			            <label class="col-sm-2 control-label" for="textinput" th:text="#{book.author}">Author</label>
-			            <div class="col-sm-10">
-			              <input type="text" id="author" placeholder="Author" class="form-control">
-			            </div>
-			          </div>
-			
-			          <!-- Text input-->
-			          <div class="form-group">
-			            <label class="col-sm-2 control-label" for="textinput" th:text="#{book.description}">Description</label>
-			            <div class="col-sm-10">
-			              <input type="text" id="description" placeholder="Description" class="form-control">
-			            </div>
-			          </div>
-			          
-			          <div class="form-group">
-			            <div class="col-sm-offset-2 col-sm-10">
-			              <div class="pull-right">
-			                <button type="submit" class="btn btn-default" id="modal-form-cancel-btn" th:text="#{cancel}">Cancel</button>
-			                <button type="submit" class="btn btn-primary" id="modal-form-save-book-btn" th:text="#{submit}">Save</button>
-			              </div>
-			            </div>
-			          </div>
-			
-			        </fieldset>
-			      </form>
-			 </div><!-- /.row -->
-			</div>
-		   </div>
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal fade -->
-        <!-- End of modal form -->
-        
-     <div class="blog-header">
-   		<p class="lead blog-description">Books</p>
-   	  </div>
-		 <div>
-			 <form class="form-horizontal" role="form">
-				 <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
-				 <div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>
-				 <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
-                searchOnlyTitle=#{search.only.title}"></div>
-				 <button type="submit" class="btn btn-primary" id="search-book-btn"><span th:text="#{submit}"></span></button>
-			 </form>
-		 </div>
-   	  <input id="add-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
-   	  <input id="update-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Update" disabled=disabled>
-   	  <input id="delete-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Delete" disabled=disabled>
-      <table id="crud-tbl" class="table table-bordered">
-			<thead>
-				<tr>
-					<th width="80" th:text="#{book.id}">Author</th>
-					<th width="80" th:text="#{book.author}">Author</th>
-					<th width="120" th:text="#{book.title}">Title</th>
-					<th width="120" th:text="#{book.description}">Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="clickable-row" th:each="book: ${obj_list}">
-					<td th:text="${book.book_id}"></td>
-					<td th:text="${book.author}"></td>
-					<td th:text="${book.book_title}"></td>
-					<td th:if="${not #lists.isEmpty(book.book_description)}" th:text="${book.book_description}"></td>
-				</tr>
-			</tbody>
-		</table>
-		
+<body>
+<div th:replace="header :: header">&nbsp;</div>
+
+<div class="container">
+    <div class="col-md-8">
+        <ul class="text-center pagination-sm" id="book-pagination"></ul>
     </div>
-    <div class="blog-footer" th:replace="fragments :: footer">&copy; Kverchi</div>
+    <!-- Modal dialog -->
+    <div class="modal fade" id="modal-dialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="padding:40px 50px;">
+                    <p th:text="#{modal.dialog.confirm}">Are you sure?</p>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-default" id="modal-dialog-cancel-btn"
+                                        th:text="#{cancel}">Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="modal-dialog-ok-btn"
+                                        th:text="#{submit}">OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  </body>
+    <!-- Modal form -->
+    <div class="modal fade" id="modal-form" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="padding:40px 50px;">
+                    <div class="row">
+
+                        <form class="form-horizontal" role="form">
+                            <fieldset>
+
+                                <!-- Form Name -->
+                                <legend th:text="#{book.details}">Book Details</legend>
+                                <p class="validateTips" th:text="#{required}">All form fields are required.</p>
+                                <input type="hidden" name="id" value="0" id="id">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="textinput"
+                                           th:text="#{book.title}">Title</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="title" placeholder="Title" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="textinput" th:text="#{book.author}">Author</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="author" placeholder="Author" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="textinput" th:text="#{book.description}">Description</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="description" placeholder="Description"
+                                               class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="pull-right">
+                                            <button type="submit" class="btn btn-default" id="modal-form-cancel-btn"
+                                                    th:text="#{cancel}">Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" id="modal-form-save-book-btn"
+                                                    th:text="#{submit}">Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div><!-- /.row -->
+                </div>
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal fade -->
+    <!-- End of modal form -->
+
+    <div class="blog-header">
+        <p class="lead blog-description">Books</p>
+    </div>
+
+    <div>
+        <form class="form-horizontal" role="form">
+            <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
+            <div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>
+            <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
+                searchOnlyTitle=#{search.only.title}"></div>
+            <button type="submit" class="btn btn-primary" id="search-book-btn"><span th:text="#{submit}"></span>
+            </button>
+        </form>
+    </div>
+    <input id="add-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
+    <input id="update-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Update"
+           disabled=disabled>
+    <input id="delete-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Delete"
+           disabled=disabled>
+    <div th:replace="fragments :: books-page"></div>
+
+</div>
+<div class="blog-footer" th:replace="fragments :: footer">&copy; Kverchi</div>
+
+</body>
 </html>

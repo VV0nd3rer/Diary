@@ -36,6 +36,7 @@ public class Post {
 	private ZonedDateTime post_datetime;
 	private String title;
 	private String description;
+	@Column(name="text")
 	private String text;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="sight_id")

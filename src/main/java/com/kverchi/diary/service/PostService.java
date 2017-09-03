@@ -17,5 +17,5 @@ public interface PostService {
 	List<Post> getSightPosts(int sight_id);
 
 	PostSearchResults search(PostSearchAttributes searchAttributes);
-	int getPagesNum();
+
 }

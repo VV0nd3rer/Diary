@@ -2,6 +2,8 @@ package com.kverchi.diary.controller;
 
 import java.util.List;
 
+import com.kverchi.diary.domain.BookSearchAttributes;
+import com.kverchi.diary.domain.BookSearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
@@ -53,7 +55,16 @@ public class BookController {
 	public ModelAndView showBooks() {
 		List<Book> all_books = bookService.getAllBooks();
 		ModelAndView mv = new ModelAndView("books");
-		mv.addObject("obj_list", all_books);
+		//mv.addObject("obj_list", all_books);
 		return mv;
 	}
+	@RequestMapping(value = "/pagination-books", method = RequestMethod.POST)
+	public ModelAndView showPaginationPosts(@RequestBody BookSearchAttributes searchAttributes) {
+		BookSearchResults results = bookService.search(searchAttributes);
+		ModelAndView mv = new ModelAndView("fragments :: books-page");
+		mv.addObject("obj_list", results.getResults());
+		mv.addObject("totalPages", results.getTotalPages());
+		return mv;
+	}
+
 }
