@@ -36,9 +36,9 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+            //CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
             CriteriaQuery<Long> criteriaQueryCount = criteriaBuilder.createQuery(Long.class);
-            Root<Book> bookRoot = criteriaQuery.from(Book.class);
+            Root<Book> bookRoot = criteriaQueryCount.from(Book.class);
             List<Predicate> predicates = new ArrayList();
             if (hasAttributes != null && !hasAttributes.isEmpty()) {
                 for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
@@ -52,10 +52,10 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
                     predicates.add(predicate);
                 }
             }
-            criteriaQueryCount.select(criteriaBuilder.count(criteriaQueryCount.from(Book.class)));
+            criteriaQueryCount.select(criteriaBuilder.count(bookRoot));
             criteriaQueryCount.where(predicates.toArray(new Predicate[] {}));
-
-            result = toIntExact(entityManager.createQuery(criteriaQueryCount).getSingleResult());
+            Query query = entityManager.createQuery(criteriaQueryCount);
+            result = toIntExact((Long)query.getSingleResult());
 
             entityManager.getTransaction().commit();
 

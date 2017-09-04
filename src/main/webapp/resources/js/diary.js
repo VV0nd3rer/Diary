@@ -124,7 +124,7 @@ $(document).ready(function(){
 			searchCriteria["BY_TEXT"] = searchText.val();
 		}
 		console.log("searchCriteria" + JSON.stringify(searchCriteria));
-		postPagination.trigger('page');
+		paginationElement.trigger('page');
 	});
 
 
@@ -142,7 +142,7 @@ $(document).ready(function(){
 		if(searchText.val() != '') {
 			searchCriteria["BY_TEXT"] = searchText.val();
 		}
-		postPagination.trigger('page');
+		paginationElement.trigger('page');
 	});
 	/*document.querySelector('input[list]').addEventListener('input', function(e) {
 		var input = e.target,

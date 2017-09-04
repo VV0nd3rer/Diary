@@ -14,8 +14,10 @@ public class Book {
 	@Column(name="book_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int book_id;
+	@Column(name="book_title")
 	private String book_title;
 	private String author;
+	@Column(name="book_description")
 	private String book_description;
 	public int getBook_id() {
 		return book_id;

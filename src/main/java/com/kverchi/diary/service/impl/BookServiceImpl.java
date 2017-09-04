@@ -78,7 +78,7 @@ public class BookServiceImpl implements BookService {
 						hasAttributes.put("user_id", entry.getValue());
 						break;
 					case BY_TEXT:
-						containsAttributes.put("text", entry.getValue().toString());
+						containsAttributes.put("book_description", entry.getValue().toString());
 						break;
 				}
 			}
