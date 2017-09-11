@@ -201,7 +201,57 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
 
     @Override
     public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
-        return null;
+        EntityManager entityManager = null;
+        List<Book> result = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+            Root<Book> bookRoot = criteriaQuery.from(Book.class);
+            List<Predicate> includingPredicates = new ArrayList();
+            List<Predicate> choosingPredicates = new ArrayList();
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
+                    Predicate predicate = criteriaBuilder.equal(bookRoot.get(entry.getKey()), entry.getValue());
+                    includingPredicates.add(predicate);
+                }
+            }
+            if (includingAttributes != null && !includingAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : includingAttributes.entrySet()) {
+                    Predicate predicate = criteriaBuilder.like(bookRoot.get(entry.getKey()), "%"+entry.getValue()+"%");
+                    includingPredicates.add(predicate);
+                }
+            }
+            if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                    Predicate predicate = criteriaBuilder.like(bookRoot.get(entry.getKey()), "%"+entry.getValue()+"%");
+                    choosingPredicates.add(predicate);
+                }
+            }
+            Predicate and = criteriaBuilder.and(includingPredicates.toArray(new Predicate[] {}));
+            Predicate or = criteriaBuilder.or(choosingPredicates.toArray(new Predicate[] {}));
+            criteriaQuery.select(bookRoot).where(and, or);
+            criteriaQuery.orderBy(criteriaBuilder.desc(bookRoot.get("book_id")));
+            Query query = entityManager.createQuery(criteriaQuery);
+            query.setFirstResult(pagination.getOffset());
+            if(pagination.getPageSize() != 0) {
+                query.setMaxResults(pagination.getPageSize());
+            }
+
+            result = query.getResultList();
+
+            entityManager.getTransaction().commit();
+
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return result;
     }
     /*@Override
     public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) {

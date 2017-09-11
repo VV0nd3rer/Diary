@@ -71,6 +71,7 @@ public class BookServiceImpl implements BookService {
 		Map<BookSearchAttributes.BookSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
+		Map<String, String> choosingAttributes = new HashMap<>();
 		if (searchCriteria != null && !searchCriteria.isEmpty()) {
 			for (Map.Entry<BookSearchAttributes.BookSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
@@ -78,26 +79,34 @@ public class BookServiceImpl implements BookService {
 						hasAttributes.put("auth_id", entry.getValue());
 						break;
 					case BY_TEXT:
-						includingAttributes.put("book_description", entry.getValue().toString());
+						choosingAttributes.put("book_description", entry.getValue().toString());
+						choosingAttributes.put("book_title", entry.getValue().toString());
+						break;
+					case IN_TITLE_ONLY:
+						includingAttributes.put("book_title", entry.getValue().toString());
 						break;
 				}
 			}
 		}
 		int totalRows;
-		if(includingAttributes.isEmpty()) {
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
 			totalRows = bookDao.getRowsNumberWithExactAttributesOnly(hasAttributes);
-		} else {
+		} else if(choosingAttributes.isEmpty()){
 			totalRows = bookDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes);
+		} else {
+			totalRows = bookDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes);
 		}
 		pagination.setTotalRows(totalRows);
 		pagination = paginationService.calculatePagination(pagination);
 		BookSearchResults searchResults = new BookSearchResults();
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		if(includingAttributes.isEmpty()) {
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
 			results = bookDao.searchExactAttributesOnly(hasAttributes, pagination);
-		} else {
+		} else if(choosingAttributes.isEmpty()) {
 			results = bookDao.searchWithStringAttributes(hasAttributes, includingAttributes, pagination);
+		} else {
+			results = bookDao.searchWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
 		}
 		searchResults.setResults(results);
 		return searchResults;

@@ -144,13 +144,15 @@ $(document).ready(function(){
 		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
 
 		var searchText = $('#searchInTextInput');
+		var searchInTitleOnlyCheckBox = $('#searchCondition');
 		searchCriteria = {};
 
 		if(authCorrectInput != null) {
 			searchCriteria["BY_AUTHOR_ID"] = parseInt(authSuggestHidden.val());
 		}
 		if(searchText.val() != '') {
-			searchCriteria["BY_TEXT"] = searchText.val();
+			searchInTitleOnlyCheckBox.is(":checked") ? searchCriteria["IN_TITLE_ONLY"] = searchText.val() :
+				searchCriteria["BY_TEXT"] = searchText.val();
 		}
 		paginationElement.trigger('page');
 	});
