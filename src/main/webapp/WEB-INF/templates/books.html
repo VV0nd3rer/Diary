@@ -17,9 +17,7 @@
 <div th:replace="header :: header">&nbsp;</div>
 
 <div class="container">
-    <div class="col-md-8">
-        <ul class="text-center pagination-sm" id="book-pagination"></ul>
-    </div>
+
     <!-- Modal dialog -->
     <div class="modal fade" id="modal-dialog" role="dialog">
         <div class="modal-dialog">
@@ -109,23 +107,54 @@
         <p class="lead blog-description">Books</p>
     </div>
 
-    <div>
+    <!-- Search panel -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="form-section">
+                <form role="form" name="searchForm" id="searchForm">
+                    <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
+
+                    <div class="row bottom-row-buffer">
+                        <div class="col-md-3">
+                            <div th:include="fragment/search-panel :: searchInTextWithCheckBox"
+                                 th:with="searchInText=#{search.in.text}, searchOnlyTitle=#{search.only.title}"></div>
+                        </div>
+                        <div class="col-md-2 top-row-buffer">
+                            <button type="submit" id="search-post-btn" class="btn btn-default btn-primary">
+                                <span class=" glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end of search panel -->
+
+    <!--<div>
         <form class="form-horizontal" role="form">
             <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
-            <div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>
+            &lt;!&ndash;<div th:include="fragment/search-panel :: searchAuthor" th:with="authLabel=#{book.author}"></div>&ndash;&gt;
             <div th:include="fragment/search-panel :: searchInTextWithCheckBox" th:with="searchInText=#{search.in.text},
                 searchOnlyTitle=#{search.only.title}"></div>
             <button type="submit" class="btn btn-primary" id="search-book-btn"><span th:text="#{submit}"></span>
             </button>
         </form>
-    </div>
+    </div>-->
+    <div class="row">
+        <div class="col-md-5">
     <input id="add-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="New">
     <input id="update-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Update"
            disabled=disabled>
     <input id="delete-book-btn" class="ui-button ui-widget ui-corner-all" type="submit" value="Delete"
            disabled=disabled>
+            </div>
+    </div>
     <div th:replace="fragments :: books-page"></div>
-
+    <div class="col-md-8">
+        <ul class="text-center pagination-sm" id="book-pagination"></ul>
+    </div>
 </div>
 <div class="blog-footer" th:replace="fragments :: footer">&copy; Kverchi</div>
 

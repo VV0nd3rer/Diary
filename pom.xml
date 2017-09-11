@@ -240,6 +240,12 @@
             <artifactId>jasypt-spring3</artifactId>
             <version>1.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>5.2.10.Final</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>Diary</finalName>
@@ -282,6 +288,9 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+
+
         </plugins>
     </build>
 </project>

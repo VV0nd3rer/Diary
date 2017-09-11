@@ -10,5 +10,4 @@ import com.kverchi.diary.domain.Post;
 
 public interface PostDao extends GenericDao<Post>, SearchDao {
 	List<Post> getSightPosts(int sight_id) throws DatabaseException;
-	int getTestRowsNum(Map<String, String> containsAttributes) throws DatabaseException;
 }

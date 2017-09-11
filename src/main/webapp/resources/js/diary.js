@@ -9,7 +9,7 @@ $(document).ready(function(){
 	});*/
 
 	var searchCriteria = checkSightSeachCriteria();
-
+	var currentPage;
 
 
 	/*var postPagination = $('#post-pagination');
@@ -55,17 +55,18 @@ $(document).ready(function(){
 				});
 
 				$.ajax({
-					url: paginationURL,//'/posts/pagination-posts',
+					url: paginationURL,
 					type:"POST",
 					data: JSON.stringify(searchAttributes),
 					contentType:"application/json; charset=utf-8",
 					success: function(data){
 						console.log("pgn clicked after success " + page);
 						$("#"+paginationChangingBlock).replaceWith(data);
-
+						if(paginationChangingBlock === 'books-block') {
+							initializeCRUDTableClickListener();
+						}
+						currentPage = page;
 						paginationElement.twbsPagination('destroy');
-						console.log('start page: ' + page);
-						console.log('total pages: ' + $('#total-pages').val());
 						paginationElement.twbsPagination($.extend({}, defaultOpts, {
 							totalPages: $('#total-pages').val(),
 							startPage: page
@@ -90,6 +91,7 @@ $(document).ready(function(){
 	$("#authSuggestInput").focusout(function () {
 		var input = $(this);
 		console.log("focusout " + $(this).val());
+		authCorrectInput = null;
 		if(checkDataListInput(input)) {
 			authCorrectInput = input;
 		}
@@ -97,6 +99,7 @@ $(document).ready(function(){
 	$("#catSuggestInput").focusout(function () {
 		var input = $(this);
 		console.log("focusout: " + $(this).val());
+		catCorrectInput = null;
 		if(checkDataListInput(input)) {
 			catCorrectInput = input;
 		}
@@ -104,6 +107,7 @@ $(document).ready(function(){
 
 	$("#search-post-btn").click(function(e) {
 		e.preventDefault();
+
 		var catSuggestInput = $("#catSuggestInput");
 		var authSuggestInput = $("#authSuggestInput");
 	    console.log("authSuggestInput.attr id " + authSuggestInput.attr("id"));
@@ -112,6 +116,7 @@ $(document).ready(function(){
 		console.log("authSuggestHidde: " + authSuggestHidden.val());
 		console.log("catSuggestHidden: " + catSuggestHidden.val());
 		var searchText = $('#searchInTextInput');
+		var searchInTitleOnlyCheckBox = $('#searchCondition');
 		searchCriteria = {};
 
 		if(catCorrectInput != null) {
@@ -121,7 +126,8 @@ $(document).ready(function(){
 			searchCriteria["BY_USER_ID"] = parseInt(authSuggestHidden.val());
 		}
 		if(searchText.val() != '') {
-			searchCriteria["BY_TEXT"] = searchText.val();
+			searchInTitleOnlyCheckBox.is(":checked") ? searchCriteria["IN_TITLE_ONLY"] = searchText.val() :
+				searchCriteria["BY_TEXT"] = searchText.val();
 		}
 		console.log("searchCriteria" + JSON.stringify(searchCriteria));
 		paginationElement.trigger('page');
@@ -130,6 +136,10 @@ $(document).ready(function(){
 
 	$("#search-book-btn").click(function(e) {
 		e.preventDefault();
+
+		catCorrectInput = null;
+		searchCriteria = checkSightSeachCriteria();
+
 		var authSuggestInput = $("#authSuggestInput");
 		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
 
@@ -137,7 +147,7 @@ $(document).ready(function(){
 		searchCriteria = {};
 
 		if(authCorrectInput != null) {
-			//searchCriteria["BY_AUTHOR_ID"] = authSuggestInput.val();
+			searchCriteria["BY_AUTHOR_ID"] = parseInt(authSuggestHidden.val());
 		}
 		if(searchText.val() != '') {
 			searchCriteria["BY_TEXT"] = searchText.val();
@@ -310,7 +320,8 @@ $(document).ready(function(){
     	var rm_book_url = root+"/books/remove/"+id;
     	$.get(rm_book_url, function(data) {
     		console.log(data);
-    		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
+    		$("#crud-tbl tr:contains('" + id + "')").remove();
+				paginationElement.trigger('page', [currentPage]);
     	})
     	  .done(function() {
 		    console.log("done");
@@ -363,9 +374,9 @@ $(document).ready(function(){
         
         tips = $( ".validateTips" );
         var valid = true;
-        valid = valid && checkMinMaxLength( title, "title", 3, 30 );
-        valid = valid && checkMinMaxLength( description, "description", 3, 80 );
-        valid = valid && checkMinMaxLength( author, "author", 3, 80 );
+        valid = valid && checkMinMaxLength( title, "title", 3, 255 );
+        //valid = valid && checkMinMaxLength( description, "description", 3, 80 );
+        valid = valid && checkMinMaxLength( author, "author", 2, 100 );
         
         var token = $("meta[name='_csrf']").attr("content");
  	    var header = $("meta[name='_csrf_header']").attr("content");
@@ -386,7 +397,8 @@ $(document).ready(function(){
 	     		   if(id != 0) {   
 	     		        $("#crud-tbl tr:contains('" + obj.book_id + "')").remove();  		    
 	     		    }
-	     		    $("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.book_id+"</td><td>"+obj.book_title+"</td><td>"+obj.author+"</td></tr>");  		  		
+	     		    //$("#crud-tbl tbody").append("<tr class='clickable-row'><td>"+obj.book_id+"</td><td>"+obj.book_title+"</td><td>"+obj.author+"</td></tr>");
+				   paginationElement.trigger('page', [currentPage]);
 	     	   },
 	     	   error : function(e) {
 	     		    console.log("Error: ", e);
@@ -399,15 +411,15 @@ $(document).ready(function(){
         
     });
 
- 
-    $('#crud-tbl').on('click', '.clickable-row', function(event) {
+
+    /*$('#crud-tbl').on('click', '.clickable-row', function(event) {
     	  console.log('click on crud-tbl class');
 		  $('#update-book-btn').removeAttr('disabled');
 		  $('#delete-book-btn').removeAttr('disabled');
     	  $(this).addClass('danger').siblings().removeClass('danger');
     	  //var valur =$(this).find('td:first').html();
     	   //alert(value);    
-    });	 
+    });	 */
    $('table').on('click', '.row_action', function(event) {
 	   event.preventDefault();
 	   var id = $("#crud-tbl tr.danger").find('td:first').html();
@@ -476,15 +488,23 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 }
 function checkDataListInput(obj) {
 	var val = obj.val();
-	console.log("checking data list input...");
+	var hiddenInput = $("#" + obj.attr("id") + '-hidden');
+	var res = false;
 	console.log("input value: " + val);
+	if(val === '') {
+		console.log('val is empty');
+		hiddenInput.val('');
+		return res;
+	}
+	console.log("checking data list input...");
+
 	var listId = obj.attr('list');
 	console.log("list id is " + listId);
 	var options = $('#' + listId + ' option');
 
 	var hiddenInput = $("#" + obj.attr("id") + '-hidden');
 
-	var res = false;
+
 	tips = $( ".validateTips" );
 	res = isDataListInput(options, val, hiddenInput);
 	if(res) {
@@ -602,4 +622,14 @@ function checkSightSeachCriteria() {
 		searchCriteria = {'BY_SIGHT_ID' : parseInt(sightIdVal)};
 	}
 	return searchCriteria;
+}
+function initializeCRUDTableClickListener() {
+	$('#crud-tbl').on('click', '.clickable-row', function(event) {
+		console.log('click on crud-tbl class');
+		$('#update-book-btn').removeAttr('disabled');
+		$('#delete-book-btn').removeAttr('disabled');
+		$(this).addClass('danger').siblings().removeClass('danger');
+		//var valur =$(this).find('td:first').html();
+		//alert(value);
+	});
 }

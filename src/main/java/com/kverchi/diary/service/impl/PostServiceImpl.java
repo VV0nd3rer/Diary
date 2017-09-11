@@ -133,13 +133,15 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostSearchResults search(PostSearchAttributes searchAttributes) {
+		PostSearchResults searchResults = new PostSearchResults();
 		Pagination pagination = new Pagination();
 		pagination.setPageSize(searchAttributes.getPageSize());
 		pagination.setCurrentPage(searchAttributes.getCurrentPage());
 
 		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
-		Map<String, String> containsAttributes = new HashMap<>();
+		Map<String, String> includingAttributes = new HashMap<>();
+		Map<String, String> choosingAttributes = new HashMap<>();
 		if (searchCriteria != null && !searchCriteria.isEmpty()) {
 			for (Map.Entry<PostSearchAttributes.PostSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
@@ -150,17 +152,39 @@ public class PostServiceImpl implements PostService {
 						hasAttributes.put("sight_id", entry.getValue());
 						break;
 					case BY_TEXT:
-						containsAttributes.put("text", entry.getValue().toString());
+						choosingAttributes.put("description", entry.getValue().toString());
+						choosingAttributes.put("text", entry.getValue().toString());
+						choosingAttributes.put("title", entry.getValue().toString());
+						break;
+					case IN_TITLE_ONLY:
+						includingAttributes.put("title", entry.getValue().toString());
 						break;
 				}
 			}
 		}
-		int totalRows = postDao.getRowsNumber(hasAttributes, containsAttributes);
+
+		int totalRows;
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+			totalRows = postDao.getRowsNumberWithExactAttributesOnly(hasAttributes);
+		}
+		else if(choosingAttributes.isEmpty()) {
+			totalRows = postDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes);
+		} else {
+			totalRows = postDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes);
+		}
+
 		pagination.setTotalRows(totalRows);
 		pagination = paginationService.calculatePagination(pagination);
-		PostSearchResults searchResults = new PostSearchResults();
+
 		searchResults.setTotalPages(pagination.getTotalPages());
-		List results = postDao.search(hasAttributes, containsAttributes, pagination);
+		List results;
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+			results = postDao.searchExactAttributesOnly(hasAttributes, pagination);
+		} else if(choosingAttributes.isEmpty()) {
+			results = postDao.searchWithStringAttributes(hasAttributes, includingAttributes, pagination);
+		} else {
+			results = postDao.searchWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
+		}
 		searchResults.setResults(results);
 		return searchResults;
 	}

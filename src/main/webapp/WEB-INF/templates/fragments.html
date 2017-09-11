@@ -13,7 +13,7 @@
     </div>
 	<!-- Book fragment for pagination -->
 	<div id="books-block" th:fragment="books-page">
-		<input id="total-pages" th:value="${totalPages}"/>
+		<input type="hidden" id="total-pages" th:value="${totalPages}"/>
 
 	<table id="crud-tbl" class="table table-bordered">
 
@@ -37,7 +37,7 @@
 	</div>
 	<!-- Page fragment for pagination -->
     <div id="posts-block" th:fragment="page">
-			<input id="total-pages" th:value="${totalPages}"/>
+			<input th:type="hidden" id="total-pages" th:value="${totalPages}"/>
 			<div class="post" th:each="post: ${posts}">
 				<!-- Each post -->
 				<div class="panel">

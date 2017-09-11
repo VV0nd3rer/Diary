@@ -80,93 +80,34 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 		return sight;
 	}
 
+
 	@Override
-	public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) {
+	public int getRowsNumberWithExactAttributesOnly(Map<String, Object> hasAttributes) {
 		return 0;
 	}
 
 	@Override
-	public List search(Map<String, Object> hasAttributes, Map<String, String> containsAttributes, Pagination pagination) {
+	public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
+		return 0;
+	}
+
+	@Override
+	public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
+		return 0;
+	}
+
+	@Override
+	public List searchExactAttributesOnly(Map<String, Object> hasAttributes, Pagination pagination) {
 		return null;
 	}
 
+	@Override
+	public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
+		return null;
+	}
 
-	/*@Override
-	public List searchRows(Map<String, Object> search_criteria, int limit, int offset) throws DatabaseException {
-		EntityManager entityManager = null;
-		List<CountriesSight> result = null;
-		try {
-			entityManager = entityManagerFactory.createEntityManager();
-			entityManager.getTransaction().begin();
-			//order by post_datetime
-			StringBuilder str_query = new StringBuilder("FROM CountriesSight");
-			if (search_criteria != null && !search_criteria.isEmpty()) {
-				str_query.append(" where ");
-				//final long[] i = {0};
-				//search_criteria.forEach((k, v) -> i[0] += k + v);
-				//search_criteria.forEach((k,v)->System.out.println("Key : " + k + " Value : " + v));
-				int i = 0;
-				for (String key : search_criteria.keySet()) {
-					if (i != 0) {
-						str_query.append(" and ");
-					}
-					str_query.append(key + "= :" + key);
-					i++;
-				}
-			}
-			//str_query.append(" order by post_datetime desc");
-			Query query = entityManager.createQuery(str_query.toString());
-			if (search_criteria != null && !search_criteria.isEmpty()) {
-				for (Map.Entry<String, Object> entry : search_criteria.entrySet()) {
-					query.setParameter(entry.getKey(), entry.getValue());
-				}
-			}
-			query.setFirstResult(offset);
-			if(limit != 0) {
-				query.setMaxResults(limit);
-			}
-			result = query.getResultList();
-			entityManager.getTransaction().commit();
-		} catch (PersistenceException e) {
-			logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-			throw new DatabaseException(e);
-		} finally {
-			if (entityManager != null && entityManager.isOpen()) {
-				entityManager.close();
-			}
-		}
-		return result;
-	}*/
-
-	/*@Override
-	public List searchRows(String search_str) throws DatabaseException {
-		EntityManager entityManager = null;
-		List<CountriesSight> result = null;
-		try {
-			entityManager = entityManagerFactory.createEntityManager();
-			entityManager.getTransaction().begin();
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<CountriesSight> criteriaQuery = criteriaBuilder.createQuery(CountriesSight.class);
-			Root<CountriesSight> resultsRoot = criteriaQuery.from(CountriesSight.class);
-			//EntityType<CountriesSight> CountriesSight_ = resultsRoot.getModel();
-			criteriaQuery.where(criteriaBuilder.like(resultsRoot.get(CountriesSight_.sight_label), '%'+search_str+'%'));
-			Query query = entityManager.createQuery(criteriaQuery);
-			result = query.getResultList();
-			for(CountriesSight sight : result) {
-				logger.debug("sight label: " + sight.getSight_label());
-				logger.debug("sight ID: " + sight.getSight_id());
-			}
-			entityManager.getTransaction().commit();
-
-		} catch (PersistenceException e) {
-			logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-			throw new DatabaseException(e);
-		} finally {
-			if (entityManager != null && entityManager.isOpen()) {
-				entityManager.close();
-			}
-		}
-		return result;
-	}*/
-
+	@Override
+	public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
+		return null;
+	}
 }

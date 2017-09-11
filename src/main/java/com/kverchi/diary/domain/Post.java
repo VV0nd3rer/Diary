@@ -34,7 +34,9 @@ public class Post {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int post_id;
 	private ZonedDateTime post_datetime;
+	@Column(name="title")
 	private String title;
+	@Column(name="description")
 	private String description;
 	@Column(name="text")
 	private String text;

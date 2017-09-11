@@ -9,7 +9,8 @@ import java.util.Map;
 public class BookSearchAttributes extends SearchAttributes {
     public enum BookSearchType {
         BY_AUTHOR_ID,
-        BY_TEXT
+        BY_TEXT,
+        IN_TITLE_ONLY
     };
     private Map<BookSearchType, Object> searchCriteria = new HashMap<>();
     private int author_id;

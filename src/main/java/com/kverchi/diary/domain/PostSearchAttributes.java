@@ -10,7 +10,8 @@ public class PostSearchAttributes extends SearchAttributes {
     public enum PostSearchType {
         BY_USER_ID,
         BY_SIGHT_ID,
-        BY_TEXT
+        BY_TEXT,
+        IN_TITLE_ONLY
     };
     private Map<PostSearchType, Object> searchCriteria = new HashMap<>();
 
