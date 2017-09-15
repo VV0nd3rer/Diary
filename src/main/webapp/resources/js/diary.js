@@ -156,27 +156,18 @@ $(document).ready(function(){
 		}
 		paginationElement.trigger('page');
 	});
-	/*document.querySelector('input[list]').addEventListener('input', function(e) {
-		var input = e.target,
-			list = input.getAttribute('list'),
-			options = document.querySelectorAll('#' + list + ' option'),
-			hiddenInput = document.getElementById(input.id + '-hidden'),
-			inputValue = input.value;
-		loadDataList("/sights/search-sight", inputValue);
-		hiddenInput.value = inputValue;
-		console.log("hidden input value: " + hiddenInput.value);
-		for (var i = 0; i < options.length; i++) {
-			var option = options[i];
-
-			if (option.innerText === inputValue) {
-				hiddenInput.value = option.getAttribute('data-value');
-				console.log("option.getAttribute('data-value'): " + option.getAttribute('data-value'));
-				break;
-			}
-		}
-	});*/
-
-
+	$("#add-wish-btn").click(function(event) {
+		var add_wish_url = '/posts/add-wish';
+		$.get(add_wish_url, function(data) {
+			$("#add-wish-btn").replaceWith(data);
+		});
+	});
+	$("#add-visit-btn").click(function(event) {
+		var add_visit_url = '/posts/add-visit';
+		$.get(add_visit_url, function(data) {
+			$("#add-visit-btn").replaceWith(data);
+		});
+	});
 	$("#create-post-ok-btn").click(function(event) {
 		event.preventDefault();
 		var description = tinyMCE.get('descrEditor').getContent();

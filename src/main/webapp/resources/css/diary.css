@@ -131,3 +131,6 @@ input:disabled:focus {
 }
 .bottom-row-buffer { margin-bottom:10px; }
 .top-row-buffer {margin-top: 23px; }
+.label-large {
+	font-size: 20px;
+}

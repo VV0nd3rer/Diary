@@ -22,7 +22,45 @@
             <span class="label label-warning">
                 <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.sight_label}"></span>
             </span>
+            <div class="row top-row-buffer">
+                <div class="col-sm-1">
+                <span th:if="${ #authorization.expression('isAuthenticated()') != true or isWishedValueExists == true }">
+                    <label
+                            th:replace="fragment/counter-buttons::wishLabel"
+                            th:with="wishCounter=${wishCounter}">
+                    </label>
+                </span>
+                <span th:if="${ #authorization.expression('isAuthenticated()') and isWishedValueExists == false }">
+                    <button
+                            th:replace="fragment/counter-buttons::addWishButton"
+                            th:with="wishCounter=${wishCounter}">
+                    </button>
+                </span>
+                </div>
+                <div class="col-sm-1">
+                <span th:if="${ #authorization.expression('isAuthenticated()') != true or isVisitedValueExists == true}">
+                    <label
+                            th:replace="fragment/counter-buttons::visitLabel"
+                            th:with="visitCounter=${visitCounter}">
+                    </label>
+                </span>
+                <span th:if="${ #authorization.expression('isAuthenticated()') and isVisitedValueExists == false}">
+                    <button
+                            th:replace="fragment/counter-buttons::addVisitButton"
+                            th:with="visitCounter=${visitCounter}">
+                    </button>
+                </span>
+                </div>
+            </div>
+
         </h2>
+
+
+        <!--<h3 th:if="${isVisitedValueExists == true}" class="label label-info">
+            <span th:text="#{counter.added.value.text}"></span>
+            <span th:text="#{sight.visit.counter.text(${visitCounter} - 1)}"></span>
+            <span class="glyphicon glyphicon-map-marker"></span>
+        </h3>-->
 
     </div>
 

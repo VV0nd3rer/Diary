@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+</head>
+<body>
+<span class="label-large" th:fragment="wishLabel">
+            <span class="label label-info">
+                <em th:text="${wishCounter}"></em>
+                <span class="glyphicon glyphicon-map-marker"></span>
+            </span>
+</span>
+<button type="submit" id="add-wish-btn" class="btn btn-default btn-primary"
+        th:fragment="addWishButton"
+        th:title="#{sight.wish.counter.button(${wishCounter})}">
+    <em th:text="${wishCounter}"></em>
+    <span class="glyphicon glyphicon-plane"></span>
+</button>
+
+<span class="label-large" th:fragment="visitLabel" th:title="#{sight.visit.counter.label(${visitCounter - 1})}">
+            <span class="label label-info">
+                <em th:text="${visitCounter}"></em>
+                <span class="glyphicon glyphicon-map-marker"></span>
+            </span>
+</span>
+
+<button type="submit" id="add-visit-btn" class="btn btn-default btn-primary"
+        th:fragment="addVisitButton"
+        th:title="#{sight.visit.counter.button(${visitCounter})}">
+    <em th:text="${visitCounter}"></em>
+    <span class="glyphicon glyphicon-map-marker"></span>
+</button>
+</body>

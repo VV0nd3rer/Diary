@@ -1,30 +1,23 @@
 package com.kverchi.diary.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import com.kverchi.diary.domain.*;
-import com.kverchi.diary.enums.PaginationContentHandler;
+import com.kverchi.diary.enums.Counter;
+import com.kverchi.diary.service.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.enums.ServiceMessageResponse;
-import com.kverchi.diary.service.CommentService;
-import com.kverchi.diary.service.CountriesSightService;
-import com.kverchi.diary.service.CountryService;
-import com.kverchi.diary.service.PaginationService;
-import com.kverchi.diary.service.PostService;
-import com.kverchi.diary.service.UserService;
 
 @RestController
 @RequestMapping("posts")
@@ -49,6 +42,8 @@ public class PostController {
 	CountriesSightService countriesSightService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	CounterService counterService;
 	
 	//???
 	@Autowired
@@ -96,8 +91,22 @@ public class PostController {
 	public ModelAndView showPaginatedSightPosts(@PathVariable("sight_id") int sight_id) {
 		ModelAndView mv = new ModelAndView(POSTS);
 		CountriesSight sight = countriesSightService.getSightById(sight_id);
+		int wishCounter = counterService.getCounterValue(sight_id, Counter.WISHES);
+		int visitCounter = counterService.getCounterValue(sight_id, Counter.VISITS);
+		boolean isVisitedValueExists = false;
+		boolean isWishedValueExists = false;
+		User currentUser = userService.getUserFromSession();
+		if(currentUser != null) {
+			isVisitedValueExists = counterService.isCounterValueExists(sight_id, currentUser.getUserId(), Counter.VISITS);
+			isWishedValueExists = counterService.isCounterValueExists(sight_id, currentUser.getUserId(), Counter.WISHES);
+		}
+
 		mv.addObject("authors", userService.getAllUsers());
 		mv.addObject("currentSight", sight);
+		mv.addObject("wishCounter", wishCounter);
+		mv.addObject("visitCounter", visitCounter);
+		mv.addObject("isWishedValueExists", isWishedValueExists);
+		mv.addObject("isVisitedValueExists", isVisitedValueExists);
 		return mv;
 	}
 	@RequestMapping("/single-post/{post_id}")
@@ -221,6 +230,34 @@ public class PostController {
 		}
 		response = commentService.addComment(comment);
 		return response;
+	}
+	@RequestMapping(value="/add-visit")
+	public ModelAndView addVisitCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
+		ModelAndView mv = new ModelAndView("fragment/counter-buttons::visitLabel");
+		User currentUser = userService.getUserFromSession();
+		if(currentSight.getSight_id() == 0 || currentUser == null) {
+			return new ModelAndView("fragment/counter-buttons::addVisitButton");
+		}
+		int sight_id = currentSight.getSight_id();
+		int user_id = currentUser.getUserId();
+		counterService.addCounterValue(sight_id, user_id, Counter.VISITS);
+		int visitCounter = counterService.getCounterValue(sight_id, Counter.VISITS);
+		mv.addObject("visitCounter", visitCounter);
+		return mv;
+	}
+	@RequestMapping(value="/add-wish")
+	public ModelAndView addWishCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
+		ModelAndView mv = new ModelAndView("fragment/counter-buttons::wishLabel");
+		User currentUser = userService.getUserFromSession();
+		if(currentSight.getSight_id() == 0 || currentUser == null) {
+			return new ModelAndView("fragment/counter-buttons::addWishButton");
+		}
+		int sight_id = currentSight.getSight_id();
+		int user_id = currentUser.getUserId();
+		counterService.addCounterValue(sight_id, user_id, Counter.WISHES);
+		int wishCounter = counterService.getCounterValue(sight_id, Counter.WISHES);
+		mv.addObject("wishCounter", wishCounter);
+		return mv;
 	}
 	//TODO ServletRequestAttribute or Spring security...
 	private String getSessionAttribute(String arg) {

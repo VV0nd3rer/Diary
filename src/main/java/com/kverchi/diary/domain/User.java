@@ -39,7 +39,10 @@ public class User implements Serializable {
     		inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="role_id")}
     		)
     private Collection<Role> roles = new HashSet<Role>();
-    
+    public User() {};
+	public User(int userId) {
+		this.userId = userId;
+	};
 	public int getUserId() {
 		return userId;
 	}

@@ -48,7 +48,10 @@ public class CountriesSight implements Serializable {
 	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="sight_id")
 	Set<Post> sight_posts;*/
-	
+	public CountriesSight(){};
+	public CountriesSight(int sight_id) {
+		this.sight_id = sight_id;
+	}
 	public int getSight_id() {
 		return sight_id;
 	}

@@ -26,7 +26,7 @@ public class MainController {
 	}
 	@RequestMapping("/")
 	public ModelAndView showMainPage() {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("redirect:/posts/list");
 		return mv;
 	}
 }

@@ -40,8 +40,6 @@ signupApp.controller('userController',
 	function($scope, $http) {
 
 	$scope.addUser = function addUser() {
-		console.log('username: ' + $scope.username);
-		console.log('form.username' + $scope.signupForm.username);
 		var user = {
 				username:$scope.username,
 				email:$scope.email,
@@ -61,7 +59,6 @@ signupApp.controller('userController',
 		$http.post('/users/add-user',  JSON.stringify(user))
 			.then(function(response) {
 				$scope.isLoading = false;
-				console.log(JSON.stringify(response));
 				angular.element('#signupForm').remove();
 				angular.element('#signupResult').replaceWith(response.data);
 			});/*function successCallback(response) {
@@ -111,9 +108,7 @@ signupApp.directive('usernameAvailable',function($timeout, $q) {
 		restrict: 'AE',
 		require: 'ngModel',
 		link: function(scope, elm, attr, model) {
-			console.log("calling directive... ");
 			model.$asyncValidators.usernameExists = function(username) {
-				console.log("calling directive... ");
 				/*var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
 				$(document).ajaxSend(function(e, xhr, options) {
