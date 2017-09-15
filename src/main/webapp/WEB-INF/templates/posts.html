@@ -121,7 +121,7 @@
 		<div class="col-md-8">
 			<div th:replace="fragments :: page"></div>
 			<ul class="text-center pagination-sm" id="post-pagination"></ul>
-            <input th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
+            <input type="hidden" th:if="${currentSight.sight_id != 0}" th:value="${currentSight.sight_id}" id="sight_id" />
 		</div>
 	</div>
     </div>
