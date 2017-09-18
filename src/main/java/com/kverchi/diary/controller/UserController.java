@@ -1,5 +1,6 @@
 package com.kverchi.diary.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +129,16 @@ public class UserController {
 		}
 //		TODO return error info with error page
 		return new ModelAndView("error/generic-error");
+	}
+	@RequestMapping(value = "/profile")
+	public ModelAndView showProfile() {
+		ModelAndView mv = new ModelAndView("profile");
+		User user = userService.getUserFromSession();
+		if(user == null) {
+			return new ModelAndView("login");
+		}
+		mv.addObject(user);
+		return mv;
 	}
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<String> exceptionHandler(Exception ex) {

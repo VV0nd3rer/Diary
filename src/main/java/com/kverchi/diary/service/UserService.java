@@ -1,5 +1,6 @@
 package com.kverchi.diary.service;
 
+import com.kverchi.diary.domain.UserActivityLog;
 import org.springframework.stereotype.Service;
 
 import com.kverchi.diary.custom.exception.ServiceException;
@@ -21,4 +22,5 @@ public interface UserService {
 	User getResetPasswordToken(String token);
 	User getUserFromSession();
 	boolean isValuePresent(String key, Object value);
+	void addUserActivityLog(UserActivityLog userActivityLog);
 }

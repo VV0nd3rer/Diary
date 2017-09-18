@@ -14,6 +14,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 
+import com.kverchi.diary.dao.UserActivityDao;
+import com.kverchi.diary.domain.UserActivityLog;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleDao roleDao;
     @Autowired
+    private UserActivityDao userActivityDao;
+    @Autowired
     private PasswordChangeRequestDao passwordChangeRequestDao;
     @Autowired
     private EmailService emailService;
@@ -84,6 +88,11 @@ public class UserServiceImpl implements UserService {
     public boolean isValuePresent(String key, Object value) {
         boolean isValuePresent = userDao.isRecordPresent(key, value);
         return isValuePresent;
+    }
+
+    @Override
+    public void addUserActivityLog(UserActivityLog userActivityLog) {
+        userActivityDao.persist(userActivityLog);
     }
 
     @Override

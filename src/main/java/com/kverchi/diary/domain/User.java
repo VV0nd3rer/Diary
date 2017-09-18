@@ -1,6 +1,8 @@
 package com.kverchi.diary.domain;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +33,11 @@ public class User implements Serializable {
     private String password;
     private boolean enabled;
     private String email;
-    
-    @ManyToMany(fetch = FetchType.EAGER)
+	private String information;
+	private ZonedDateTime registration_date;
+
+
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
     		name="user_roles",
     		joinColumns = {@JoinColumn(name="user_id", referencedColumnName="user_id")},
@@ -73,7 +78,26 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public ZonedDateTime getRegistration_date() {
+		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+		String text = registration_date.format(formatter);
+		registration_date = ZonedDateTime.parse(text, formatter);
+		return registration_date;
+	}
+
+	public void setRegistration_date(ZonedDateTime registration_date) {
+		this.registration_date = registration_date;
+	}
+
 	public Collection<Role> getRoles() {
 		return roles;
 	}
