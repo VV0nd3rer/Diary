@@ -9,6 +9,7 @@ import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserService {
@@ -23,5 +24,5 @@ public interface UserService {
 	User getUserFromSession();
 	boolean isValuePresent(String key, Object value);
 	void addUserActivityLog(UserActivityLog userActivityLog);
-	void saveUserInfo(int user_id, String info);
+	void saveUserInfo(int user_id, String info, HttpServletRequest request);
 }

@@ -27,6 +27,7 @@ import com.kverchi.diary.form.RegistrationForm;
 import com.kverchi.diary.service.UserService;
 
 import javax.jws.soap.SOAPBinding;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("users")
@@ -164,9 +165,9 @@ public class UserController {
 		return mv;
 	}
 	@RequestMapping(value = "/save-info", method = RequestMethod.POST)
-	public String saveInfo(@RequestBody String info) {
+	public String saveInfo(@RequestBody String info, HttpServletRequest request) {
 		User currentUser = userService.getUserFromSession();
-		userService.saveUserInfo(currentUser.getUserId(), info);
+		userService.saveUserInfo(currentUser.getUserId(), info, request);
 		return "OK";
 	}
 	@ExceptionHandler(ServiceException.class)

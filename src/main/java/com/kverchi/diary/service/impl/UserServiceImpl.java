@@ -13,6 +13,7 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.kverchi.diary.dao.UserActivityDao;
 import com.kverchi.diary.domain.UserActivityLog;
@@ -24,10 +25,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -55,7 +59,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ServletContext context;
-
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -96,8 +101,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUserInfo(int user_id, String info) {
+    public void saveUserInfo(int user_id, String info, HttpServletRequest request) {
         userDao.updateUserInfo(user_id, info);
+        User user = getUserFromSession();
+        user.setInformation(info);
+        updateUserSession(user, request);
     }
 
     @Override
@@ -278,5 +286,16 @@ public class UserServiceImpl implements UserService {
             return userDetails.getUser();
         }
         return null;
+    }
+    private void updateUserSession(User user, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), user.getPassword());
+
+        request.getSession();
+
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
     }
 }
