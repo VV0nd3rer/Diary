@@ -1,5 +1,6 @@
 package com.kverchi.diary.controller;
 
+import com.sun.org.apache.bcel.internal.classfile.Method;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory;
@@ -24,6 +25,8 @@ import com.kverchi.diary.form.ForgotPasswordForm;
 import com.kverchi.diary.form.NewPasswordForm;
 import com.kverchi.diary.form.RegistrationForm;
 import com.kverchi.diary.service.UserService;
+
+import javax.jws.soap.SOAPBinding;
 
 @RestController
 @RequestMapping("users")
@@ -139,6 +142,32 @@ public class UserController {
 		}
 		mv.addObject(user);
 		return mv;
+	}
+	@RequestMapping(value = "/user-info")
+	public ModelAndView showUserInfo() {
+		ModelAndView mv = new ModelAndView("fragment/user-menu::userInfo");
+		User user = userService.getUserFromSession();
+		if(user == null) {
+			return new ModelAndView("login");
+		}
+		mv.addObject(user);
+		return mv;
+	}
+	@RequestMapping(value = "/user-statistic")
+	public ModelAndView showUserStatistic() {
+		ModelAndView mv = new ModelAndView("fragment/user-menu::userStatistic");
+		User user = userService.getUserFromSession();
+		if(user == null) {
+			return new ModelAndView("login");
+		}
+		mv.addObject(user);
+		return mv;
+	}
+	@RequestMapping(value = "/save-info", method = RequestMethod.POST)
+	public String saveInfo(@RequestBody String info) {
+		User currentUser = userService.getUserFromSession();
+		userService.saveUserInfo(currentUser.getUserId(), info);
+		return "OK";
 	}
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<String> exceptionHandler(Exception ex) {

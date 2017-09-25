@@ -38,8 +38,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			logger.info(username + " is disabled.");
 		
 		UserDetailsImpl principal = new UserDetailsImpl(user);
-		UserActivityLog userActivityLog = generateActivityLog(user.getUserId());
-		userService.addUserActivityLog(userActivityLog);
+		/*UserActivityLog userActivityLog = generateActivityLog(user.getUserId());
+		userService.addUserActivityLog(userActivityLog);*/
 
 		logger.info("principal user: " + principal.getUsername());
 		return principal;

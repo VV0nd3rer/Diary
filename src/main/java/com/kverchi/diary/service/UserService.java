@@ -23,4 +23,5 @@ public interface UserService {
 	User getUserFromSession();
 	boolean isValuePresent(String key, Object value);
 	void addUserActivityLog(UserActivityLog userActivityLog);
+	void saveUserInfo(int user_id, String info);
 }

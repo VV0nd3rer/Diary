@@ -96,6 +96,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveUserInfo(int user_id, String info) {
+        userDao.updateUserInfo(user_id, info);
+    }
+
+    @Override
     public ServiceResponse testRegisterAccount(RegistrationForm user) throws ServiceException {
         ServiceResponse response =
                 new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());

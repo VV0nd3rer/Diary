@@ -278,7 +278,48 @@ $(document).ready(function(){
 	     	 });
         }
 	});
-	
+
+	$("#modal-form-save-info-btn").click(function(event){
+		event.preventDefault();
+
+
+		var info = $("#info");
+
+		tips = $( ".validateTips" );
+		var valid = true;
+		valid = valid && checkMinMaxLength( info, "info", 3, 255 );
+
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(header, token);
+		});
+		var info_val = info.val();
+		var save_info_url = root+"/users/save-info";
+		if(valid) {
+			$.ajax({
+				url: save_info_url,
+				type:"POST",
+				data: info.val(),
+				contentType:"application/json; charset=utf-8",
+				//dataType:"json",
+				success: function(obj){
+					console.log('info_val: ' + info_val);
+					$("#user-info").replaceWith("<div id='user-info'>"+info_val+"</div>");
+					hideModalDialog();
+					console.log('updated user info. closing modal dialog...');
+				},
+				error : function(e) {
+					console.log("Error: ", e);
+				},
+				done : function(e) {
+					alert("DONE");
+				}
+			});
+		}
+
+	});
+
 	//Books page CRUD functionality
 	$("#add-book-btn").click(function(){
         $("#modal-form").modal();
@@ -423,7 +464,11 @@ $(document).ready(function(){
 
 });
 //End of document.ready
+function showModalDialog() {
+	$("#modal-form").modal();
+}
 function hideModalDialog() {
+	console.log('hiding modal dialog...')
 	$("#modal-form").modal("hide");
 	$(':input','#modal-form')
     .not(':button, :submit, :reset, :hidden')
@@ -431,6 +476,7 @@ function hideModalDialog() {
     .removeAttr('checked')
     .removeAttr('selected');
 	$(':input[type=hidden]','#modal-form').val('0');
+	console.log('hided modal dialog');
 }
 function addErrMsg( t ) {
     tips

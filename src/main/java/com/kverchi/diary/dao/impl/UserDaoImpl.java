@@ -7,9 +7,7 @@ import com.kverchi.diary.domain.Country;
 import org.apache.log4j.Logger;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 
 import org.hibernate.Session;
@@ -19,6 +17,7 @@ import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.domain.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -78,5 +77,31 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 			}
 		}
 		return user;
+	}
+
+	@Override
+	public void updateUserInfo(int user_id, String info) throws DatabaseException {
+		EntityManager entityManager = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
+			Root<User> userRoot = criteriaUpdate.from(User.class);
+			Predicate predicate = criteriaBuilder.equal(userRoot.get("userId"), user_id);
+			criteriaUpdate.where(predicate);
+			criteriaUpdate.set(userRoot.get("information"), info);
+			entityManager.getTransaction().begin();
+			Query query = entityManager.createQuery(criteriaUpdate);
+			int rowsAffected = query.executeUpdate();
+			entityManager.getTransaction().commit();
+
+		} catch (PersistenceException e) {
+			logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		} finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 	}
 }

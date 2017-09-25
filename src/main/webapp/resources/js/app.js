@@ -3,6 +3,28 @@ var loginApp = angular.module('login', ['ngMaterial','ngMessages']);
 var forgotPassApp = angular.module('forgotPass', ['ngMaterial','ngMessages']);
 var resetPassApp = angular.module('resetPass', ['ngMaterial','ngMessages']);
 var searchApp = angular.module('search', ['ngMaterial','ngMessages']);
+var profileApp = angular.module('profile', ['ngMaterial']);
+
+profileApp.controller('UserMenuCtrl', function($scope){
+
+		$scope.currentNavItem = 'info';
+
+		$scope.goto = function (page) {
+			console.log("Goto " + page);
+			console.log("$scope.currentNavItem " + $scope.currentNavItem);
+			if(page == 'info') {
+				$.get('/users/user-info', function(modelAndView) {
+					$("#nav-bar-content").html(modelAndView);
+				});
+			}
+			if(page == 'statistic') {
+				$.get('/users/user-statistic', function(modelAndView) {
+					$("#nav-bar-content").html(modelAndView);
+				});
+			}
+		}
+
+});
 
 loginApp.controller('userController', function($scope, $window, $timeout, $q) {
 	angular.element('#login-btn').click(function() {

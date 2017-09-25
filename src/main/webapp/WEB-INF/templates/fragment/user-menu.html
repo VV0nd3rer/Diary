@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+</head>
+<body>
+<div id="user-info" th:fragment="userInfo">
+
+
+
+    <div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></div>
+    <div th:if="${#lists.isEmpty(user.information)}">No information found</div>
+
+   <!-- This button triggers showing Bootstrap modal form.
+        This button loads in angularjs nav-bar.
+        id.click event doesn't work from dynamically loaded nav-bar page. -->
+    <a href="#" id="update-info-btn" class="btn btn-info" role="button" onclick="return showModalDialog();">Link Button</a>
+
+</div>
+<div id="user-statistic" th:fragment="userStatistic">
+    <div> Joined since <em th:text="${#temporals.format(user.registration_date, 'dd/MM/yyyy HH:mm')}">Some date</em></div>
+</div>
+</body>
