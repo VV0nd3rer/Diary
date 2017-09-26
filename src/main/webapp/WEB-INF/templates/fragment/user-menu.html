@@ -9,8 +9,12 @@
 
 
 
-    <div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></div>
-    <div th:if="${#lists.isEmpty(user.information)}">No information found</div>
+    <!--<div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}" id="current-info"></div>
+    <div th:if="${#lists.isEmpty(user.information)}" id="current-info">No information found</div>-->
+    <div id="current-info">
+        <span th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></span>
+        <span th:if="${#lists.isEmpty(user.information)}">No information found</span>
+    </div>
 
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.

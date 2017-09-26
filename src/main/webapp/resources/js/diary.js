@@ -281,14 +281,12 @@ $(document).ready(function(){
 
 	$("#modal-form-save-info-btn").click(function(event){
 		event.preventDefault();
-
-
-		var info = $("#info");
-
+		var info = $("#edit-info");
+		console.log("info val: " + info.val());
 		tips = $( ".validateTips" );
 		var valid = true;
-		valid = valid && checkMinMaxLength( info, "info", 3, 255 );
-
+		valid = valid && checkTextAreaMinMaxLen(info, "info", 2, 155 );
+		console.log("valid: " + valid);
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		$(document).ajaxSend(function(e, xhr, options) {
@@ -305,7 +303,7 @@ $(document).ready(function(){
 				//dataType:"json",
 				success: function(obj){
 					console.log('info_val: ' + info_val);
-					$("#user-info").replaceWith("<div id='user-info'>"+info_val+"</div>");
+					$("#current-info").text(info_val);
 					hideModalDialog();
 					console.log('updated user info. closing modal dialog...');
 				},
@@ -465,6 +463,7 @@ $(document).ready(function(){
 });
 //End of document.ready
 function showModalDialog() {
+	$("#edit-info").val($("#current-info").val());
 	$("#modal-form").modal();
 }
 function hideModalDialog() {
@@ -478,14 +477,25 @@ function hideModalDialog() {
 	$(':input[type=hidden]','#modal-form').val('0');
 	console.log('hided modal dialog');
 }
-function addErrMsg( t ) {
+function addErrMsgToField( text, object ) {
     tips
-      .text( t )
+      .text( text )
       .addClass( "alert alert-danger" );
-    /*setTimeout(function() {
+	object.addClass( "alert alert-danger" );
+    setTimeout(function() {
+		object.removeClass("alert alert-danger", 1500);
         tips.removeClass( "alert alert-danger", 1500 );
     	tips.empty();
-    }, 500 );*/
+    }, 500 );
+}
+function addErrMsg( text) {
+	tips
+		.text( text )
+		.addClass( "alert alert-danger" );
+	/*setTimeout(function() {
+		tips.removeClass( "alert alert-danger", 1500 );
+		tips.empty();
+	}, 500 );*/
 }
 function remErrMsg() {
 	tips.removeClass( "alert alert-danger", 1500 );
@@ -493,37 +503,46 @@ function remErrMsg() {
 }
 
 function checkMinMaxLength(o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min /*|| o.length > max || o.length < min*/) {
-      o.addClass( "alert alert-danger" );
-      addErrMsg( "Length of " + n + " must be between " +
-        min + " and " + max + "." );
+    if ( o.val().length > max || o.val().length < min ) {
+
+      addErrMsgToField( "Length of " + n + " must be between " +
+        min + " and " + max + ".", o);
       return false;
-    } else {
+    }/* else {
       remErrMsg();
       return true;
-    }
+    }*/
   }
 function checkTextEditorMinLength(content, field, field_title, min) {
 	if (content.length < min) {
-		field.addClass( "alert alert-danger" );
-		addErrMsg( "Length of " + field_title + " must be mere than " +
-			min + "." );
+		addErrMsgToField( "Length of " + field_title + " must be mere than " +
+			min + ".", field);
 		return false;
-	} else {
+	} /*else {
 		remErrMsg();
 		return true;
-	}
+	}*/
 }
 function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 	if (content.length > max || content.length < min) {
-		field.addClass( "alert alert-danger" );
-	      addErrMsg( "Length of " + field_title + " must be between " +
-	        min + " and " + max + "." );
+
+	      addErrMsgToField( "Length of " + field_title + " must be between " +
+	        min + " and " + max + ".", field);
 	      return false;
-	    } else {
+	    } /*else {
 	      remErrMsg();
 	      return true;
-	    }
+	    }*/
+}
+function checkTextAreaMinMaxLen(object, name, min, max) {
+	var val = $.trim(object.val());
+	if(val < min || val > max) {
+		addErrMsgToField( "Length of " + name + " must be between " +
+			min + " and " + max + ".", object);
+		return false;
+	}
+	return true;
+
 }
 function checkDataListInput(obj) {
 	var val = obj.val();
