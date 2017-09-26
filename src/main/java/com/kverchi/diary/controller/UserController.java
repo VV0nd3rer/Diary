@@ -1,5 +1,7 @@
 package com.kverchi.diary.controller;
 
+import com.kverchi.diary.domain.UserActivityLog;
+import com.kverchi.diary.service.UserActivityLogService;
 import com.sun.org.apache.bcel.internal.classfile.Method;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
@@ -35,6 +37,8 @@ public class UserController {
 	final static Logger logger = Logger.getLogger(UserController.class);
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserActivityLogService userActivityLogService;
 
 	@RequestMapping(value="/signup")
 	public ModelAndView signup() {
@@ -161,7 +165,10 @@ public class UserController {
 		if(user == null) {
 			return new ModelAndView("login");
 		}
+		UserActivityLog userActivityLog = null;
+		userActivityLog = userActivityLogService.getLastUserActivity(user.getUserId());
 		mv.addObject(user);
+		mv.addObject("userActivityLog", userActivityLog);
 		return mv;
 	}
 	@RequestMapping(value = "/save-info", method = RequestMethod.POST)

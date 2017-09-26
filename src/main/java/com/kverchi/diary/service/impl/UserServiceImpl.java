@@ -65,8 +65,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private RoleDao roleDao;
-    @Autowired
-    private UserActivityDao userActivityDao;
+
     @Autowired
     private PasswordChangeRequestDao passwordChangeRequestDao;
     @Autowired
@@ -93,11 +92,6 @@ public class UserServiceImpl implements UserService {
     public boolean isValuePresent(String key, Object value) {
         boolean isValuePresent = userDao.isRecordPresent(key, value);
         return isValuePresent;
-    }
-
-    @Override
-    public void addUserActivityLog(UserActivityLog userActivityLog) {
-        userActivityDao.persist(userActivityLog);
     }
 
     @Override
