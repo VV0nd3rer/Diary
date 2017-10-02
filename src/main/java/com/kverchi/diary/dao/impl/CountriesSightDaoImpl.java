@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import com.kverchi.diary.domain.CountriesSight_;
 import com.kverchi.diary.domain.Pagination;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;

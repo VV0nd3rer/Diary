@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by Kverchi on 26.9.2017.
  */
-@Service
+@Service("userActivityLogService")
 public class UserActivityLogServiceImpl implements UserActivityLogService {
     @Autowired
     private UserActivityDao userActivityDao;
@@ -23,4 +23,5 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
     public UserActivityLog getLastUserActivity(int user_id) {
         return userActivityDao.getLastUserActivity(user_id);
     }
+    
 }
