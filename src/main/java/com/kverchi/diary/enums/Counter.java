@@ -1,7 +1,7 @@
 package com.kverchi.diary.enums;
 
 /**
- * Created by Kverchi on 14.9.2017.
+ * Created by Liudmyla Melnychuk on 14.9.2017.
  */
 public enum Counter {
     WISHES,

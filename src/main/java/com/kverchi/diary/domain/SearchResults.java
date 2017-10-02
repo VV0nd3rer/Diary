@@ -3,7 +3,7 @@ package com.kverchi.diary.domain;
 import java.util.List;
 
 /**
- * Created by Kverchi on 30.8.2017.
+ * Created by Liudmyla Melnychuk on 30.8.2017.
  */
 public abstract class SearchResults<T> {
     private int totalPages = 5;

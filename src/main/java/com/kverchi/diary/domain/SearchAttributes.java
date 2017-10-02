@@ -1,7 +1,7 @@
 package com.kverchi.diary.domain;
 
 /**
- * Created by Kverchi on 30.8.2017.
+ * Created by Liudmyla Melnychuk on 30.8.2017.
  */
 public abstract class SearchAttributes {
     private boolean pagination = true;

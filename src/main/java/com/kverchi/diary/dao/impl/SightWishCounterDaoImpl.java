@@ -19,7 +19,7 @@ import javax.persistence.criteria.Root;
 import static java.lang.Math.toIntExact;
 
 /**
- * Created by Kverchi on 13.9.2017.
+ * Created by Liudmyla Melnychuk on 13.9.2017.
  */
 @Repository
 public class SightWishCounterDaoImpl extends GenericDaoImpl<SightWishCounter> implements SightWishCounterDao {

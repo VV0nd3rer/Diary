@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by Kverchi on 5.9.2017.
+ * Created by Liudmyla Melnychuk on 5.9.2017.
  */
 @Entity
 @Table(name="authors")

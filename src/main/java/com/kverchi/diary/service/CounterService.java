@@ -5,7 +5,7 @@ import com.kverchi.diary.domain.SightWishCounter;
 import com.kverchi.diary.enums.Counter;
 
 /**
- * Created by Kverchi on 13.9.2017.
+ * Created by Liudmyla Melnychuk on 13.9.2017.
  */
 public interface CounterService {
     int getCounterValue(int sight_id, Counter counter);

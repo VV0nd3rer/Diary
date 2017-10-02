@@ -3,7 +3,7 @@ package com.kverchi.diary.service;
 import com.kverchi.diary.domain.UserActivityLog;
 
 /**
- * Created by Kverchi on 26.9.2017.
+ * Created by Liudmyla Melnychuk on 26.9.2017.
  */
 public interface UserActivityLogService {
     void addUserActivityLog(UserActivityLog userActivityLog);

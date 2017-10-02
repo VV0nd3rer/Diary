@@ -1,7 +1,7 @@
 package com.kverchi.diary.domain;
 
 /**
- * Created by Kverchi on 13.9.2017.
+ * Created by Liudmyla Melnychuk on 13.9.2017.
  */
 
 import javax.persistence.*;

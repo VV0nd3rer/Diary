@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by Kverchi on 13.9.2017.
+ * Created by Liudmyla Melnychuk on 13.9.2017.
  */
 @Service
 public class CounterServiceImpl implements CounterService {

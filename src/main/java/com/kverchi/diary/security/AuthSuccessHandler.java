@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Created by Kverchi on 14.07.2017.
+ * Created by Liudmyla Melnychuk on 14.07.2017.
  */
 public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override

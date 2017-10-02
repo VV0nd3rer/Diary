@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Kverchi on 14.9.2017.
+ * Created by Liudmyla Melnychuk on 14.9.2017.
  */
 @Entity
 @Table(name="sight_visits_counter")

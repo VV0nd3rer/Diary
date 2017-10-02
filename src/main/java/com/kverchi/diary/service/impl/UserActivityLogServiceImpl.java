@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by Kverchi on 26.9.2017.
+ * Created by Liudmyla Melnychuk on 26.9.2017.
  */
 @Service("userActivityLogService")
 public class UserActivityLogServiceImpl implements UserActivityLogService {

@@ -5,15 +5,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Kverchi on 18.9.2017.
+ * Created by Liudmyla Melnychuk on 18.9.2017.
  */
 @Entity
 @Table(name="user_activity_log")
 public class UserActivityLog {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="log_id")
-    private int log_id;
+    @Column(name="session_id")
+    private String session_id;
     @Column(name="user_id")
     private int user_id;
     @Basic(optional = false)
@@ -23,13 +22,12 @@ public class UserActivityLog {
     private String user_hostname;
 
 
-
-    public int getLog_id() {
-        return log_id;
+    public String getSession_id() {
+        return session_id;
     }
 
-    public void setLog_id(int log_id) {
-        this.log_id = log_id;
+    public void setSession_id(String session_id) {
+        this.session_id = session_id;
     }
 
     public int getUser_id() {

@@ -14,7 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- * Created by Kverchi on 18.9.2017.
+ * Created by Liudmyla Melnychuk on 18.9.2017.
  */
 @Repository
 public class UserActivityLogDaoImpl extends GenericDaoImpl<UserActivityLog> implements UserActivityDao {

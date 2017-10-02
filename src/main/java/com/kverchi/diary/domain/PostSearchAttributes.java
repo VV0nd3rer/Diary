@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Kverchi on 30.8.2017.
+ * Created by Liudmyla Melnychuk on 30.8.2017.
  */
 public class PostSearchAttributes extends SearchAttributes {
     public enum PostSearchType {
