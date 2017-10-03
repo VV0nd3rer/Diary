@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.service.UserService;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		UserDetailsImpl principal = new UserDetailsImpl(user);
 		/*UserActivityLog userActivityLog = generateActivityLog(user.getUserId());
 		userService.addUserActivityLog(userActivityLog);*/
-
+		logger.debug("----- session ID: " + RequestContextHolder.currentRequestAttributes().getSessionId() + " -------");
 		logger.info("principal user: " + principal.getUsername());
 		return principal;
 	}

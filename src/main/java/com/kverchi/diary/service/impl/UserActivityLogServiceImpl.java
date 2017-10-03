@@ -20,8 +20,18 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
     }
 
     @Override
+    public UserActivityLog getUserActivity(String session_id) {
+        return userActivityDao.getById(session_id);
+    }
+
+    @Override
     public UserActivityLog getLastUserActivity(int user_id) {
         return userActivityDao.getLastUserActivity(user_id);
     }
-    
+
+    @Override
+    public void updateUserActivityLog(UserActivityLog userActivityLog) {
+        userActivityDao.update(userActivityLog);
+    }
+
 }

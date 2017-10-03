@@ -49,7 +49,7 @@ import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.EmailService;
 import com.kverchi.diary.service.UserService;
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
     private final static Logger logger = Logger.getLogger(UserServiceImpl.class);
     private final static String CHANGE_PASS_LINK = "users/change-password/";
@@ -284,8 +284,6 @@ public class UserServiceImpl implements UserService {
     private void updateUserSession(User user, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
-
-        request.getSession();
 
         token.setDetails(new WebAuthenticationDetails(request));
         Authentication authenticatedUser = authenticationManager.authenticate(token);

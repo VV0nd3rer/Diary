@@ -20,7 +20,15 @@ public class UserActivityLog {
     private ZonedDateTime login_time;
     private String login_ip;
     private String user_hostname;
+    private boolean active_session;
 
+    public boolean isActive_session() {
+        return active_session;
+    }
+
+    public void setActive_session(boolean active_session) {
+        this.active_session = active_session;
+    }
 
     public String getSession_id() {
         return session_id;

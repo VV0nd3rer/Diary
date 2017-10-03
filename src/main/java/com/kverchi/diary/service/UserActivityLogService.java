@@ -7,5 +7,7 @@ import com.kverchi.diary.domain.UserActivityLog;
  */
 public interface UserActivityLogService {
     void addUserActivityLog(UserActivityLog userActivityLog);
+    UserActivityLog getUserActivity(String session_id);
     UserActivityLog getLastUserActivity(int user_id);
+    void updateUserActivityLog(UserActivityLog userActivityLog);
 }
