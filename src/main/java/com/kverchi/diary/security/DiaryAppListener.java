@@ -55,8 +55,10 @@ public class DiaryAppListener implements ApplicationListener<ApplicationEvent> {
                 Object principal = securityContext.getAuthentication().getPrincipal();
                 if (principal instanceof UserDetailsImpl) {
                     logger.debug(" ----- SessionDestroyedEvent, principal instanceof UserDetailsImpl ------");
-                    logger.debug("----- session ID: " + RequestContextHolder.currentRequestAttributes().getSessionId() + " -------");
-                    updateUserActivityLog();
+                    HttpSession eventSession = (HttpSession)event.getSource();
+                    String sessionId = eventSession.getId();
+                    logger.debug("----- SessionDestroyedEvent, session ID: " + sessionId + " -------");
+                    updateUserActivityLog(sessionId);
                 }
             }
 
@@ -80,14 +82,11 @@ public class DiaryAppListener implements ApplicationListener<ApplicationEvent> {
                 (UserActivityLogService)injectBean("userActivityLogService");
         userActivityLogService.addUserActivityLog(userActivityLog);
     }
-    private void updateUserActivityLog() {
+    private void updateUserActivityLog(String sessionId) {
         UserActivityLogService userActivityLogService =
                 (UserActivityLogService)injectBean("userActivityLogService");
 
-
-            String session_id = RequestContextHolder.currentRequestAttributes().getSessionId();
-
-            UserActivityLog userActivityLog = userActivityLogService.getUserActivity(session_id);
+            UserActivityLog userActivityLog = userActivityLogService.getUserActivity(sessionId);
             userActivityLog.setActive_session(false);
 
             userActivityLogService.updateUserActivityLog(userActivityLog);

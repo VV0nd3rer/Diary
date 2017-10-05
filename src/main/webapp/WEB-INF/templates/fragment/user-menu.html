@@ -24,8 +24,18 @@
 </div>
 <div id="user-statistic" th:fragment="userStatistic">
     <div> Joined since <em th:text="${#temporals.format(user.registration_date, 'dd/MM/yyyy HH:mm')}">Some date</em></div>
-    <div> Your last login time: <span th:text="${userActivityLog.login_time}"></span> </div>
+    <div>
+        <p>Your active sessions: </p>
+        <ul>
+            <li>session1</li>
+            <li>session2</li>
+        </ul>
+    </div>
+
+    <div> Your last closed session:
+        <span th:text="${userActivityLog.login_time}"></span>
     <div> Your IP address is <span th:text="${userActivityLog.login_ip}"></span> </div>
     <div> Your hostname is <span th:text="${userActivityLog.user_hostname}"></span> </div>
+    </div>
 </div>
 </body>

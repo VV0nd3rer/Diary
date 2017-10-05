@@ -165,7 +165,7 @@ public class UserController {
 		if(user == null) {
 			return new ModelAndView("login");
 		}
-		UserActivityLog userActivityLog = null;
+		UserActivityLog userActivityLog;
 		userActivityLog = userActivityLogService.getLastUserActivity(user.getUserId());
 		mv.addObject(user);
 		mv.addObject("userActivityLog", userActivityLog);
