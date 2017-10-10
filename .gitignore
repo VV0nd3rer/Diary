@@ -1,4 +1,3 @@
 /target/
-
-#db configuration 
-src/main/resources/data-context.xml
+.idea/
+Diary.iml
