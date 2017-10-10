@@ -6,6 +6,8 @@ import com.kverchi.diary.service.UserActivityLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by Liudmyla Melnychuk on 26.9.2017.
  */
@@ -25,7 +27,7 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
     }
 
     @Override
-    public UserActivityLog getLastUserActivity(int user_id) {
+    public List<UserActivityLog> getLastUserActivity(int user_id) {
         return userActivityDao.getLastUserActivity(user_id);
     }
 

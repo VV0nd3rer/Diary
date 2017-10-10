@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * Created by Liudmyla Melnychuk on 18.9.2017.
@@ -19,9 +20,9 @@ import javax.persistence.criteria.Root;
 @Repository
 public class UserActivityLogDaoImpl extends GenericDaoImpl<UserActivityLog> implements UserActivityDao {
     @Override
-    public UserActivityLog getLastUserActivity(int user_id) throws DatabaseException {
+    public List<UserActivityLog> getLastUserActivity(int user_id) throws DatabaseException {
         EntityManager entityManager = null;
-        UserActivityLog result = null;
+        List<UserActivityLog> result = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -34,8 +35,7 @@ public class UserActivityLogDaoImpl extends GenericDaoImpl<UserActivityLog> impl
 
             entityManager.getTransaction().begin();
             Query query = entityManager.createQuery(criteriaQuery);
-            query.setMaxResults(1);
-            result = (UserActivityLog)query.getSingleResult();
+            result = (List<UserActivityLog>)query.getResultList();
             entityManager.getTransaction().commit();
 
         } catch (PersistenceException e) {

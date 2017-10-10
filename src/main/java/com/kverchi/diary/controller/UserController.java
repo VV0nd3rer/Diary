@@ -30,6 +30,7 @@ import com.kverchi.diary.service.UserService;
 
 import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("users")
@@ -165,10 +166,9 @@ public class UserController {
 		if(user == null) {
 			return new ModelAndView("login");
 		}
-		UserActivityLog userActivityLog;
-		userActivityLog = userActivityLogService.getLastUserActivity(user.getUserId());
+		List<UserActivityLog> userActivityLogList= userActivityLogService.getLastUserActivity(user.getUserId());
 		mv.addObject(user);
-		mv.addObject("userActivityLog", userActivityLog);
+		mv.addObject("userActivityLogList", userActivityLogList);
 		return mv;
 	}
 	@RequestMapping(value = "/save-info", method = RequestMethod.POST)
