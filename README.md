@@ -1,2 +1,3 @@
-# Diary
-Java application with Spring security and Spring MVC started on Tomcat with MySQL.
+## Diary for travellers
+Java application with Spring Security and Spring MVC started on Tomcat with PostgresSQL.  
+Deployed on Heroku.
