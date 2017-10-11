@@ -15,8 +15,8 @@
 	<bean id="jasyptPropertyPlaceholderConfigurer"
 		  class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
 		<constructor-arg ref="configurationEncryptor" />
-		<property name="ignoreUnresolvablePlaceholders" value="true"/>
-		<property name="location" value="classpath:properties/encodedApp.properties" />
+		<!--<property name="ignoreUnresolvablePlaceholders" value="true"/>-->
+		<property name="location" value="classpath:properties/${build.profile.id}/app.properties" />
 	</bean>
 
 	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">

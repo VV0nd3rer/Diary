@@ -15,7 +15,7 @@
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreUnresolvablePlaceholders" value="false"/>
-        <property name="location" value="classpath:properties/app.properties"/>
+        <property name="location" value="classpath:properties/${build.profile.id}/app.properties"/>
     </bean>
 
     <!-- Thymeleaf -->
