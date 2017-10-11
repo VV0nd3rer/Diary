@@ -23,28 +23,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <build>
-                <filters>
-                    <filter>src/main/resources/properties/${build.profile.id}.properties</filter>
-                </filters>
                 <resources>
                     <resource>
+                        <!-- Use maven properties (build.profile.id) in described resources -->
                         <filtering>true</filtering>
                         <directory>src/main/resources</directory>
-                          <!--<includes>
-                           <include>**/*.properties</include>
-                         </includes>
-                         <excludes>
-                          <exclude>**/*.xml</exclude>
-                          <exclude>**/local/*.properties</exclude>
-                        </excludes>-->
                     </resource>
-                     <!--<resource>
-                      <filtering>false</filtering>
-                      <directory>src/main/resources</directory>
-                      <includes>
-                        <include>**/*.xml</include>
-                      </includes>
-                    </resource>-->
                 </resources>
             </build>
         </profile>
@@ -54,28 +38,11 @@
                 <build.profile.id>heroku</build.profile.id>
             </properties>
             <build>
-                <filters>
-                    <filter>src/main/resources/properties/${build.profile.id}.properties</filter>
-                </filters>
                 <resources>
                     <resource>
                         <filtering>true</filtering>
                         <directory>src/main/resources</directory>
-                          <!--<includes>
-                           <include>**/*.properties</include>
-                         </includes>
-                         <excludes>
-                          <exclude>**/*.xml</exclude>
-                          <exclude>**/local/*.properties</exclude>
-                        </excludes>-->
                     </resource>
-                     <!--<resource>
-                      <filtering>false</filtering>
-                      <directory>src/main/resources</directory>
-                      <includes>
-                        <include>**/*.xml</include>
-                      </includes>
-                    </resource>-->
                 </resources>
             </build>
         </profile>
