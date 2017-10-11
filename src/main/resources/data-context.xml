@@ -24,9 +24,9 @@
       </property>
      </bean>
 	
-	<bean class="java.net.URI" id="dbUrl">
+	<!--<bean class="java.net.URI" id="dbUrl">
     	<constructor-arg value="${DATABASE_URL}"/>
-	</bean>
+	</bean>-->
 	
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -47,10 +47,14 @@
         <property name="password" value="${db.postgres.password}" />-->
 
 		<!-- Heroku Postgresql connetion -->
-	 	<property name="driverClassName" value="${database.postgres.driverClassName}"/>
+	 	<!--<property name="driverClassName" value="${database.postgres.driverClassName}"/>
 		<property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
 		<property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-    	<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+    	<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>-->
+		<property name="driverClassName" value="${database.postgres.driverClassName}"/>
+		<property name="url" value="${JDBC_DATABASE_URL}"/>
+		<property name="username" value="${JDBC_DATABASE_USERNAME}"/>
+		<property name="password" value="${JDBC_DATABASE_PASSWORD}"/>
     	
     	<property name="maxActive" value="10"/>
 	    <property name="maxIdle" value="5"/>
