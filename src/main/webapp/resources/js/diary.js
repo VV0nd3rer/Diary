@@ -281,25 +281,27 @@ $(document).ready(function(){
 
 	$("#modal-form-save-info-btn").click(function(event){
 		event.preventDefault();
-		var info = $("#edit-info");
-		console.log("info val: " + info.val());
+		var info = $("#edit-info").val();
+		console.log("info val: " + info);
 
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		$(document).ajaxSend(function(e, xhr, options) {
 			xhr.setRequestHeader(header, token);
 		});
-		var info_val = info.val();
-		var save_info_url = root+"/users/save-info";
+
+		var save_info_url = root+"/users/save-info/";
+
 			$.ajax({
 				url: save_info_url,
 				type:"POST",
-				data: info.val(),
-				contentType:"application/json; charset=utf-8",
+				data: info,
+				contentType: "text/plain",
+				/*contentType:"application/json; charset=utf-8",*/
 				//dataType:"json",
 				success: function(obj){
-					console.log('info_val: ' + info_val);
-					$("#current-info").text(info_val);
+					console.log('obj: ' + obj);
+					$("#current-info").text(info);
 					hideModalDialog();
 					console.log('updated user info. closing modal dialog...');
 				},

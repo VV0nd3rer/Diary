@@ -171,10 +171,10 @@ public class UserController {
 		mv.addObject("userActivityLogList", userActivityLogList);
 		return mv;
 	}
-	@RequestMapping(value = "/save-info", method = RequestMethod.POST)
-	public String saveInfo(@RequestBody String info, HttpServletRequest request) {
+	@RequestMapping(value = "/save-info", method = RequestMethod.POST, consumes = "text/plain")
+	public String saveInfo(@RequestBody(required=false)  String info) {
 		User currentUser = userService.getUserFromSession();
-		userService.saveUserInfo(currentUser.getUserId(), info, request);
+		userService.saveUserInfo(currentUser.getUserId(), info);
 		return "OK";
 	}
 	@ExceptionHandler(ServiceException.class)

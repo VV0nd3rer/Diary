@@ -11,9 +11,9 @@
 
     <!--<div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}" id="current-info"></div>
     <div th:if="${#lists.isEmpty(user.information)}" id="current-info">No information found</div>-->
-    <div id="current-info" th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></div>
+    <div id="current-info" th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}">
+    </div>
     <span th:if="${#lists.isEmpty(user.information)}" th:text="#{user.info.empty}">No information found</span>
-
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.
         id.click event doesn't work from dynamically loaded nav-bar page. -->

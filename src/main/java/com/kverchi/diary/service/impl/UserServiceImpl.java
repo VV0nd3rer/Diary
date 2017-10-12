@@ -4,10 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -28,6 +25,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -95,11 +93,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUserInfo(int user_id, String info, HttpServletRequest request) {
+    public void saveUserInfo(int user_id, String info) {
         userDao.updateUserInfo(user_id, info);
         User user = getUserFromSession();
         user.setInformation(info);
-        updateUserSession(user, request);
+        updateUserSession();
     }
 
     @Override
@@ -281,13 +279,21 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-    private void updateUserSession(User user, HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+    private void updateUserSession() {
+        /*UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
 
         token.setDetails(new WebAuthenticationDetails(request));
         Authentication authenticatedUser = authenticationManager.authenticate(token);
 
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);*/
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
+        //updatedAuthorities.add(...); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")]
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuthorities);
+
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }
