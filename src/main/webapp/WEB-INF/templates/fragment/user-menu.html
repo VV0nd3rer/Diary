@@ -11,34 +11,43 @@
 
     <!--<div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}" id="current-info"></div>
     <div th:if="${#lists.isEmpty(user.information)}" id="current-info">No information found</div>-->
-    <div id="current-info">
-        <span th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></span>
-        <span th:if="${#lists.isEmpty(user.information)}">No information found</span>
-    </div>
+    <div id="current-info" th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}"></div>
+    <span th:if="${#lists.isEmpty(user.information)}" th:text="#{user.info.empty}">No information found</span>
 
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.
         id.click event doesn't work from dynamically loaded nav-bar page. -->
-    <a href="#" id="update-info-btn" class="btn btn-info" role="button" onclick="return showModalDialog();">Link Button</a>
+    <a href="#" id="update-info-btn" class="btn btn-info top-row-buffer" role="button" onclick="showModalDialog();"
+       th:text="#{user.info.edit}">Edit info</a>
 
 </div>
 <div id="user-statistic" th:fragment="userStatistic">
-    <div> Joined since <em th:text="${#temporals.format(user.registration_date, 'dd/MM/yyyy HH:mm')}">Some date</em></div>
-    <p>Your active sessions: </p>
-    <div th:each="userLog : ${userActivityLogList}">
-        <div th:if="${userLog.active_session}">
-            <ul>
-                <li th:if="${userLog.active_session}" th:text="${userLog.session_id}"></li>
-            </ul>
-        </div>
-        <div th:if="${!userLog.active_session}">
-            <p> Your last closed session:</p>
-            <div th:text="${userLog.session_id}"></div>
-        </div>
-    <!--    <span th:text="${userActivityLog.login_time}"></span>
-        <div> Your IP address is <span th:text="${userActivityLog.login_ip}"></span> </div>
-        <div> Your hostname is <span th:text="${userActivityLog.user_hostname}"></span> </div>-->
+    <p> <span th:text="#{user.statistic.joined}">Joined since</span>
+        <em th:text="${#temporals.format(user.registration_date, 'dd/MM/yyyy HH:mm')}">Some date</em>
+    </p>
 
-    </div>
+    <table id="crud-tbl" class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th width="80" th:text="#{user.statistic.session.ip}">IP</th>
+            <th width="80" th:text="#{user.statistic.session.city}">City</th>
+            <th width="120" th:text="#{user.statistic.session.postal}">Postal</th>
+            <th width="120" th:text="#{user.statistic.session.state}">State</th>
+            <th width="120" th:text="#{user.statistic.session.os}">OS</th>
+            <th width="120" th:text="#{user.statistic.session.active}">Is active?</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="userLog : ${userActivityLogList}">
+            <td th:text="${userLog.login_ip}"></td>
+            <td th:text="${userLog.city}"></td>
+            <td th:text="${userLog.postal}"></td>
+            <td th:text="${userLog.state}"></td>
+            <td th:text="${userLog.osInfo}"></td>
+            <td th:text="${userLog.active_session}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>

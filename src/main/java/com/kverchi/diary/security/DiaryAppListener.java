@@ -67,29 +67,14 @@ public class DiaryAppListener implements ApplicationListener<ApplicationEvent> {
 
     }
     private void addUserActivityLog(Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) authentication.getDetails();
-        String rem_addr = webAuthenticationDetails.getRemoteAddress();
-        String session_id = RequestContextHolder.currentRequestAttributes().getSessionId();
-        ((WebAuthenticationDetails) authentication.getDetails()).getSessionId();
-        User user = userDetails.getUser();
-        UserActivityLog userActivityLog = new UserActivityLog();
-        userActivityLog.setUser_id(user.getUserId());
-        userActivityLog.setSession_id(session_id);
-        userActivityLog.setLogin_ip(rem_addr);
-        userActivityLog.setActive_session(true);
         UserActivityLogService userActivityLogService =
                 (UserActivityLogService)injectBean("userActivityLogService");
-        userActivityLogService.addUserActivityLog(userActivityLog);
+        userActivityLogService.addUserActivityLog(authentication);
     }
     private void updateUserActivityLog(String sessionId) {
         UserActivityLogService userActivityLogService =
                 (UserActivityLogService)injectBean("userActivityLogService");
-
-            UserActivityLog userActivityLog = userActivityLogService.getUserActivity(sessionId);
-            userActivityLog.setActive_session(false);
-
-            userActivityLogService.updateUserActivityLog(userActivityLog);
+            userActivityLogService.updateUserActivityLog(sessionId);
 
 
     }

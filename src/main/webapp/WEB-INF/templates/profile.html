@@ -39,14 +39,12 @@
                                 <fieldset>
 
                                     <!-- Form Name -->
-                                    <legend th:text="#{book.details}">Update info</legend>
-                                    <p class="validateTips" th:text="#{required}">All form fields are required.</p>
+                                    <legend th:text="#{user.info.edit}">Edit info</legend>
                                     <!-- Text input-->
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label"
-                                               th:text="#{book.title}">Info</label>
                                         <div class="col-sm-10">
-                                                <textarea rows="4" cols="50" id="edit-info" placeholder="Info" class="form-control">
+                                                <textarea rows="4" cols="50" id="edit-info" placeholder="Say something"
+                                                          class="form-control">
                                                 </textarea>
                                         </div>
                                     </div>
@@ -104,12 +102,12 @@
                         <li class="active">
                             <a href="#">
                                 <i class="glyphicon glyphicon-home"></i>
-                                Overview </a>
+                                Friends </a>
                         </li>
                         <li>
                             <a href="#">
                                 <i class="glyphicon glyphicon-user"></i>
-                                Account activity </a>
+                                Messages </a>
                         </li>
                         <li>
                             <a href="#">
@@ -131,19 +129,18 @@
                             md-selected-nav-item="currentNavItem"
                             nav-bar-aria-label="navigation links">
                         <md-nav-item md-nav-click="goto('info')" name="info">
-                            Page One
+                            <span th:text="#{user.top.nav.info}">Info</span>
                         </md-nav-item>
                         <md-nav-item md-nav-click="goto('statistic')" name="statistic">
-                            Page Two
+                            <span th:text="#{user.top.nav.account.activity}">Account activity</span>
                         </md-nav-item>
-                        <md-nav-item md-nav-click="goto('contacts')" name="contacts">
-                            Page Three
+                        <md-nav-item md-nav-click="goto('favorite')" name="favorite">
+                            <span th:text="#{user.top.nav.favorite}">Favorite</span>
                         </md-nav-item>
 
                     </md-nav-bar>
-                    <div class="ext-content" id="nav-bar-content">
+                    <div id="nav-bar-content">
                         <div th:replace="fragment/user-menu::userInfo"></div>
-                        External content for `<span>{{currentNavItem}}</span>`.
                     </div>
 
                 </md-content>

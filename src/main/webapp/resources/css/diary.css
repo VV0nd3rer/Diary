@@ -234,3 +234,9 @@ input:disabled:focus {
 	background: #fff;
 	min-height: 460px;
 }
+
+#nav-bar-content {
+	padding: 33px;
+	/*margin: 20px;*/
+	background-color: #dcf9d1;
+}

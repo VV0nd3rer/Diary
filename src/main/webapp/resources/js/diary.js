@@ -283,10 +283,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var info = $("#edit-info");
 		console.log("info val: " + info.val());
-		tips = $( ".validateTips" );
-		var valid = true;
-		valid = valid && checkTextAreaMinMaxLen(info, "info", 2, 155 );
-		console.log("valid: " + valid);
+
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		$(document).ajaxSend(function(e, xhr, options) {
@@ -294,7 +291,6 @@ $(document).ready(function(){
 		});
 		var info_val = info.val();
 		var save_info_url = root+"/users/save-info";
-		if(valid) {
 			$.ajax({
 				url: save_info_url,
 				type:"POST",
@@ -314,7 +310,6 @@ $(document).ready(function(){
 					alert("DONE");
 				}
 			});
-		}
 
 	});
 
@@ -463,7 +458,8 @@ $(document).ready(function(){
 });
 //End of document.ready
 function showModalDialog() {
-	$("#edit-info").val($("#current-info").val());
+	var currentInfo = $("#current-info").text();
+	$("#edit-info").val(currentInfo);
 	$("#modal-form").modal();
 }
 function hideModalDialog() {

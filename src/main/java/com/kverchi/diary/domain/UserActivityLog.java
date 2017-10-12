@@ -22,6 +22,44 @@ public class UserActivityLog {
     private String user_hostname;
     private boolean active_session;
 
+    private String city;
+    private String postal;
+    private String state;
+    @Column(name="os_info")
+    private String osInfo;
+
+    public String getOsInfo() {
+        return osInfo;
+    }
+
+    public void setOsInfo(String osInfo) {
+        this.osInfo = osInfo;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPostal() {
+        return postal;
+    }
+
+    public void setPostal(String postal) {
+        this.postal = postal;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public boolean isActive_session() {
         return active_session;
     }
