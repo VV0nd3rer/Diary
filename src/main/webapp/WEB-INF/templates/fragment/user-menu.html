@@ -31,9 +31,6 @@
         <thead>
         <tr>
             <th width="80" th:text="#{user.statistic.session.ip}">IP</th>
-            <th width="80" th:text="#{user.statistic.session.city}">City</th>
-            <th width="120" th:text="#{user.statistic.session.postal}">Postal</th>
-            <th width="120" th:text="#{user.statistic.session.state}">State</th>
             <th width="120" th:text="#{user.statistic.session.os}">OS</th>
             <th width="120" th:text="#{user.statistic.session.active}">Is active?</th>
         </tr>
@@ -41,9 +38,6 @@
         <tbody>
         <tr th:each="userLog : ${userActivityLogList}">
             <td th:text="${userLog.login_ip}"></td>
-            <td th:text="${userLog.city}"></td>
-            <td th:text="${userLog.postal}"></td>
-            <td th:text="${userLog.state}"></td>
             <td th:text="${userLog.osInfo}"></td>
             <td th:text="${userLog.active_session}"></td>
         </tr>

@@ -50,34 +50,7 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
         String  browserDetails  =   request.getHeader("User-Agent");
         userActivityLog.setOsInfo(browserDetails);
         logger.debug("browserDetails: " + browserDetails);
-        if(ip.equals("0:0:0:0:0:0:0:1")) {
-            userActivityLog.setCity("home");
-            userActivityLog.setPostal("home");
-            userActivityLog.setState("localhost");
-        } else {
-            //Load ip info from GeoLite database
-            try {
-                ClassLoader classLoader = getClass().getClassLoader();
-                File file = new File(classLoader.getResource("GeoLite2-City.mmdb").getFile());
-                DatabaseReader databaseReader = new DatabaseReader.Builder(file).build();
-                InetAddress inetAddress = InetAddress.getByName(ip);
-                CityResponse cityResponse = databaseReader.city(inetAddress);
-                String cityName = cityResponse.getCity().getName();
-                String postal = cityResponse.getPostal().getCode();
-                String state = cityResponse.getCountry().getName();
-                logger.debug("-------------- User's IP detailed information -------------------");
-                logger.debug("City: " + cityName);
-                logger.debug("postal: " + postal);
-                logger.debug("state: " + state);
-                userActivityLog.setCity(cityName);
-                userActivityLog.setPostal(postal);
-                userActivityLog.setState(state);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (GeoIp2Exception e) {
-                e.printStackTrace();
-            }
-        }
+
         userActivityDao.persist(userActivityLog);
     }
 
