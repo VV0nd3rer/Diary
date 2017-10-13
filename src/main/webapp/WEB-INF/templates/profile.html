@@ -48,13 +48,7 @@
                                                 </textarea>
                                         </div>
                                     </div>
-                                    <!--<div class="form-group">
-                                        <div class="col-sm-10">
-                                                <input type="text" id="edit-email" placeholder="Email"
-                                                          class="form-control">
-                                                </input>
-                                        </div>
-                                    </div>-->
+
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-10">
                                             <div class="pull-right">
@@ -98,8 +92,8 @@
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
                 <div class="profile-userbuttons">
-                    <button type="button" class="btn btn-success btn-sm">Follow</button>
-                    <button type="button" class="btn btn-danger btn-sm">Message</button>
+                    <button type="button" class="btn btn-success btn-sm" th:text="#{user.profile.add.friend}">Become friends </button>
+                    <button type="button" class="btn btn-info btn-sm top-row-buffer" th:text="#{user.profile.message}">Say something</button>
                 </div>
                 <!-- END SIDEBAR BUTTONS -->
                 <!-- SIDEBAR MENU -->
@@ -107,18 +101,23 @@
                     <ul class="nav">
                         <li class="active">
                             <a href="#">
-                                <i class="glyphicon glyphicon-home"></i>
-                                Friends </a>
+                                <i class="glyphicon glyphicon-user">
+                                </i>
+                                <span th:text="#{user.profile.friends}">Friends</span>
+                            </a>
                         </li>
                         <li>
                             <a href="#">
-                                <i class="glyphicon glyphicon-user"></i>
-                                Messages </a>
+                                <i class="glyphicon glyphicon-envelope">
+                                </i>
+                                <span th:text="#{user.profile.messages}">Messages</span>
+                            </a>
                         </li>
                         <li>
                             <a href="#">
                                 <i class="glyphicon glyphicon-flag"></i>
-                                Help </a>
+                                Help
+                            </a>
                         </li>
                     </ul>
                 </div>

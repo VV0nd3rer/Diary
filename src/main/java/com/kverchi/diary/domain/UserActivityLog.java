@@ -22,8 +22,12 @@ public class UserActivityLog {
     private String user_hostname;
     private boolean active_session;
 
-    @Column(name="os_info")
+    @Column(name="os")
     private String osInfo;
+    @Column(name="browser")
+    private String browserInfo;
+    @Column(name="user_agent")
+    private String userAgentInfo;
 
     public String getOsInfo() {
         return osInfo;
@@ -31,6 +35,22 @@ public class UserActivityLog {
 
     public void setOsInfo(String osInfo) {
         this.osInfo = osInfo;
+    }
+
+    public String getBrowserInfo() {
+        return browserInfo;
+    }
+
+    public void setBrowserInfo(String browserInfo) {
+        this.browserInfo = browserInfo;
+    }
+
+    public String getUserAgentInfo() {
+        return userAgentInfo;
+    }
+
+    public void setUserAgentInfo(String userAgentInfo) {
+        this.userAgentInfo = userAgentInfo;
     }
 
     public boolean isActive_session() {

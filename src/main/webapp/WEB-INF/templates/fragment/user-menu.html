@@ -6,14 +6,9 @@
 </head>
 <body>
 <div id="user-info" th:fragment="userInfo">
-
-
-
-    <!--<div th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}" id="current-info"></div>
-    <div th:if="${#lists.isEmpty(user.information)}" id="current-info">No information found</div>-->
-    <div id="current-info" th:if="${!#lists.isEmpty(user.information)}" th:text="${user.information}">
+    <div id="current-info" th:text="${!#lists.isEmpty(user.information)} ? ${user.information} : #{user.info.empty}">
     </div>
-    <span th:if="${#lists.isEmpty(user.information)}" th:text="#{user.info.empty}">No information found</span>
+
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.
         id.click event doesn't work from dynamically loaded nav-bar page. -->
@@ -32,6 +27,7 @@
         <tr>
             <th width="80" th:text="#{user.statistic.session.ip}">IP</th>
             <th width="120" th:text="#{user.statistic.session.os}">OS</th>
+            <th width="120" th:text="#{user.statistic.session.browser}">OS</th>
             <th width="120" th:text="#{user.statistic.session.active}">Is active?</th>
         </tr>
         </thead>
@@ -39,6 +35,7 @@
         <tr th:each="userLog : ${userActivityLogList}">
             <td th:text="${userLog.login_ip}"></td>
             <td th:text="${userLog.osInfo}"></td>
+            <td th:text="${userLog.browserInfo}"></td>
             <td th:text="${userLog.active_session}"></td>
         </tr>
         </tbody>

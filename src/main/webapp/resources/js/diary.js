@@ -297,13 +297,9 @@ $(document).ready(function(){
 				type:"POST",
 				data: info,
 				contentType: "text/plain",
-				/*contentType:"application/json; charset=utf-8",*/
-				//dataType:"json",
-				success: function(obj){
-					console.log('obj: ' + obj);
+				success: function(res){
 					$("#current-info").text(info);
 					hideModalDialog();
-					console.log('updated user info. closing modal dialog...');
 				},
 				error : function(e) {
 					console.log("Error: ", e);

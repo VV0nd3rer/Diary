@@ -46,10 +46,11 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
         userActivityLog.setSession_id(session_id);
         userActivityLog.setLogin_ip(ip);
         userActivityLog.setActive_session(true);
+        userActivityLog.setUserAgentInfo(request.getHeader("User-Agent"));
+        String  userAgentInfo  =   request.getHeader("User-Agent").toLowerCase();
 
-        String  browserDetails  =   request.getHeader("User-Agent");
-        userActivityLog.setOsInfo(browserDetails);
-        logger.debug("browserDetails: " + browserDetails);
+        userActivityLog.setOsInfo(getOSInformation(userAgentInfo));
+        userActivityLog.setBrowserInfo(getBrowserInformation(userAgentInfo));
 
         userActivityDao.persist(userActivityLog);
     }
@@ -70,6 +71,67 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
         UserActivityLog userActivityLog = getUserActivity(sessionId);
         userActivityLog.setActive_session(false);
         userActivityDao.update(userActivityLog);
+    }
+    private String getOSInformation(String userAgentInfo) {
+
+        String os;
+        if (userAgentInfo.indexOf("win") >= 0 )
+        {
+            os = "Windows";
+        } else if(userAgentInfo.indexOf("mac") >= 0)
+        {
+            os = "Mac";
+        } else if(userAgentInfo.indexOf("nix") >= 0
+                || userAgentInfo.indexOf("nux") >= 0
+                || userAgentInfo.indexOf("aix") >= 0)
+        {
+            os = "Linux or Unix";
+        } else if(userAgentInfo.indexOf("sunos") >= 0)
+        {
+            os = "Solaris";
+        } else if(userAgentInfo.indexOf("android") >= 0)
+        {
+            os = "Android";
+        } else if(userAgentInfo.indexOf("iphone") >= 0)
+        {
+            os = "IPhone";
+        } else {
+            os = "Unknown, More-Info: " + userAgentInfo;
+        }
+        return os;
+    }
+    private String getBrowserInformation(String userAgetnInfo) {
+        userAgetnInfo = userAgetnInfo.toLowerCase();
+        String browser;
+        if (userAgetnInfo.contains("chrome"))
+        {
+            browser = "Chrome";
+        } else if (userAgetnInfo.contains("firefox"))
+        {
+            browser = "Firefox";
+        } else if ( userAgetnInfo.contains("opr") || userAgetnInfo.contains("opera"))
+        {
+            browser = "Opera";
+        } else if (userAgetnInfo.contains("msie") || userAgetnInfo.contains("rv"))
+        {
+            browser = "Internet Explorer";
+        }   else if (userAgetnInfo.contains("safari"))
+        {
+            browser = "Safari";
+        } else if ((userAgetnInfo.indexOf("mozilla/7.0") > -1)
+                || (userAgetnInfo.indexOf("netscape6") != -1)
+                || (userAgetnInfo.indexOf("mozilla/4.7") != -1)
+                || (userAgetnInfo.indexOf("mozilla/4.78") != -1)
+                || (userAgetnInfo.indexOf("mozilla/4.08") != -1)
+                || (userAgetnInfo.indexOf("mozilla/3") != -1) )
+        {
+            browser = "Netscape";
+
+        } else
+        {
+            browser = "Unknown";
+        }
+        return browser;
     }
 
 }

@@ -4,11 +4,8 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<!--<div class="navbar navbar-inverse" th:fragment="header">-->
 <div id="header" th:fragment="header">
     <div class="container-fluid">
-
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="#" th:href="@{/posts/list}" th:text="#{posts}">Where to go</a></li>
@@ -24,22 +21,28 @@
 						name="${_csrf.parameterName}"
 						value="${_csrf.token}"/>
 				</form>
-                <li sec:authorize="isAuthenticated()"><a href="#" onclick="document.getElementById('logout').submit();" th:text="#{logout}">Logout</a></li>
-                <!--<li sec:authorize="isAuthenticated()"><a href="#" th:text="#{greeting(${#authentication.name})}">Bob</a></li>-->
-                <li sec:authorize="isAuthenticated()"><a href="#">Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span></a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" onclick="document.getElementById('logout').submit();"
+                       th:text="#{logout}">Logout</a>
+                </li>
+                <li sec:authorize="isAuthenticated()"><a href="#">Roles:
+                    <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span></a>
+                </li>
             </ul>
         </div>      
     </div>
     <div class="navbar-bottom">
-        <div class="col-md-6 profile-link" th:text="#{greeting(${#authentication.name})}">
+        <!--<div class="col-md-6 profile-link" th:text="#{greeting(${#authentication.name})}">
             Bob
-        </div>
-        <!-- <span sec:authentication="principal.authorities"></span> -->
+        </div>-->
+        <a sec:authorize="isAuthenticated()" class="col-md-6 profile-link"
+           th:text="#{profile}" th:href="@{/users/profile}"}>Profile</a>
         <div class="pull-right">
-            <a href="?language=en_US">English</a>|<a href="?language=ru_RU">Russian</a>|<a href="?language=cs_CS">Czech</a>
+            <a href="?language=en_US">English</a>
+            |<a href="?language=ru_RU">Russian</a>
+            |<a href="?language=cs_CS">Czech</a>
         </div>
     </div>
-
 </div>
 </body>
 </html>
