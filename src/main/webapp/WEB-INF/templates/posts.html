@@ -90,7 +90,8 @@
                             </div>
 
                             <div class="col-md-3">
-                                <div th:include="fragment/search-panel :: filterSights"></div>
+                                <div th:if="${currentSight.sight_id == 0}"
+                                     th:include="fragment/search-panel :: filterSights"></div>
                             </div>
 
                             <div class="col-md-2 top-row-buffer">
