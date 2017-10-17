@@ -68,33 +68,33 @@
 
         <!-- Search panel -->
         <div class="row">
-            <div class="col-md-11">
+            <div class="col-md-13">
                 <div class="form-section">
                     <form role="form" name="searchForm" id="searchForm">
                         <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
                         <div class="row bottom-row-buffer">
 
-                            <div class="col-md-3">
+
                                 <div th:if="${currentSight.sight_id == 0}"
                                      th:include="fragment/search-panel :: searchCategory"
                                      th:with="catLabel=#{sight}"></div>
-                            </div>
-                            <div class="col-md-3">
+
+
                                 <div th:include="fragment/search-panel :: searchUser"
                                      th:with="authLabel=#{post.author}"></div>
-                            </div>
 
-                            <div class="col-md-3">
+
+
                                 <div th:include="fragment/search-panel :: searchInTextWithCheckBox"
                                      th:with="searchInText=#{search.in.text}, searchOnlyTitle=#{search.only.title}"></div>
-                            </div>
 
-                            <div class="col-md-3">
+
+
                                 <div th:if="${currentSight.sight_id == 0}"
                                      th:include="fragment/search-panel :: filterSights"></div>
-                            </div>
 
-                            <div class="col-md-2 top-row-buffer">
+
+                            <div class="col-md-1 top-row-buffer">
                                 <button type="submit" id="search-post-btn" class="btn btn-default btn-primary">
                                     <span class=" glyphicon glyphicon-search"></span>
                                 </button>
