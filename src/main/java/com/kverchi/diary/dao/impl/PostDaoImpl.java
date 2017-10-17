@@ -103,7 +103,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            String str_query = "FROM Post p WHERE p.countriesSight.sight_id = :sight_id";
+            String str_query = "FROM Post post WHERE post.countriesSight.sight_id = :sight_id";
             Query query = entityManager.createQuery(str_query);
             query.setParameter("sight_id", sight_id);
             sight_posts = query.getResultList();
@@ -125,260 +125,19 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         return sight_posts;
     }
 
-    /*@Override
-    public int getRowsNumber(Map<String, Object> hasAttributes, Map<String, String> containsAttributes) throws DatabaseException {
+    @Override
+    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
         EntityManager entityManager = null;
         int rowsNumber = 0;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            StringBuilder str_query = new StringBuilder("select count(*) from Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-
-                for (String key : hasAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }
-            }
-            if(containsAttributes != null && !containsAttributes.isEmpty()) {
-                for(String key : containsAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                            str_query.append(" end ");
-                    }
-                    str_query.append(key + " like :" + key);
-                }
-
-            }
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            if (containsAttributes != null && !containsAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
-                }
-            }
-            logger.debug("single result: " + query.getSingleResult());
-            rowsNumber = ((Long) query.getSingleResult()).intValue();
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return rowsNumber;
-    }
-
-    @Override
-    public List search(Map<String, Object> hasAttributes, Map<String, String> containsAttributes, Pagination pagination) {
-        EntityManager entityManager = null;
-        List<Post> limitedPosts = null;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            //order by post_datetime
-            StringBuilder str_query = new StringBuilder("FROM Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (String key : hasAttributes.keySet()) {
-                    if (str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    } else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }
-            }
-            if(containsAttributes != null && !containsAttributes.isEmpty()) {
-
-                for (String key : containsAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                            str_query.append(" end ");
-                    }
-                    str_query.append(key + " like :" + key);
-                }
-
-            }
-            str_query.append(" order by post_datetime desc");
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            if (containsAttributes != null && !containsAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : containsAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
-                }
-            }
-            query.setFirstResult(pagination.getOffset());
-            if(pagination.getPageSize() != 0) {
-                query.setMaxResults(pagination.getPageSize());
-            }
-            limitedPosts = query.getResultList();
-
-            for (Post post : limitedPosts) {
-                Hibernate.initialize(post.getPost_comments());
-                Hibernate.initialize(post.getCountriesSight());
-                Hibernate.initialize(post.getUser());
-            }
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return limitedPosts;
-    }*/
-
-    @Override
-    public int getRowsNumberWithExactAttributesOnly(Map<String, Object> hasAttributes) {
-        EntityManager entityManager = null;
-        int rowsNumber = 0;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            StringBuilder str_query = new StringBuilder("select count(*) from Post");
+            StringBuilder str_query = new StringBuilder("select count(*) from Post post");
             if (hasAttributes != null && !hasAttributes.isEmpty()) {
                 str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
-                /*for (String key : hasAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }*/
-            }
-
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-
-            logger.debug("single result: " + query.getSingleResult());
-            rowsNumber = ((Long) query.getSingleResult()).intValue();
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return rowsNumber;
-    }
-
-    @Override
-    public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
-        EntityManager entityManager = null;
-        int rowsNumber = 0;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            StringBuilder str_query = new StringBuilder("select count(*) from Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
-                /*for (String key : hasAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }*/
             }
             if(includingAttributes != null && !includingAttributes.isEmpty()) {
                 str_query = generateIncludingStringAttrQueryString(str_query, includingAttributes.keySet());
-                /*for(String key : includingAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + " like :" + key);
-                }*/
-            }
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            if (includingAttributes != null && !includingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : includingAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
-                }
-            }
-            logger.debug("single result: " + query.getSingleResult());
-            rowsNumber = ((Long) query.getSingleResult()).intValue();
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return rowsNumber;
-    }
-
-    @Override
-    public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
-        EntityManager entityManager = null;
-        int rowsNumber = 0;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            StringBuilder str_query = new StringBuilder("select count(*) from Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
-                /*for (String key : hasAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }*/
-            }
-            if(includingAttributes != null && !includingAttributes.isEmpty()) {
-                str_query = generateIncludingStringAttrQueryString(str_query, includingAttributes.keySet());
-                /*for(String key : includingAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + " like :" + key);
-                }*/
             }
             if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
                 str_query = generateChoosingStringAttrQueryString(str_query, choosingAttributes.keySet());
@@ -414,140 +173,28 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
-    public List searchExactAttributesOnly(Map<String, Object> hasAttributes, Pagination pagination) {
-        EntityManager entityManager = null;
-        List<Post> limitedPosts = null;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            //order by post_datetime
-            StringBuilder str_query = new StringBuilder("FROM Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
-                /*for (String key : hasAttributes.keySet()) {
-                    if (str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    } else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }*/
-            }
-
-            str_query.append(" order by post_datetime desc");
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-
-            query.setFirstResult(pagination.getOffset());
-            if(pagination.getPageSize() != 0) {
-                query.setMaxResults(pagination.getPageSize());
-            }
-            limitedPosts = query.getResultList();
-
-            for (Post post : limitedPosts) {
-                Hibernate.initialize(post.getPost_comments());
-                Hibernate.initialize(post.getCountriesSight());
-                Hibernate.initialize(post.getUser());
-            }
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return limitedPosts;
+    public int getRowsNumberWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter) {
+        return 0;
     }
 
     @Override
-    public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
+    public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
             //order by post_datetime
-            StringBuilder str_query = new StringBuilder("FROM Post");
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
-                /*for (String key : hasAttributes.keySet()) {
-                    if (str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    } else {
-                        str_query.append(" and ");
-                    }
-                    str_query.append(key + "= :" + key);
-                }*/
-            }
-            if(includingAttributes != null && !includingAttributes.isEmpty()) {
-                str_query = generateIncludingStringAttrQueryString(str_query, includingAttributes.keySet());
-                /*for (String key : includingAttributes.keySet()) {
-                    if(str_query.indexOf(" where") == -1) {
-                        str_query.append(" where ");
-                    }
-                    else {
-                        str_query.append(" end ");
-                    }
-                    str_query.append(key + " like :" + key);
-                }*/
-            }
-            str_query.append(" order by post_datetime desc");
-            Query query = entityManager.createQuery(str_query.toString());
-            if (hasAttributes != null && !hasAttributes.isEmpty()) {
-                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            if (includingAttributes != null && !includingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : includingAttributes.entrySet()) {
-                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
-                }
-            }
-            query.setFirstResult(pagination.getOffset());
-            if(pagination.getPageSize() != 0) {
-                query.setMaxResults(pagination.getPageSize());
-            }
-            limitedPosts = query.getResultList();
-
-            for (Post post : limitedPosts) {
-                Hibernate.initialize(post.getPost_comments());
-                Hibernate.initialize(post.getCountriesSight());
-                Hibernate.initialize(post.getUser());
-            }
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
-            throw new DatabaseException(e);
-        } finally {
-            if (entityManager != null && entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
-        return limitedPosts;
-    }
-
-    @Override
-    public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
-        EntityManager entityManager = null;
-        List<Post> limitedPosts = null;
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            //order by post_datetime
-            StringBuilder str_query = new StringBuilder("FROM Post");
+            StringBuilder str_query = new StringBuilder("FROM Post post");
             if (hasAttributes != null && !hasAttributes.isEmpty()) {
                 str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
             }
             if(includingAttributes != null && !includingAttributes.isEmpty()) {
                 str_query = generateIncludingStringAttrQueryString(str_query, includingAttributes.keySet());
             }
-            str_query = generateChoosingStringAttrQueryString(str_query, choosingAttributes.keySet());
+            if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                str_query = generateChoosingStringAttrQueryString(str_query, choosingAttributes.keySet());
+            }
             str_query.append(" order by post_datetime desc");
             Query query = entityManager.createQuery(str_query.toString());
             if (hasAttributes != null && !hasAttributes.isEmpty()) {
@@ -588,6 +235,71 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
         return limitedPosts;
     }
 
+    @Override
+    public List searchWithAttributesAndFilter(Map<String, Object> hasAttributes,
+                                              Map<String, String> includingAttributes,
+                                              Map<String, String> choosingAttributes, String filter,
+                                              Pagination pagination) {
+        EntityManager entityManager = null;
+        List<Post> limitedPosts = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            StringBuilder str_query = new StringBuilder("select post" +
+                    " from Post post" +
+                    " left join " + filter + " counter " +
+                    " on post.countriesSight.sight_id = counter.countriesSight.sight_id");
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                str_query = generateExactAttrQueryString(str_query, hasAttributes.keySet());
+            }
+            if(includingAttributes != null && !includingAttributes.isEmpty()) {
+                str_query = generateIncludingStringAttrQueryString(str_query, includingAttributes.keySet());
+            }
+            if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                str_query = generateChoosingStringAttrQueryString(str_query, choosingAttributes.keySet());
+            }
+            str_query.append(" group by post.post_id" +
+                    " order by count(counter.countriesSight.sight_id) desc," +
+                    " post.countriesSight.sight_id");
+            Query query = entityManager.createQuery(str_query.toString());
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                for (Map.Entry<String, Object> entry : hasAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), entry.getValue());
+                }
+            }
+            if (includingAttributes != null && !includingAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : includingAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
+                }
+            }
+            if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                    query.setParameter(entry.getKey(), "%" + entry.getValue().toString() + "%");
+                }
+            }
+            query.setFirstResult(pagination.getOffset());
+            if(pagination.getPageSize() != 0) {
+                query.setMaxResults(pagination.getPageSize());
+            }
+            limitedPosts = query.getResultList();
+
+            for (Post post : limitedPosts) {
+                Hibernate.initialize(post.getPost_comments());
+                Hibernate.initialize(post.getCountriesSight());
+                Hibernate.initialize(post.getUser());
+            }
+            entityManager.getTransaction().commit();
+        }catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return limitedPosts;
+    }
+
     private StringBuilder generateExactAttrQueryString(StringBuilder str_query, Set<String> exactSet) {
         for (String key : exactSet) {
             if (str_query.indexOf(" where") == -1) {
@@ -595,7 +307,14 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
             } else {
                 str_query.append(" and ");
             }
-            str_query.append(key + "= :" + key);
+            String column = key;
+            if(key.equals("user_id")) {
+                column = "post.user.userId";
+            } else
+            if(key.equals("sight_id")) {
+                column = "post.countriesSight."+key;
+            }
+            str_query.append(column + "= :" + key);
         }
         return str_query;
     }

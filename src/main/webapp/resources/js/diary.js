@@ -9,6 +9,7 @@ $(document).ready(function(){
 	});*/
 
 	var searchCriteria = checkSightSeachCriteria();
+	var filterType = null;
 	var currentPage;
 
 
@@ -47,6 +48,7 @@ $(document).ready(function(){
 				var searchAttributes = {};
 				searchAttributes['searchCriteria'] = searchCriteria;
 				searchAttributes['currentPage'] = page;
+				searchAttributes['filterType'] = filterType;
 
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
@@ -117,6 +119,7 @@ $(document).ready(function(){
 		console.log("catSuggestHidden: " + catSuggestHidden.val());
 		var searchText = $('#searchInTextInput');
 		var searchInTitleOnlyCheckBox = $('#searchCondition');
+		var filterSightsDropBox = $('#filterSights');
 		searchCriteria = {};
 
 		if(catCorrectInput != null) {
@@ -128,6 +131,11 @@ $(document).ready(function(){
 		if(searchText.val() != '') {
 			searchInTitleOnlyCheckBox.is(":checked") ? searchCriteria["IN_TITLE_ONLY"] = searchText.val() :
 				searchCriteria["BY_TEXT"] = searchText.val();
+		}
+		if(filterSightsDropBox.val() > 0) {
+			console.log('filterSightsDropBox.val() ' + filterSightsDropBox.val());
+			filterSightsDropBox.val() == 1 ? filterType = "BY_WISHES" : filterType = "BY_VISITS";
+			console.log("filterType: " + filterType);
 		}
 		console.log("searchCriteria" + JSON.stringify(searchCriteria));
 		paginationElement.trigger('page');

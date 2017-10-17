@@ -17,7 +17,7 @@ public class SightWishCounter {
     private int wish_id;
 
     @Basic(optional = false)
-    @Column(name="visit_datetime", insertable = false, updatable = false)
+    @Column(name="wish_datetime", insertable = false, updatable = false)
     private ZonedDateTime wish_datetime;
 
     @OneToOne(fetch = FetchType.LAZY)

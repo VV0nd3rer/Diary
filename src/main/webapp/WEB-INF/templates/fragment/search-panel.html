@@ -72,6 +72,14 @@
                 </div>
             </div>
         </div>
+        <div th:fragment="filterSights">
+            <label>Filter by</label>
+            <select class="form-control" id="filterSights">
+                <option value="-1" selected>No selected</option>
+                <option value="1">Most desired</option>
+                <option value="2">Most visited</option>
+            </select>
+        </div>
 
 </body>
 </html>

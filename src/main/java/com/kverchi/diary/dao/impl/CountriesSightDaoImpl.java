@@ -80,33 +80,43 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 
-	@Override
-	public int getRowsNumberWithExactAttributesOnly(Map<String, Object> hasAttributes) {
+	/*@Override
+	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes) {
 		return 0;
 	}
 
 	@Override
-	public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
+	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
+		return 0;
+	}*/
+
+	@Override
+	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
 		return 0;
 	}
 
 	@Override
-	public int getRowsNumberWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
+	public int getRowsNumberWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter) {
 		return 0;
 	}
 
-	@Override
-	public List searchExactAttributesOnly(Map<String, Object> hasAttributes, Pagination pagination) {
+	/*@Override
+	public List searchWithAttributes(Map<String, Object> hasAttributes, Pagination pagination) {
 		return null;
 	}
 
 	@Override
-	public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
+	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
+		return null;
+	}*/
+
+	@Override
+	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
 		return null;
 	}
 
 	@Override
-	public List searchWithStringAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
+	public List searchWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter, Pagination pagination) {
 		return null;
 	}
 }

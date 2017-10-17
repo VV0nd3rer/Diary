@@ -13,7 +13,12 @@ public class PostSearchAttributes extends SearchAttributes {
         BY_TEXT,
         IN_TITLE_ONLY
     };
+    public enum PostFilterType {
+        BY_WISHES,
+        BY_VISITS
+    };
     private Map<PostSearchType, Object> searchCriteria = new HashMap<>();
+    private PostFilterType filterType;
 
     private int user_id;
     private int sight_id;
@@ -21,6 +26,14 @@ public class PostSearchAttributes extends SearchAttributes {
 
     public Map<PostSearchType, Object> getSearchCriteria() {
         return searchCriteria;
+    }
+
+    public PostFilterType getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(PostFilterType filterType) {
+        this.filterType = filterType;
     }
 
     public void setSearchCriteria(Map<PostSearchType, Object> searchCriteria) {

@@ -11,7 +11,6 @@ import com.kverchi.diary.domain.Pagination;
 import com.kverchi.diary.service.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kverchi.diary.dao.BookDao;
 import com.kverchi.diary.service.BookService;
@@ -89,25 +88,25 @@ public class BookServiceImpl implements BookService {
 			}
 		}
 		int totalRows;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			totalRows = bookDao.getRowsNumberWithExactAttributesOnly(hasAttributes);
+		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes);
 		} else if(choosingAttributes.isEmpty()){
-			totalRows = bookDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes);
-		} else {
-			totalRows = bookDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes);
-		}
+			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes);
+		} else {*/
+			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
+		//}
 		pagination.setTotalRows(totalRows);
 		pagination = paginationService.calculatePagination(pagination);
 		BookSearchResults searchResults = new BookSearchResults();
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			results = bookDao.searchExactAttributesOnly(hasAttributes, pagination);
+		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+			results = bookDao.searchWithAttributes(hasAttributes, pagination);
 		} else if(choosingAttributes.isEmpty()) {
-			results = bookDao.searchWithStringAttributes(hasAttributes, includingAttributes, pagination);
-		} else {
-			results = bookDao.searchWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
-		}
+			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, pagination);
+		} else {*/
+			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
+		//}
 		searchResults.setResults(results);
 		return searchResults;
 	}

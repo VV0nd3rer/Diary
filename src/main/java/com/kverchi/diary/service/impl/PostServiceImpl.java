@@ -1,6 +1,5 @@
 package com.kverchi.diary.service.impl;
 
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kverchi.diary.enums.ServiceMessageResponse;
-import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.PostDao;
-import com.kverchi.diary.dao.UserDao;
-import com.kverchi.diary.dao.impl.PostDaoImpl;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.PostService;
 import com.kverchi.diary.service.UserService;
@@ -139,6 +133,7 @@ public class PostServiceImpl implements PostService {
 		pagination.setCurrentPage(searchAttributes.getCurrentPage());
 
 		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
+
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
 		Map<String, String> choosingAttributes = new HashMap<>();
@@ -164,27 +159,38 @@ public class PostServiceImpl implements PostService {
 		}
 
 		int totalRows;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			totalRows = postDao.getRowsNumberWithExactAttributesOnly(hasAttributes);
+		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes);
 		}
 		else if(choosingAttributes.isEmpty()) {
-			totalRows = postDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes);
-		} else {
-			totalRows = postDao.getRowsNumberWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes);
-		}
+			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes);
+		} else {*/
+			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
+		//}
 
 		pagination.setTotalRows(totalRows);
 		pagination = paginationService.calculatePagination(pagination);
 
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			results = postDao.searchExactAttributesOnly(hasAttributes, pagination);
-		} else if(choosingAttributes.isEmpty()) {
-			results = postDao.searchWithStringAttributes(hasAttributes, includingAttributes, pagination);
+		PostSearchAttributes.PostFilterType filterType = searchAttributes.getFilterType();
+		logger.debug("filter type: " + filterType);
+		if(filterType != null) {
+			String filter = null;
+			switch (filterType) {
+				case BY_WISHES:
+					filter = "SightWishCounter";
+					break;
+				case BY_VISITS:
+					filter = "SightVisitCounter";
+					break;
+			}
+			results = postDao.searchWithAttributesAndFilter(hasAttributes, includingAttributes,
+					choosingAttributes, filter, pagination);
 		} else {
-			results = postDao.searchWithStringAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
+			results = postDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
 		}
+
 		searchResults.setResults(results);
 		return searchResults;
 	}
