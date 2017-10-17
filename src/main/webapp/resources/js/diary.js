@@ -104,6 +104,9 @@ $(document).ready(function(){
 		catCorrectInput = null;
 		if(checkDataListInput(input)) {
 			catCorrectInput = input;
+			$("#filterSights").prop("disabled", true);
+		} else {
+			$("#filterSights").prop("disabled", false);
 		}
 	});
 
