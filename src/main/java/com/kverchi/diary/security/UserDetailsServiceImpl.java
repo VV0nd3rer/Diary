@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private UserActivityLog generateActivityLog(int user_id) {
 		UserActivityLog userActivityLog = new UserActivityLog();
-		userActivityLog.setUser_id(user_id);
+		userActivityLog.setUserId(user_id);
 		String ip = getUserRequestInfo();
 		String user_hostname = httpServletRequest.getRemoteHost();
 		String rem_user = httpServletRequest.getRemoteUser();
@@ -56,8 +56,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		logger.debug("user_hostname: " + user_hostname);
 		logger.debug("rem_user: " + rem_user);
 		logger.debug("user_local_hostname: " + user_local_hostname);
-		userActivityLog.setLogin_ip(ip);
-		userActivityLog.setUser_hostname(user_hostname);
+		userActivityLog.setLoginIp(ip);
+		userActivityLog.setHostname(user_hostname);
 		return userActivityLog;
 	}
 

@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,11 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.type.descriptor.java.ZonedDateTimeJavaDescriptor;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="posts")
@@ -32,8 +27,9 @@ public class Post {
 	@Id
 	@Column(name="post_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int post_id;
-	private ZonedDateTime post_datetime;
+	private int postId;
+	@Column(name="post_datetime")
+	private ZonedDateTime postDatetime;
 	@Column(name="title")
 	private String title;
 	@Column(name="description")
@@ -46,36 +42,36 @@ public class Post {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
-	@OneToMany(mappedBy="post_id", fetch=FetchType.LAZY, orphanRemoval=true)
-	//@JoinColumn(name="post_id")
-	private Set<Comment> post_comments;
+	@OneToMany(fetch=FetchType.LAZY, orphanRemoval=true)
+	@JoinColumn(name="post_id")
+	private Set<Comment> postComments;
 
 	public Post() {};
-	public Post(int post_id, String title, String text) {
-		this.post_id = post_id;
+	public Post(int postId, String title, String text) {
+		this.postId = postId;
 		this.title = title;
 		this.text = text;
 	}
 
-	public int getPost_id() {
-		return post_id;
+	public int getPostId() {
+		return postId;
 	}
-	public void setPost_id(int post_id) {
-		this.post_id = post_id;
+	public void setPostId(int postId) {
+		this.postId = postId;
 	}
-	public ZonedDateTime getPost_datetime() {
+	public ZonedDateTime getPostDatetime() {
 		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-		String text = post_datetime.format(formatter);
-		post_datetime = ZonedDateTime.parse(text, formatter);
-		return post_datetime;
+		String text = postDatetime.format(formatter);
+		postDatetime = ZonedDateTime.parse(text, formatter);
+		return postDatetime;
 	}
-	public void setPost_datetime(ZonedDateTime post_datetime) {
-		this.post_datetime = post_datetime;
+	public void setPostDatetime(ZonedDateTime postDatetime) {
+		this.postDatetime = postDatetime;
 	}
 	@PrePersist
 	@PreUpdate
-	public void setPost_datetime() {
-		this.post_datetime = ZonedDateTime.now();
+	public void setPostDatetime() {
+		this.postDatetime = ZonedDateTime.now();
 	}
 	public String getTitle() {
 		return title;
@@ -102,11 +98,11 @@ public class Post {
 	public void setCountriesSight(CountriesSight countriesSight) {
 		this.countriesSight = countriesSight;
 	}
-	public Set<Comment> getPost_comments() {
-		return post_comments;
+	public Set<Comment> getPostComments() {
+		return postComments;
 	}
-	public void setPost_comments(Set<Comment> post_comments) {
-		this.post_comments = post_comments;
+	public void setPostComments(Set<Comment> postComments) {
+		this.postComments = postComments;
 	}
 	
 	public User getUser() {
@@ -117,7 +113,7 @@ public class Post {
 	}
 	@Override
 	public String toString(){
-		return "id="+post_id+", title="+title+", text="+text;
+		return "id="+ postId +", title="+title+", text="+text;
 	}
 	
 }

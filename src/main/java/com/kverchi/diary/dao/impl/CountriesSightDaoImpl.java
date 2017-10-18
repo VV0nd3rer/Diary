@@ -80,7 +80,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 
-	/*@Override
+	@Override
 	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes) {
 		return 0;
 	}
@@ -88,7 +88,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	@Override
 	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
 		return 0;
-	}*/
+	}
 
 	@Override
 	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
@@ -96,11 +96,6 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 	@Override
-	public int getRowsNumberWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter) {
-		return 0;
-	}
-
-	/*@Override
 	public List searchWithAttributes(Map<String, Object> hasAttributes, Pagination pagination) {
 		return null;
 	}
@@ -108,7 +103,7 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	@Override
 	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
 		return null;
-	}*/
+	}
 
 	@Override
 	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {

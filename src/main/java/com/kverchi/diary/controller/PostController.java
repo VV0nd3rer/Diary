@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import com.kverchi.diary.domain.*;
 import com.kverchi.diary.enums.Counter;
 import com.kverchi.diary.service.*;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -114,7 +113,7 @@ public class PostController {
 		ModelAndView mv = new ModelAndView(SINGLE_POST);
 
 		Post post = postService.getPostById(post_id);
-		Set<Comment> comments = post.getPost_comments();
+		Set<Comment> comments = post.getPostComments();
 		//CountriesSight sight =  countriesSightService.getSightById(post.getSight_id()); //post.getSight();
 		//Add sight ID to the session
 		mv.addObject("post", post);
@@ -193,8 +192,8 @@ public class PostController {
 		}*/
 		//post.setSight_id(currentSight.getSight_id());
 		//New post
-		if(post.getPost_id() == 0) {
-			if(currentSight.getSight_id() == 0) {
+		if(post.getPostId() == 0) {
+			if(currentSight.getSightId() == 0) {
 				return response;
 			}
 			post.setCountriesSight(currentSight);
@@ -212,7 +211,7 @@ public class PostController {
 		/*if(currentUser == null) {
 			return new ModelAndView(LOGIN);
 		}*/
-		if(currentSight.getSight_label() == null) {
+		if(currentSight.getLabel() == null) {
 			logger.debug("Session sight's label is NULL");
 			return new ModelAndView(REDIRECT_TO_POSTS);
 		}
@@ -235,10 +234,10 @@ public class PostController {
 	public ModelAndView addVisitCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		ModelAndView mv = new ModelAndView("fragment/counter-buttons::visitLabel");
 		User currentUser = userService.getUserFromSession();
-		if(currentSight.getSight_id() == 0 || currentUser == null) {
+		if(currentSight.getSightId() == 0 || currentUser == null) {
 			return new ModelAndView("fragment/counter-buttons::addVisitButton");
 		}
-		int sight_id = currentSight.getSight_id();
+		int sight_id = currentSight.getSightId();
 		int user_id = currentUser.getUserId();
 		counterService.addCounterValue(sight_id, user_id, Counter.VISITS);
 		int visitCounter = counterService.getCounterValue(sight_id, Counter.VISITS);
@@ -249,10 +248,10 @@ public class PostController {
 	public ModelAndView addWishCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
 		ModelAndView mv = new ModelAndView("fragment/counter-buttons::wishLabel");
 		User currentUser = userService.getUserFromSession();
-		if(currentSight.getSight_id() == 0 || currentUser == null) {
+		if(currentSight.getSightId() == 0 || currentUser == null) {
 			return new ModelAndView("fragment/counter-buttons::addWishButton");
 		}
-		int sight_id = currentSight.getSight_id();
+		int sight_id = currentSight.getSightId();
 		int user_id = currentUser.getUserId();
 		counterService.addCounterValue(sight_id, user_id, Counter.WISHES);
 		int wishCounter = counterService.getCounterValue(sight_id, Counter.WISHES);

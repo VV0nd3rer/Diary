@@ -65,6 +65,8 @@ $(document).ready(function(){
 						console.log("pgn clicked after success " + page);
 						$("#"+paginationChangingBlock).replaceWith(data);
 						if(paginationChangingBlock === 'books-block') {
+							$("#update-book-btn").prop("disabled", true);
+							$("#delete-book-btn").prop("disabled", true);
 							initializeCRUDTableClickListener();
 						}
 						currentPage = page;
@@ -192,7 +194,7 @@ $(document).ready(function(){
 		var data = {}
 		var sight = {}
 		//data["sight_id"] = sight_id.val();
-		data["post_id"] = id.val();
+		data["postId"] = id.val();
 		data["title"] = title.val();
 		data["description"] = description;//description.val();
 		data["text"] = postText;
@@ -247,7 +249,7 @@ $(document).ready(function(){
 		var text = $("#text");
 		var comment = new Object();
 		comment.text = text.val();
-		comment.post_id = post_id.val();
+		comment.postId = post_id.val();
 	
 		tips = $( ".validateTips" );
 	    var valid = false;
@@ -336,8 +338,8 @@ $(document).ready(function(){
     	$.get(upd_book_url, function(data) {
     		//event.preventDefault();
     		$("#id").val(id);
-    		$("#title").val(data.book_title);
-    		$("#description").val(data.book_description);
+    		$("#title").val(data.title);
+    		$("#description").val(data.description);
     		$("#author").val(data.author);
         	$("#modal-form").modal();
     	});
@@ -403,17 +405,19 @@ $(document).ready(function(){
     	var author = $("#author");
     	
     	var data = {}
-    	data["book_id"] = id.val();
-    	data["book_title"] = title.val();
-        data["book_description"] = description.val();
+    	data["bookId"] = id.val();
+    	data["title"] = title.val();
+        data["description"] = description.val();
         data["author"] = author.val();
         
         tips = $( ".validateTips" );
         var valid = true;
+		console.log("is valid for add book dialog? " + valid);
         valid = valid && checkMinMaxLength( title, "title", 3, 255 );
         //valid = valid && checkMinMaxLength( description, "description", 3, 80 );
         valid = valid && checkMinMaxLength( author, "author", 2, 100 );
-        
+
+		console.log("data " + JSON.stringify(data));
         var token = $("meta[name='_csrf']").attr("content");
  	    var header = $("meta[name='_csrf_header']").attr("content");
         $(document).ajaxSend(function(e, xhr, options) {
@@ -421,6 +425,7 @@ $(document).ready(function(){
 	    });
         
         var save_book_url = root+"/books/add-book";
+
         if(valid) {
         	$.ajax({
 	     	   url: save_book_url,
@@ -517,6 +522,7 @@ function checkMinMaxLength(o, n, min, max ) {
       remErrMsg();
       return true;
     }*/
+	return true;
   }
 function checkTextEditorMinLength(content, field, field_title, min) {
 	if (content.length < min) {
@@ -527,6 +533,7 @@ function checkTextEditorMinLength(content, field, field_title, min) {
 		remErrMsg();
 		return true;
 	}*/
+	return true;
 }
 function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 	if (content.length > max || content.length < min) {
@@ -538,6 +545,7 @@ function checkTextEditorMinMaxLength(content, field, field_title, min, max ) {
 	      remErrMsg();
 	      return true;
 	    }*/
+	return true;
 }
 function checkTextAreaMinMaxLen(object, name, min, max) {
 	var val = $.trim(object.val());

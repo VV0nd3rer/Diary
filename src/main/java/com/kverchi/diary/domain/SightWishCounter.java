@@ -14,11 +14,11 @@ public class SightWishCounter {
     @Id
     @Column(name="wish_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int wish_id;
+    private int wishId;
 
     @Basic(optional = false)
     @Column(name="wish_datetime", insertable = false, updatable = false)
-    private ZonedDateTime wish_datetime;
+    private ZonedDateTime wishDatetime;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -33,23 +33,23 @@ public class SightWishCounter {
         this.countriesSight = new CountriesSight(sight_id);
         this.user = new User(user_id);
     }
-    public int getWish_id() {
-        return wish_id;
+    public int getWishId() {
+        return wishId;
     }
 
-    public void setWish_id(int wish_id) {
-        this.wish_id = wish_id;
+    public void setWishId(int wishId) {
+        this.wishId = wishId;
     }
 
-    public ZonedDateTime getWish_datetime() {
-        return wish_datetime;
+    public ZonedDateTime getWishDatetime() {
+        return wishDatetime;
     }
 
-    public void setWish_datetime(ZonedDateTime wish_datetime) {
+    public void setWishDatetime(ZonedDateTime wishDatetime) {
         DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-        String text = wish_datetime.format(formatter);
-        wish_datetime = ZonedDateTime.parse(text, formatter);
-        this.wish_datetime = wish_datetime;
+        String text = wishDatetime.format(formatter);
+        wishDatetime = ZonedDateTime.parse(text, formatter);
+        this.wishDatetime = wishDatetime;
     }
 
     public User getUser() {

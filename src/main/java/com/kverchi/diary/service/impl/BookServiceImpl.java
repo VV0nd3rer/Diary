@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
 	
 	public Book updateBook(Book book) {
 		bookDao.update(book);
-		Book updatedBook = bookDao.getById(book.getBook_id());
+		Book updatedBook = bookDao.getById(book.getBookId());
 		return updatedBook;
 	}
 
@@ -75,38 +75,38 @@ public class BookServiceImpl implements BookService {
 			for (Map.Entry<BookSearchAttributes.BookSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
 					case BY_AUTHOR_ID:
-						hasAttributes.put("auth_id", entry.getValue());
+						hasAttributes.put("authId", entry.getValue());
 						break;
 					case BY_TEXT:
-						choosingAttributes.put("book_description", entry.getValue().toString());
-						choosingAttributes.put("book_title", entry.getValue().toString());
+						choosingAttributes.put("description", entry.getValue().toString());
+						choosingAttributes.put("title", entry.getValue().toString());
 						break;
 					case IN_TITLE_ONLY:
-						includingAttributes.put("book_title", entry.getValue().toString());
+						includingAttributes.put("title", entry.getValue().toString());
 						break;
 				}
 			}
 		}
 		int totalRows;
-		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
 			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes);
 		} else if(choosingAttributes.isEmpty()){
 			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes);
-		} else {*/
+		} else {
 			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
-		//}
+		}
 		pagination.setTotalRows(totalRows);
 		pagination = paginationService.calculatePagination(pagination);
 		BookSearchResults searchResults = new BookSearchResults();
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
+		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
 			results = bookDao.searchWithAttributes(hasAttributes, pagination);
 		} else if(choosingAttributes.isEmpty()) {
 			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, pagination);
-		} else {*/
+		} else {
 			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
-		//}
+		}
 		searchResults.setResults(results);
 		return searchResults;
 	}

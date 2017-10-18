@@ -39,7 +39,7 @@ public class SightVisitCounterDaoImpl extends GenericDaoImpl<SightVisitCounter> 
             CriteriaQuery<Long> criteriaQueryCount = criteriaBuilder.createQuery(Long.class);
             Root<SightVisitCounter> visitCounterRoot = criteriaQueryCount.from(SightVisitCounter.class);
             criteriaQueryCount.select(criteriaBuilder.count(visitCounterRoot));
-            criteriaQueryCount.where(criteriaBuilder.equal(visitCounterRoot.get("countriesSight").get("sight_id"), counter_obj_id));
+            criteriaQueryCount.where(criteriaBuilder.equal(visitCounterRoot.get("countriesSight").get("sightId"), counter_obj_id));
             Query query = entityManager.createQuery(criteriaQueryCount);
             result = toIntExact((Long)query.getSingleResult());
 
@@ -68,7 +68,7 @@ public class SightVisitCounterDaoImpl extends GenericDaoImpl<SightVisitCounter> 
             Root<SightVisitCounter> visitCounterRoot = criteriaQueryCount.from(SightVisitCounter.class);
             criteriaQueryCount.select(criteriaBuilder.count(visitCounterRoot));
             Predicate andPredicate = criteriaBuilder.and(
-                    criteriaBuilder.equal(visitCounterRoot.get("countriesSight").get("sight_id"), counter_obj_id),
+                    criteriaBuilder.equal(visitCounterRoot.get("countriesSight").get("sightId"), counter_obj_id),
                     criteriaBuilder.equal(visitCounterRoot.get("user").get("userId"), user_id));
             criteriaQueryCount.where(andPredicate);
             Query query = entityManager.createQuery(criteriaQueryCount);

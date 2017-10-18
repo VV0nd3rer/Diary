@@ -33,10 +33,10 @@
         </thead>
         <tbody>
         <tr th:each="userLog : ${userActivityLogList}">
-            <td th:text="${userLog.login_ip}"></td>
+            <td th:text="${userLog.loginIp}"></td>
             <td th:text="${userLog.osInfo}"></td>
             <td th:text="${userLog.browserInfo}"></td>
-            <td th:text="${userLog.active_session}"></td>
+            <td th:text="${userLog.activeSession}"></td>
         </tr>
         </tbody>
     </table>

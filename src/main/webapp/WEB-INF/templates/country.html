@@ -16,7 +16,7 @@
 	<!-- <script src="../../../resources/carousel/jquery.cloud9carousel.js" th:src="@{/resources/carousel/jquery.cloud9carousel.js}"></script> -->
     <!-- <script src="../../../resources/carousel/jquery.reflection.js" th:src="@{/resources/carousel/jquery.reflection.js}"></script> -->
 	<script src="../../../resources/js/carousel.js" th:src="@{/resources/js/carousel.js}"></script>
-    <title th:text="${country.country_name}"></title>
+    <title th:text="${country.name}"></title>
   </head>
   
   <body>
@@ -28,10 +28,10 @@
     	<p> hello </p>
 	    <div id="gallery">
 	     <div th:each="sight: ${country_sights}">
-	        <h3 th:text="${sight.sight_label}"></h3>
+	        <h3 th:text="${sight.label}"></h3>
 	     	<img class="cloud9-item" src="#" th:src="@{/resources/countryImg/countries_sights/fairy-tail-prague.jpg}" alt="Prague">
-	     	<p th:text="${sight.country_code}"></p>
-			<p th:if="${not #lists.isEmpty(sight.sight_description)}" th:text="${sight.sight_description}"></p>
+	     	<p th:text="${sight.countryCode}"></p>
+			<p th:if="${not #lists.isEmpty(sight.description)}" th:text="${sight.description}"></p>
 			<p class="row_action"><a href="#" th:text="Open"></a></p>
 	     </div>
 	    </div>

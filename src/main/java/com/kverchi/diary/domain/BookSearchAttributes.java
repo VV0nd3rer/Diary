@@ -13,7 +13,7 @@ public class BookSearchAttributes extends SearchAttributes {
         IN_TITLE_ONLY
     };
     private Map<BookSearchType, Object> searchCriteria = new HashMap<>();
-    private int author_id;
+    private int authorId;
     private String text;
 
     public Map<BookSearchType, Object> getSearchCriteria() {
@@ -24,12 +24,12 @@ public class BookSearchAttributes extends SearchAttributes {
         this.searchCriteria = searchCriteria;
     }
 
-    public int getAuthor_id() {
-        return author_id;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
     public String getText() {

@@ -9,34 +9,34 @@ public class Book {
 	@Column(name="book_id")
 	@SequenceGenerator(name="id_generator", sequenceName="books_book_id_seq", allocationSize=1)
 	@GeneratedValue(generator="id_generator", strategy=GenerationType.SEQUENCE)
-	private int book_id;
+	private int bookId;
 	@Column(name="book_title")
-	private String book_title;
+	private String title;
 	@Column(name="book_description")
-	private String book_description;
+	private String description;
 	@Column(name="author")
 	private String author;
 	/*@ManyToOne
 	@JoinColumn(name="auth_id")
 	private Author author;*/
 
-	public int getBook_id() {
-		return book_id;
+	public int getBookId() {
+		return bookId;
 	}
-	public void setBook_id(int book_id) {
-		this.book_id = book_id;
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
 	}
-	public String getBook_title() {
-		return book_title;
+	public String getTitle() {
+		return title;
 	}
-	public void setBook_title(String book_title) {
-		this.book_title = book_title;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-	public String getBook_description() {
-		return book_description;
+	public String getDescription() {
+		return description;
 	}
-	public void setBook_description(String book_description) {
-		this.book_description = book_description;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getAuthor() {

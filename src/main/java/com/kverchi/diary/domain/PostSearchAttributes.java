@@ -20,8 +20,8 @@ public class PostSearchAttributes extends SearchAttributes {
     private Map<PostSearchType, Object> searchCriteria = new HashMap<>();
     private PostFilterType filterType;
 
-    private int user_id;
-    private int sight_id;
+    private int userId;
+    private int sightId;
     private String text;
 
     public Map<PostSearchType, Object> getSearchCriteria() {
@@ -40,20 +40,20 @@ public class PostSearchAttributes extends SearchAttributes {
         this.searchCriteria = searchCriteria;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getSight_id() {
-        return sight_id;
+    public int getSightId() {
+        return sightId;
     }
 
-    public void setSight_id(int sight_id) {
-        this.sight_id = sight_id;
+    public void setSightId(int sightId) {
+        this.sightId = sightId;
     }
 
     public String getText() {

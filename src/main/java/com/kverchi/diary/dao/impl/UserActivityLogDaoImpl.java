@@ -29,9 +29,9 @@ public class UserActivityLogDaoImpl extends GenericDaoImpl<UserActivityLog> impl
 
             CriteriaQuery<UserActivityLog> criteriaQuery = criteriaBuilder.createQuery(UserActivityLog.class);
             Root<UserActivityLog> activityLogRoot = criteriaQuery.from(UserActivityLog.class);
-            Predicate predicate = criteriaBuilder.equal(activityLogRoot.get("user_id"), user_id);
+            Predicate predicate = criteriaBuilder.equal(activityLogRoot.get("userId"), user_id);
             criteriaQuery.select(activityLogRoot).where(predicate);
-            criteriaQuery.orderBy(criteriaBuilder.desc(activityLogRoot.get("login_time")));
+            criteriaQuery.orderBy(criteriaBuilder.desc(activityLogRoot.get("loginTime")));
 
             entityManager.getTransaction().begin();
             Query query = entityManager.createQuery(criteriaQuery);

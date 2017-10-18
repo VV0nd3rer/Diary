@@ -7,7 +7,7 @@
 <span class="label-large" th:fragment="wishLabel">
             <span class="label label-info">
                 <em th:text="${wishCounter}"></em>
-                <span class="glyphicon glyphicon-map-marker"></span>
+                <span class="glyphicon glyphicon-plane"></span>
             </span>
 </span>
 <button type="submit" id="add-wish-btn" class="btn btn-default btn-primary"
@@ -17,7 +17,8 @@
     <span class="glyphicon glyphicon-plane"></span>
 </button>
 
-<span class="label-large" th:fragment="visitLabel" th:title="#{sight.visit.counter.label(${visitCounter - 1})}">
+<span class="label-large" th:fragment="visitLabel"
+      th:title="#{sight.visit.counter.label(${visitCounter - 1})}">
             <span class="label label-info">
                 <em th:text="${visitCounter}"></em>
                 <span class="glyphicon glyphicon-map-marker"></span>

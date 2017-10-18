@@ -6,8 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -20,33 +18,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Country {
 	@Id
 	@Column(name="country_code")
-	private String country_code;
+	private String countryCode;
 	@Column(name="country_name")
-	private String country_name;
+	private String name;
 	@Column(name="img_path")
-	private String img_path;
+	private String imgPath;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="country_code")
 	@JsonIgnore
 	private Set<CountriesSight> countriesSight;
 	
-	public String getCountry_code() {
-		return country_code;
+	public String getCountryCode() {
+		return countryCode;
 	}
-	public void setCountry_code(String country_code) {
-		this.country_code = country_code;
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
-	public String getCountry_name() {
-		return country_name;
+	public String getName() {
+		return name;
 	}
-	public void setCountry_name(String country_name) {
-		this.country_name = country_name;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getImg_path() {
-		return img_path;
+	public String getImgPath() {
+		return imgPath;
 	}
-	public void setImg_path(String img_path) {
-		this.img_path = img_path;
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
 	}
 	
 	public Set<CountriesSight> getCountriesSight() {

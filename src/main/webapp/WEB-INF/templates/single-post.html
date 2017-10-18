@@ -17,10 +17,10 @@
   </head>
    <body>
     <div th:replace="header :: header">&nbsp;</div>
-	<div class="container" th:if="${currentSight.sight_label != null}">
+	<div class="container" th:if="${currentSight.label != null}">
 		<h2>
             <span class="label label-warning">
-                <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.sight_label}"></span>
+                <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.label}"></span>
             </span>
 		</h2>
 	</div>
@@ -37,22 +37,22 @@
 					<span class="badge badge-success">
 						<span th:text="#{post.author}">Author</span>
 						<span  th:text="${post.user.username}">someone</span>
-						<span th:text="${#temporals.format(post.post_datetime, 'dd-MMM-yyyy')}">Posted 2012-08-02 20:47:04</span>
+						<span th:text="${#temporals.format(post.postDatetime, 'dd-MMM-yyyy')}">Posted 2012-08-02 20:47:04</span>
 					</span>
-					<div class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.sight_label}"></em></div>
-					<input type="hidden" th:value="${post.countriesSight.map_coord_x}" id="map_coord_x"/>
-					<input type="hidden" th:value="${post.countriesSight.map_coord_y}" id="map_coord_y"/>
+					<div class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.label}"></em></div>
+					<input type="hidden" th:value="${post.countriesSight.mapCoordX}" id="map_coord_x"/>
+					<input type="hidden" th:value="${post.countriesSight.mapCoordY}" id="map_coord_y"/>
 					<!--<div class="pull-right"><span class="label" th:text="${sight.sight_label}"></span></div>-->
 				</div>
 				<div class="btn-toolbar pull-right">
 					<div class="btn-group">
 					<span th:if="${ isAuthor }">
-			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.post_id}) }" id="update-post-btn"><span th:text="#{post.update}">Update post</span></a>
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/edit/{post_id}(post_id=${post.postId}) }" id="update-post-btn"><span th:text="#{post.update}">Update post</span></a>
 			    	</span>
 					</div>
 					<div class="btn-group">
 					<span th:if="${ isAuthor }">
-			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/remove/{post_id}(post_id=${post.post_id}) }" id="remove-post-btn"><span th:text="#{post.remove}">Remove post</span></a>
+			    		<a class="btn pull-right btn-success" href="#" th:href="@{/posts/remove/{post_id}(post_id=${post.postId}) }" id="remove-post-btn"><span th:text="#{post.remove}">Remove post</span></a>
 			    	</span>
 					</div>
 					<div class="btn-group">
@@ -71,7 +71,7 @@
                     <form role="form">
                         <p class="validateTips"></p>
                         <div class="form-group">
-                            <input type="hidden" th:value="${post.post_id}" id="post-id"/>
+                            <input type="hidden" th:value="${post.postId}" id="post-id"/>
                             <textarea class="form-control" id="text" rows="3" placeholder="Comment"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" id="add-comment">Add</button>
@@ -98,7 +98,7 @@
 								<strong th:text="${comment.user.username}">myusername</strong>
 								<p>
 								  commented 
-								  <span class="text-muted" id="comment_date" th:text="${comment.comment_datetime}">5 days ago</span>
+								  <span class="text-muted" id="comment_date" th:text="${comment.commentDatetime}">5 days ago</span>
 								</p>
 							</div>
 							<div class="panel-body" th:text="${comment.text}">Comment content</div>

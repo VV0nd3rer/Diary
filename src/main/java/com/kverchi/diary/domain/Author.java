@@ -13,33 +13,33 @@ import javax.persistence.Table;
 public class Author {
     @Id
     @Column(name="auth_id")
-    private int auth_id;
+    private int authId;
     @Column(name="auth_type")
-    private int auth_type;
+    private int type;
     @Column(name="auth_name")
-    private String auth_name;
+    private String name;
 
-    public int getAuth_id() {
-        return auth_id;
+    public int getAuthId() {
+        return authId;
     }
 
-    public void setAuth_id(int auth_id) {
-        this.auth_id = auth_id;
+    public void setAuthId(int authId) {
+        this.authId = authId;
     }
 
-    public int getAuth_type() {
-        return auth_type;
+    public int getType() {
+        return type;
     }
 
-    public void setAuth_type(int auth_type) {
-        this.auth_type = auth_type;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public String getAuth_name() {
-        return auth_name;
+    public String getName() {
+        return name;
     }
 
-    public void setAuth_name(String auth_name) {
-        this.auth_name = auth_name;
+    public void setName(String name) {
+        this.name = name;
     }
 }

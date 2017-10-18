@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
-import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.CountryService;
 import com.kverchi.diary.service.PostService;
@@ -108,7 +106,7 @@ public class SightController {
 	@RequestMapping(value="/add-sight", method = RequestMethod.POST)
 	public CountriesSight addSight(@RequestBody CountriesSight sight) {
 		CountriesSight addedSight;
-		if(sight.getSight_id() == 0) {
+		if(sight.getSightId() == 0) {
 			addedSight = countriesSightService.addSight(sight);
 		}
 		else {

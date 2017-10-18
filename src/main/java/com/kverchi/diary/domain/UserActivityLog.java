@@ -12,15 +12,18 @@ import java.time.format.DateTimeFormatter;
 public class UserActivityLog {
     @Id
     @Column(name="session_id")
-    private String session_id;
+    private String sessionId;
     @Column(name="user_id")
-    private int user_id;
+    private int userId;
     @Basic(optional = false)
     @Column(name="login_time", insertable = false, updatable = false)
-    private ZonedDateTime login_time;
-    private String login_ip;
-    private String user_hostname;
-    private boolean active_session;
+    private ZonedDateTime loginTime;
+    @Column(name="login_ip")
+    private String loginIp;
+    @Column(name="user_hostname")
+    private String hostname;
+    @Column(name="active_session")
+    private boolean activeSession;
 
     @Column(name="os")
     private String osInfo;
@@ -53,53 +56,53 @@ public class UserActivityLog {
         this.userAgentInfo = userAgentInfo;
     }
 
-    public boolean isActive_session() {
-        return active_session;
+    public boolean isActiveSession() {
+        return activeSession;
     }
 
-    public void setActive_session(boolean active_session) {
-        this.active_session = active_session;
+    public void setActiveSession(boolean activeSession) {
+        this.activeSession = activeSession;
     }
 
-    public String getSession_id() {
-        return session_id;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setSession_id(String session_id) {
-        this.session_id = session_id;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public ZonedDateTime getLogin_time() {
+    public ZonedDateTime getLoginTime() {
         DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-        String text = login_time.format(formatter);
-        login_time = ZonedDateTime.parse(text, formatter);
-        return login_time;
+        String text = loginTime.format(formatter);
+        loginTime = ZonedDateTime.parse(text, formatter);
+        return loginTime;
     }
 
-    public void setLogin_time(ZonedDateTime login_time) {
-        this.login_time = login_time;
+    public void setLoginTime(ZonedDateTime loginTime) {
+        this.loginTime = loginTime;
     }
 
-    public String getLogin_ip() {
-        return login_ip;
+    public String getLoginIp() {
+        return loginIp;
     }
 
-    public void setLogin_ip(String login_ip) {
-        this.login_ip = login_ip;
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
     }
-    public String getUser_hostname() {
-        return user_hostname;
+    public String getHostname() {
+        return hostname;
     }
 
-    public void setUser_hostname(String user_hostname) {
-        this.user_hostname = user_hostname;
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 }

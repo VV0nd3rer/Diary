@@ -50,13 +50,13 @@ function loadPostSight(mini_map) {
 function loadSights(map, infowindow, sightBaseURL) {
     $.get("get-sights", function (data) {
             for (var i in data) {
-                var sight_id = data[i].sight_id;
+                var sight_id = data[i].sightId;
                 var marker = new google.maps.Marker({
-                    position: {lat: data[i].map_coord_x, lng: data[i].map_coord_y},
+                    position: {lat: data[i].mapCoordX, lng: data[i].mapCoordY},
                     map: map,
-                    title: data[i].sight_label,
-                    description: data[i].sight_description,
-                    id: data[i].sight_id
+                    title: data[i].label,
+                    description: data[i].description,
+                    id: data[i].sightId
                 });
                 marker.addListener('click', function () {
                     infowindow.setContent('<p>' + this.title + '</p><p>' + this.description + '</p><a href=' + sightBaseURL + this.id + '>See more</a> or <button onclick="updSight(' + this.id + ')" type="submit"/>Update sight</button>');

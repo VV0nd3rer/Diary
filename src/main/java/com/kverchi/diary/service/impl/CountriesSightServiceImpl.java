@@ -39,7 +39,7 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 	@Override
 	public CountriesSight updateSight(CountriesSight sight) {
 		countriesSightDao.update(sight);
-		CountriesSight updatedSight = countriesSightDao.getById(sight.getSight_id());
+		CountriesSight updatedSight = countriesSightDao.getById(sight.getSightId());
 		return updatedSight;
 	}
 
@@ -50,7 +50,7 @@ public class CountriesSightServiceImpl implements CountriesSightService {
 		if(country == null) {
 			return addedSight;
 		}
-		Country countryFromDb = countryService.getCountryById(country.getCountry_code());
+		Country countryFromDb = countryService.getCountryById(country.getCountryCode());
 		if(countryFromDb == null) {
 			countryService.addCountry(country);
 			sight.setCountry(country);

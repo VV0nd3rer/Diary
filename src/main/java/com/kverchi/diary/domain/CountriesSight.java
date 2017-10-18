@@ -3,19 +3,14 @@ package com.kverchi.diary.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -25,9 +20,9 @@ public class CountriesSight implements Serializable {
 	@Id
 	@Column(name="sight_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int sight_id;
+	private int sightId;
 	@Column(name="sight_label")
-	private String sight_label;
+	private String label;
 	
 	@ManyToOne
     @JoinColumn(name="country_code")
@@ -37,32 +32,32 @@ public class CountriesSight implements Serializable {
 	private String country_code;*/
 	
 	@Column(name="img_url")
-	private String img_url;
+	private String imgUrl;
 	@Column(name="description")
-	private String sight_description;
+	private String description;
 	@Column(name="map_coord_x")
-	private float map_coord_x;
+	private float mapCoordX;
 	@Column(name="map_coord_y")
-	private float map_coord_y;
+	private float mapCoordY;
 	
 	/*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="sight_id")
 	Set<Post> sight_posts;*/
 	public CountriesSight(){};
 	public CountriesSight(int sight_id) {
-		this.sight_id = sight_id;
+		this.sightId = sight_id;
 	}
-	public int getSight_id() {
-		return sight_id;
+	public int getSightId() {
+		return sightId;
 	}
-	public void setSight_id(int sight_id) {
-		this.sight_id = sight_id;
+	public void setSightId(int sightId) {
+		this.sightId = sightId;
 	}
-	public String getSight_label() {
-		return sight_label;
+	public String getLabel() {
+		return label;
 	}
-	public void setSight_label(String sight_label) {
-		this.sight_label = sight_label;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	public Country getCountry() {
@@ -72,30 +67,30 @@ public class CountriesSight implements Serializable {
 		this.country = country;
 	}
 
-	public String getImg_url() {
-		return img_url;
+	public String getImgUrl() {
+		return imgUrl;
 	}
-	public void setImg_url(String img_url) {
-		this.img_url = img_url;
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
-	public String getSight_description() {
-		return sight_description;
+	public String getDescription() {
+		return description;
 	}
-	public void setSight_description(String sight_description) {
-		this.sight_description = sight_description;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public float getMap_coord_x() {
-		return map_coord_x;
+	public float getMapCoordX() {
+		return mapCoordX;
 	}
-	public void setMap_coord_x(float map_coord_x) {
-		this.map_coord_x = map_coord_x;
+	public void setMapCoordX(float mapCoordX) {
+		this.mapCoordX = mapCoordX;
 	}
-	public float getMap_coord_y() {
-		return map_coord_y;
+	public float getMapCoordY() {
+		return mapCoordY;
 	}
-	public void setMap_coord_y(float map_coord_y) {
-		this.map_coord_y = map_coord_y;
+	public void setMapCoordY(float mapCoordY) {
+		this.mapCoordY = mapCoordY;
 	}
    
 }

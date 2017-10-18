@@ -109,11 +109,11 @@
 			</thead>
 			<tbody>
 				<tr class="clickable-row" th:each="sight: ${country_sights}">
-				    <td th:text="${sight.sight_id}"></td>
-					<td th:text="${sight.country_code}"></td>
-					<td th:text="${sight.sight_label}"></td>
-					<td th:if="${not #lists.isEmpty(sight.sight_description)}" th:text="${sight.sight_description}"></td>
-					<td><a href="#" th:href="@{/posts/sight/{sight_id}(sight_id=${sight.sight_id})}" th:text="Open"></a></td>
+				    <td th:text="${sight.sightId}"></td>
+					<td th:text="${sight.countryCode}"></td>
+					<td th:text="${sight.label}"></td>
+					<td th:if="${not #lists.isEmpty(sight.description)}" th:text="${sight.description}"></td>
+					<td><a href="#" th:href="@{/posts/sight/{sight_id}(sight_id=${sight.sightId})}" th:text="Open"></a></td>
 				</tr>
 			</tbody>
 		</table>

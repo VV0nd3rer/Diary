@@ -13,11 +13,11 @@ public class SightVisitCounter {
     @Id
     @Column(name="visit_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int visit_id;
+    private int visitId;
 
     @Basic(optional = false)
     @Column(name="visit_datetime", insertable = false, updatable = false)
-    private ZonedDateTime visit_datetime;
+    private ZonedDateTime visitDatetime;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -33,23 +33,23 @@ public class SightVisitCounter {
         this.user = new User(user_id);
     }
 
-    public int getVisit_id() {
-        return visit_id;
+    public int getVisitId() {
+        return visitId;
     }
 
-    public void setVisit_id(int visit_id) {
-        this.visit_id = visit_id;
+    public void setVisitId(int visitId) {
+        this.visitId = visitId;
     }
 
-    public ZonedDateTime getVisit_datetime() {
+    public ZonedDateTime getVisitDatetime() {
         DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-        String text = visit_datetime.format(formatter);
-        visit_datetime = ZonedDateTime.parse(text, formatter);
-        return visit_datetime;
+        String text = visitDatetime.format(formatter);
+        visitDatetime = ZonedDateTime.parse(text, formatter);
+        return visitDatetime;
     }
 
-    public void setVisit_datetime(ZonedDateTime visit_datetime) {
-        this.visit_datetime = visit_datetime;
+    public void setVisitDatetime(ZonedDateTime visitDatetime) {
+        this.visitDatetime = visitDatetime;
     }
 
     public User getUser() {

@@ -5,7 +5,6 @@ import java.util.List;
 import com.kverchi.diary.domain.BookSearchAttributes;
 import com.kverchi.diary.domain.BookSearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.domain.Book;
-import com.kverchi.diary.domain.Post;
 import com.kverchi.diary.service.BookService;
 
 @RestController	
@@ -43,7 +41,7 @@ public class BookController {
 	@RequestMapping(value="/add-book", method = RequestMethod.POST)
 	public Book addBook(@RequestBody Book book) {
 		Book addedBook;
-		if(book.getBook_id() == 0) {
+		if(book.getBookId() == 0) {
 			addedBook = bookService.addBook(book);
 		}
 		else {

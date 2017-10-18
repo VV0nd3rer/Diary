@@ -5,9 +5,6 @@ import com.kverchi.diary.domain.User;
 import com.kverchi.diary.domain.UserActivityLog;
 import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.UserActivityLogService;
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.maxmind.geoip2.model.CityResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
 import java.util.List;
 
 /**
@@ -42,10 +36,10 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
         ((WebAuthenticationDetails) authentication.getDetails()).getSessionId();
         User user = userDetails.getUser();
         UserActivityLog userActivityLog = new UserActivityLog();
-        userActivityLog.setUser_id(user.getUserId());
-        userActivityLog.setSession_id(session_id);
-        userActivityLog.setLogin_ip(ip);
-        userActivityLog.setActive_session(true);
+        userActivityLog.setUserId(user.getUserId());
+        userActivityLog.setSessionId(session_id);
+        userActivityLog.setLoginIp(ip);
+        userActivityLog.setActiveSession(true);
         userActivityLog.setUserAgentInfo(request.getHeader("User-Agent"));
         String  userAgentInfo  =   request.getHeader("User-Agent").toLowerCase();
 
@@ -69,7 +63,7 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
     @Override
     public void updateUserActivityLog(String sessionId) {
         UserActivityLog userActivityLog = getUserActivity(sessionId);
-        userActivityLog.setActive_session(false);
+        userActivityLog.setActiveSession(false);
         userActivityDao.update(userActivityLog);
     }
     private String getOSInformation(String userAgentInfo) {

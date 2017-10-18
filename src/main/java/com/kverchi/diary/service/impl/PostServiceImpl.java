@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
 		//List of posts - no user loaded
 		//Single post - user loaded
 		//How is it better to develop this thing?
-		Post postNeedToUpd = postDao.getById(post.getPost_id());
+		Post postNeedToUpd = postDao.getById(post.getPostId());
 		//Check if user is owner of this post
 		User currentUser = userService.getUserFromSession();
 		String postAuth = postNeedToUpd.getUser().getUsername();
@@ -141,10 +141,10 @@ public class PostServiceImpl implements PostService {
 			for (Map.Entry<PostSearchAttributes.PostSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
 					case BY_USER_ID:
-						hasAttributes.put("user_id", entry.getValue());
+						hasAttributes.put("userId", entry.getValue());
 						break;
 					case BY_SIGHT_ID:
-						hasAttributes.put("sight_id", entry.getValue());
+						hasAttributes.put("sightId", entry.getValue());
 						break;
 					case BY_TEXT:
 						choosingAttributes.put("description", entry.getValue().toString());

@@ -11,8 +11,10 @@
 	<div class="blog-footer" th:fragment="footer">
         &copy; <span ${#dates.year(#dates.createNow())}></span><span th:text="#{signature}"></span>
     </div>
+
 	<!-- Book fragment for pagination -->
 	<div id="books-block" th:fragment="books-page">
+		<span th:if="${not #lists.isEmpty(obj_list)}">
 		<input type="hidden" id="total-pages" th:value="${totalPages}"/>
 
 	<table id="crud-tbl" class="table table-bordered">
@@ -27,13 +29,18 @@
 		</thead>
 		<tbody>
 		<tr class="clickable-row" th:each="book: ${obj_list}">
-			<td th:text="${book.book_id}"></td>
+			<td th:text="${book.bookId}"></td>
 			<td th:text="${book.author}"></td>
-			<td th:text="${book.book_title}"></td>
-			<td th:if="${not #lists.isEmpty(book.book_description)}" th:text="${book.book_description}"></td>
+			<td th:text="${book.title}"></td>
+			<td th:if="${not #lists.isEmpty(book.description)}" th:text="${book.description}"></td>
 		</tr>
 		</tbody>
+
 	</table>
+			</span>
+		<span th:if="${#lists.isEmpty(obj_list)}">
+			<div>No books found.</div>
+		</span>
 	</div>
 	<!-- Page fragment for pagination -->
     <div id="posts-block" th:fragment="page">
@@ -50,7 +57,7 @@
 								<div class="col-sm-3">
 									<p class="pull-right">
 										by <span th:text="${post.user.username}">someone</span>
-										<small><em th:text="${#temporals.format(post.post_datetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
+										<small><em th:text="${#temporals.format(post.postDatetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
 									</p>
 								</div>
 							</div>
@@ -67,9 +74,9 @@
 	
 					<div class="panel-footer">
 						<span><a href="#"
-							th:href="@{/posts/single-post/{post_id}(post_id=${post.post_id}) }">Read
+							th:href="@{/posts/single-post/{post_id}(post_id=${post.postId}) }">Read
 								more</a></span>
-						<span class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.sight_label}"></em></span>
+						<span class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.label}"></em></span>
 					</div>
 				</div>
 				<!-- end of post -->

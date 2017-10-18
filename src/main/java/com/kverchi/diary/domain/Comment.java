@@ -3,7 +3,6 @@ package com.kverchi.diary.domain;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,12 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
@@ -27,37 +20,38 @@ public class Comment {
 	@Id
 	@Column(name="comment_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int comment_id;
+	private int commentId;
 	@Column(name="comment_datetime")
-	private ZonedDateTime comment_datetime;
+	private ZonedDateTime commentDatetime;
 	private String text;
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
 	/*@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="post_id")
+
 	private Post post;*/
-	private int post_id;
+	@Column(name="post_id")
+	private int postId;
 	
-	public int getComment_id() {
-		return comment_id;
+	public int getCommentId() {
+		return commentId;
 	}
-	public void setComment_id(int comment_id) {
-		this.comment_id = comment_id;
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
 	}
-	public ZonedDateTime getComment_datetime() {
+	public ZonedDateTime getCommentDatetime() {
 		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-		String text = comment_datetime.format(formatter);
-		comment_datetime = ZonedDateTime.parse(text, formatter);
-		return comment_datetime;
+		String text = commentDatetime.format(formatter);
+		commentDatetime = ZonedDateTime.parse(text, formatter);
+		return commentDatetime;
 	}
 	
-	public void setComment_datetime(ZonedDateTime comment_datetime) {
-		this.comment_datetime = comment_datetime;
+	public void setCommentDatetime(ZonedDateTime commentDatetime) {
+		this.commentDatetime = commentDatetime;
 	}
 	@PrePersist
 	public void setComment_datetime() {
-		this.comment_datetime = ZonedDateTime.now();
+		this.commentDatetime = ZonedDateTime.now();
 	}
 	public String getText() {
 		return text;
@@ -71,11 +65,11 @@ public class Comment {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public int getPost_id() {
-		return post_id;
+	public int getPostId() {
+		return postId;
 	}
-	public void setPost_id(int post_id) {
-		this.post_id = post_id;
+	public void setPostId(int postId) {
+		this.postId = postId;
 	}
 	
 	
