@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import com.kverchi.diary.domain.Pagination;
+import com.kverchi.diary.domain.SearchAttributes;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -80,17 +81,21 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 	}
 
 	@Override
-	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
+	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
+										   Map<String, String> choosingAttributes) {
 		return 0;
 	}
-	
+
 	@Override
-	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
+	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
+									 Map<String, String> choosingAttributes, Pagination pagination) {
 		return null;
 	}
 
 	@Override
-	public List searchWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter, Pagination pagination) {
+	public List searchAndSortWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
+											Map<String, String> choosingAttributes, String sortType,
+											Pagination pagination) {
 		return null;
 	}
 }

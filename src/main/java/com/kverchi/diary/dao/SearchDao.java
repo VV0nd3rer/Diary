@@ -17,7 +17,7 @@ public interface SearchDao {
 
     List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
                               Map<String, String> choosingAttributes, Pagination pagination);
-    List searchWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
-                                       Map<String, String> choosingAttributes, String filter,
-                                       Pagination pagination);
+    List searchAndSortWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
+                                     Map<String, String> choosingAttributes,
+                                     String sortType, Pagination pagination);
 }

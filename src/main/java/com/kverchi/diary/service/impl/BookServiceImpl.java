@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kverchi.diary.domain.Book;
-import com.kverchi.diary.domain.BookSearchAttributes;
-import com.kverchi.diary.domain.BookSearchResults;
-import com.kverchi.diary.domain.Pagination;
+import com.kverchi.diary.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +77,8 @@ public class BookServiceImpl implements BookService {
 		BookSearchResults searchResults = new BookSearchResults();
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
+		results = bookDao.searchWithAttributes(hasAttributes, includingAttributes,
+				choosingAttributes, pagination);
 		searchResults.setResults(results);
 		return searchResults;
 	}

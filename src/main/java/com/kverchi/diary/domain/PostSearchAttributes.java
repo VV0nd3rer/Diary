@@ -13,12 +13,20 @@ public class PostSearchAttributes extends SearchAttributes {
         BY_TEXT,
         IN_TITLE_ONLY
     };
-    public enum PostFilterType {
-        BY_WISHES,
-        BY_VISITS
+    public enum PostSortType {
+        BY_WISHES (SightWishCounter.class.getSimpleName()),
+        BY_VISITS (SightVisitCounter.class.getSimpleName());
+
+        private final String sortType;
+        PostSortType(String sortType) {
+            this.sortType = sortType;
+        }
+        public String getSortType() {
+            return sortType;
+        }
     };
     private Map<PostSearchType, Object> searchCriteria = new HashMap<>();
-    private PostFilterType filterType;
+    private PostSortType postSortType;
 
     private int userId;
     private int sightId;
@@ -28,12 +36,12 @@ public class PostSearchAttributes extends SearchAttributes {
         return searchCriteria;
     }
 
-    public PostFilterType getFilterType() {
-        return filterType;
+    public PostSortType getPostSortType() {
+        return postSortType;
     }
 
-    public void setFilterType(PostFilterType filterType) {
-        this.filterType = filterType;
+    public void setPostSortType(PostSortType postSortType) {
+        this.postSortType = postSortType;
     }
 
     public void setSearchCriteria(Map<PostSearchType, Object> searchCriteria) {

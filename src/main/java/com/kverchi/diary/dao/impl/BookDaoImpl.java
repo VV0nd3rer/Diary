@@ -7,6 +7,7 @@ import java.util.Map;
 import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.domain.Book_;
 import com.kverchi.diary.domain.Pagination;
+import com.kverchi.diary.domain.SearchAttributes;
 import org.springframework.stereotype.Repository;
 
 import com.kverchi.diary.dao.BookDao;
@@ -75,7 +76,8 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
     }
 
     @Override
-    public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
+    public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
+                                     Map<String, String> choosingAttributes, Pagination pagination) {
         EntityManager entityManager = null;
         List<Book> result = null;
         try {
@@ -140,9 +142,10 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
     }
 
     @Override
-    public List searchWithAttributesAndFilter(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, String filter, Pagination pagination) {
+    public List searchAndSortWithAttributes(Map<String, Object> hasAttributes,
+                                            Map<String, String> includingAttributes,
+                                            Map<String, String> choosingAttributes, String sortType,
+                                            Pagination pagination) {
         return null;
     }
-
-
 }

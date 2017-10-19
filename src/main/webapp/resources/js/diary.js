@@ -9,7 +9,7 @@ $(document).ready(function(){
 	});*/
 
 	var searchCriteria = checkSightSeachCriteria();
-	var filterType = null;
+	var postSortType = null;
 	var currentPage;
 
 
@@ -48,7 +48,7 @@ $(document).ready(function(){
 				var searchAttributes = {};
 				searchAttributes['searchCriteria'] = searchCriteria;
 				searchAttributes['currentPage'] = page;
-				searchAttributes['filterType'] = filterType;
+				searchAttributes['postSortType'] = postSortType;
 
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
@@ -139,8 +139,8 @@ $(document).ready(function(){
 		}
 		if(filterSightsDropBox.val() > 0) {
 			console.log('filterSightsDropBox.val() ' + filterSightsDropBox.val());
-			filterSightsDropBox.val() == 1 ? filterType = "BY_WISHES" : filterType = "BY_VISITS";
-			console.log("filterType: " + filterType);
+			filterSightsDropBox.val() == 1 ? postSortType = "BY_WISHES" : postSortType = "BY_VISITS";
+			console.log("sortType: " + postSortType);
 		}
 		console.log("searchCriteria" + JSON.stringify(searchCriteria));
 		paginationElement.trigger('page');

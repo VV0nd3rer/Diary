@@ -156,22 +156,15 @@ public class PostServiceImpl implements PostService {
 		//pagination = paginationService.calculatePagination(pagination);
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		PostSearchAttributes.PostFilterType filterType = searchAttributes.getFilterType();
-		logger.debug("filter type: " + filterType);
-		if(filterType != null) {
-			String filter = null;
-			switch (filterType) {
-				case BY_WISHES:
-					filter = "SightWishCounter";
-					break;
-				case BY_VISITS:
-					filter = "SightVisitCounter";
-					break;
-			}
-			results = postDao.searchWithAttributesAndFilter(hasAttributes, includingAttributes,
-					choosingAttributes, filter, pagination);
+		PostSearchAttributes.PostSortType sortType = searchAttributes.getPostSortType();
+		logger.debug("sortType: " + sortType);
+
+		if(sortType != null) {
+			results = postDao.searchAndSortWithAttributes(hasAttributes, includingAttributes,
+					choosingAttributes, sortType.getSortType(), pagination);
 		} else {
-			results = postDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
+			results = postDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes,
+					pagination);
 		}
 
 		searchResults.setResults(results);

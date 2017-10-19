@@ -3,6 +3,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.kverchi.diary.domain.Pagination;
+import com.kverchi.diary.domain.PostSearchAttributes;
+import com.kverchi.diary.domain.SearchAttributes;
 import org.springframework.stereotype.Repository;
 
 import com.kverchi.diary.custom.exception.DatabaseException;
