@@ -8,7 +8,6 @@ import com.kverchi.diary.domain.Book;
 import com.kverchi.diary.domain.BookSearchAttributes;
 import com.kverchi.diary.domain.BookSearchResults;
 import com.kverchi.diary.domain.Pagination;
-import com.kverchi.diary.service.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,26 +18,18 @@ import com.kverchi.diary.service.BookService;
 public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookDao bookDao;
-	@Autowired
-	private PaginationService paginationService;
-	/*public void setBookDao(BookDao bookDao) {
-		this.bookDao = bookDao;
-	}*/
 
 	@Override
-	
 	public List<Book> getAllBooks() {
 		return bookDao.getAllRecords();
 	}
 
 	@Override
-	
 	public Book getBookById(int book_id) {
 		return bookDao.getById(book_id);
 	}
 
 	@Override
-	
 	public Book addBook(Book book) {
 		//int addedId = (Integer)bookDao.create(book);
 		//Book addedBook = bookDao.getById(addedId);
@@ -47,7 +38,6 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	
 	public Book updateBook(Book book) {
 		bookDao.update(book);
 		Book updatedBook = bookDao.getById(book.getBookId());
@@ -55,7 +45,6 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	
 	public void deleteBook(int book_id) {
 		Book bookToDel = bookDao.getById(book_id);
 		bookDao.delete(bookToDel);
@@ -63,10 +52,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookSearchResults search(BookSearchAttributes searchAttributes) {
-		Pagination pagination = new Pagination();
-		pagination.setPageSize(searchAttributes.getPageSize());
-		pagination.setCurrentPage(searchAttributes.getCurrentPage());
-
+		Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
 		Map<BookSearchAttributes.BookSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
@@ -88,25 +74,13 @@ public class BookServiceImpl implements BookService {
 			}
 		}
 		int totalRows;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes);
-		} else if(choosingAttributes.isEmpty()){
-			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes);
-		} else {
-			totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
-		}
+		totalRows = bookDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
 		pagination.setTotalRows(totalRows);
-		pagination = paginationService.calculatePagination(pagination);
+		//pagination = paginationService.calculatePagination(pagination);
 		BookSearchResults searchResults = new BookSearchResults();
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
-		if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			results = bookDao.searchWithAttributes(hasAttributes, pagination);
-		} else if(choosingAttributes.isEmpty()) {
-			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, pagination);
-		} else {
-			results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
-		}
+		results = bookDao.searchWithAttributes(hasAttributes, includingAttributes, choosingAttributes, pagination);
 		searchResults.setResults(results);
 		return searchResults;
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.kverchi.diary.domain.*;
-import com.kverchi.diary.service.PaginationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +28,6 @@ public class PostServiceImpl implements PostService {
 	private UserService userService;
 	@Autowired
 	private CountriesSightService countriesSightService;
-	@Autowired
-	private PaginationService paginationService;
-	
-	/*public void setPostDao(PostDao postDao) {
-		this.postDao = postDao;
-	}*/
 	
 	public List<Post> getAllPosts() {
 		return postDao.getAllRecords();
@@ -128,9 +121,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostSearchResults search(PostSearchAttributes searchAttributes) {
 		PostSearchResults searchResults = new PostSearchResults();
-		Pagination pagination = new Pagination();
-		pagination.setPageSize(searchAttributes.getPageSize());
-		pagination.setCurrentPage(searchAttributes.getCurrentPage());
+		Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
 
 		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 
@@ -159,18 +150,10 @@ public class PostServiceImpl implements PostService {
 		}
 
 		int totalRows;
-		/*if(includingAttributes.isEmpty() && choosingAttributes.isEmpty()) {
-			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes);
-		}
-		else if(choosingAttributes.isEmpty()) {
-			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes);
-		} else {*/
-			totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
-		//}
+		totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
 
 		pagination.setTotalRows(totalRows);
-		pagination = paginationService.calculatePagination(pagination);
-
+		//pagination = paginationService.calculatePagination(pagination);
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
 		PostSearchAttributes.PostFilterType filterType = searchAttributes.getFilterType();

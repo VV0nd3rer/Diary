@@ -43,10 +43,6 @@ public class PostController {
 	UserService userService;
 	@Autowired
 	CounterService counterService;
-	
-	//???
-	@Autowired
-	PaginationService paginatonService;
 
 	@ModelAttribute("currentSight")
 	public CountriesSight getCurrentSight () {

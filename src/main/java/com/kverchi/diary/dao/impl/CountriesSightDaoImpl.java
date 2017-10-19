@@ -79,32 +79,11 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 		return sight;
 	}
 
-
-	@Override
-	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes) {
-		return 0;
-	}
-
-	@Override
-	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes) {
-		return 0;
-	}
-
 	@Override
 	public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
 		return 0;
 	}
-
-	@Override
-	public List searchWithAttributes(Map<String, Object> hasAttributes, Pagination pagination) {
-		return null;
-	}
-
-	@Override
-	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Pagination pagination) {
-		return null;
-	}
-
+	
 	@Override
 	public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes, Pagination pagination) {
 		return null;
