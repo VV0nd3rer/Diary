@@ -23,5 +23,7 @@ public interface UserService {
 	User getResetPasswordToken(String token);
 	User getUserFromSession();
 	boolean isValuePresent(String key, Object value);
-	void saveUserInfo(int user_id, String info);
+	void saveUserInfo(int userId, String info);
+	List getUserWishedSights(int userId);
+	List getUserVisitedSights(int userId);
 }

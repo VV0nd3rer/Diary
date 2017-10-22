@@ -1,14 +1,11 @@
 package com.kverchi.diary.controller;
 
+import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.UserActivityLog;
 import com.kverchi.diary.service.UserActivityLogService;
-import com.sun.org.apache.bcel.internal.classfile.Method;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
-import org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.custom.exception.ServiceException;
-import com.kverchi.diary.dao.UserDao;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.form.ForgotPasswordForm;
@@ -28,8 +24,6 @@ import com.kverchi.diary.form.NewPasswordForm;
 import com.kverchi.diary.form.RegistrationForm;
 import com.kverchi.diary.service.UserService;
 
-import javax.jws.soap.SOAPBinding;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -169,6 +163,20 @@ public class UserController {
 		List<UserActivityLog> userActivityLogList= userActivityLogService.getLastUserActivity(user.getUserId());
 		mv.addObject(user);
 		mv.addObject("userActivityLogList", userActivityLogList);
+		return mv;
+	}
+	@RequestMapping(value="/user-favorite")
+	public ModelAndView showUserFavorite() {
+		ModelAndView mv = new ModelAndView("fragment/user-menu::userFavorite");
+		User user = userService.getUserFromSession();
+		if(user == null) {
+			return new ModelAndView("login");
+		}
+		List<CountriesSight> userWishedList = userService.getUserWishedSights(user.getUserId());
+		List<CountriesSight> userVisitedList = userService.getUserVisitedSights(user.getUserId());
+		mv.addObject(user);
+		mv.addObject("userWishedSights", userWishedList);
+		mv.addObject("userVisitedSights", userVisitedList);
 		return mv;
 	}
 	@RequestMapping(value = "/save-info", method = RequestMethod.POST, consumes = "text/plain")

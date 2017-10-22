@@ -24,44 +24,49 @@
             </span>
             <div class="row top-row-buffer">
                 <div class="col-sm-1">
-                <span th:if="${ #authorization.expression('isAuthenticated()') != true or isWishedValueExists == true }">
-                    <label
-                            th:replace="fragment/counter-buttons::wishLabel"
+                    <span th:if="${ #authorization.expression('isAuthenticated()') != true}">
+                        <label
+                            th:replace="fragment/counter-buttons::wishedLabel"
                             th:with="wishCounter=${wishCounter}">
-                    </label>
-                </span>
-                <span th:if="${ #authorization.expression('isAuthenticated()') and isWishedValueExists == false }">
-                    <button
+                        </label>
+                    </span>
+                    <span th:if="${ #authorization.expression('isAuthenticated()') and isWishedValueExists}">
+                        <label
+                            th:replace="fragment/counter-buttons::authWishedLabel"
+                            th:with="wishCounter=${wishCounter}">
+                        </label>
+                    </span>
+                    <span th:if="${ #authorization.expression('isAuthenticated()') and !isWishedValueExists}">
+                        <button
                             th:replace="fragment/counter-buttons::addWishButton"
                             th:with="wishCounter=${wishCounter}">
-                    </button>
-                </span>
+                        </button>
+                    </span>
                 </div>
+
                 <div class="col-sm-1">
-                <span th:if="${ #authorization.expression('isAuthenticated()') != true or isVisitedValueExists == true}">
+                    <span th:if="${ #authorization.expression('isAuthenticated()') != true}">
                     <label
-                            th:replace="fragment/counter-buttons::visitLabel"
+                            th:replace="fragment/counter-buttons::visitedLabel"
                             th:with="visitCounter=${visitCounter}">
                     </label>
-                </span>
-                <span th:if="${ #authorization.expression('isAuthenticated()') and isVisitedValueExists == false}">
-                    <button
+                    </span>
+                    <span th:if="${ #authorization.expression('isAuthenticated()') and isVisitedValueExists}">
+                        <label th:replace="fragment/counter-buttons::authVisitedLabel"
+                               th:with="visitCounter=${visitCounter}">
+                        </label>
+                    </span>
+
+                    <span th:if="${ #authorization.expression('isAuthenticated()') and !isVisitedValueExists}">
+                        <button
                             th:replace="fragment/counter-buttons::addVisitButton"
                             th:with="visitCounter=${visitCounter}">
-                    </button>
-                </span>
+                        </button>
+                    </span>
                 </div>
+
             </div>
-
         </h2>
-
-
-        <!--<h3 th:if="${isVisitedValueExists == true}" class="label label-info">
-            <span th:text="#{counter.added.value.text}"></span>
-            <span th:text="#{sight.visit.counter.text(${visitCounter} - 1)}"></span>
-            <span class="glyphicon glyphicon-map-marker"></span>
-        </h3>-->
-
     </div>
 
     <div class="container">

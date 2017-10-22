@@ -23,7 +23,10 @@ profileApp.controller('UserMenuCtrl', function($scope){
 				});
 			}
 			if(page == 'favorite') {
-				$("#nav-bar-content").html("Coming soon");
+				$.get('/users/user-favorite', function(modelAndView) {
+					$("#nav-bar-content").html(modelAndView);
+				});
+				//$("#nav-bar-content").html("Coming soon");
 			}
 		}
 

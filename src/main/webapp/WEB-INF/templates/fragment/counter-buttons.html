@@ -4,7 +4,16 @@
 <head>
 </head>
 <body>
-<span class="label-large" th:fragment="wishLabel">
+<span class="label-large" th:fragment="authWishedLabel"
+      th:title="${wishCounter - 1 == 0} ? #{sight.wished.counter.auth.only.label} :
+      #{sight.wished.counter.auth.label(${wishCounter - 1})}">
+            <span class="label label-info">
+                <em th:text="${wishCounter}"></em>
+                <span class="glyphicon glyphicon-plane"></span>
+            </span>
+</span>
+<span class="label-large" th:fragment="wishedLabel"
+      th:title="#{sight.wish.counter(${wishCounter})}">
             <span class="label label-info">
                 <em th:text="${wishCounter}"></em>
                 <span class="glyphicon glyphicon-plane"></span>
@@ -12,13 +21,22 @@
 </span>
 <button type="submit" id="add-wish-btn" class="btn btn-default btn-primary"
         th:fragment="addWishButton"
-        th:title="#{sight.wish.counter.button(${wishCounter})}">
+        th:title="#{sight.wish.counter(${wishCounter})}">
     <em th:text="${wishCounter}"></em>
     <span class="glyphicon glyphicon-plane"></span>
 </button>
 
-<span class="label-large" th:fragment="visitLabel"
-      th:title="#{sight.visit.counter.label(${visitCounter - 1})}">
+<span class="label-large" th:fragment="authVisitedLabel"
+      th:title="${visitCounter - 1 == 0} ? #{sight.visited.counter.auth.only.label} :
+      #{sight.visited.counter.auth.label(${visitCounter - 1})}">
+            <span class="label label-info">
+                <em th:text="${visitCounter}"></em>
+                <span class="glyphicon glyphicon-map-marker"></span>
+            </span>
+</span>
+
+<span class="label-large" th:fragment="visitedLabel"
+      th:title="#{sight.visit.counter(${visitCounter})}">
             <span class="label label-info">
                 <em th:text="${visitCounter}"></em>
                 <span class="glyphicon glyphicon-map-marker"></span>
@@ -27,7 +45,7 @@
 
 <button type="submit" id="add-visit-btn" class="btn btn-default btn-primary"
         th:fragment="addVisitButton"
-        th:title="#{sight.visit.counter.button(${visitCounter})}">
+        th:title="#{sight.visit.counter(${visitCounter})}">
     <em th:text="${visitCounter}"></em>
     <span class="glyphicon glyphicon-map-marker"></span>
 </button>

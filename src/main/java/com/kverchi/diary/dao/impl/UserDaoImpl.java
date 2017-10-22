@@ -3,6 +3,7 @@ package com.kverchi.diary.dao.impl;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
+import com.kverchi.diary.domain.CountriesSight;
 import com.kverchi.diary.domain.Country;
 import org.apache.log4j.Logger;
 import javax.persistence.Query;
@@ -80,14 +81,14 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 	}
 
 	@Override
-	public void updateUserInfo(int user_id, String info) throws DatabaseException {
+	public void updateUserInfo(int userId, String info) throws DatabaseException {
 		EntityManager entityManager = null;
 		try {
 			entityManager = entityManagerFactory.createEntityManager();
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
 			Root<User> userRoot = criteriaUpdate.from(User.class);
-			Predicate predicate = criteriaBuilder.equal(userRoot.get("userId"), user_id);
+			Predicate predicate = criteriaBuilder.equal(userRoot.get("userId"), userId);
 			criteriaUpdate.where(predicate);
 			criteriaUpdate.set(userRoot.get("information"), info);
 			entityManager.getTransaction().begin();
@@ -103,5 +104,49 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 				entityManager.close();
 			}
 		}
+	}
+
+	@Override
+	public List gerUserWishedSights(int userId) throws DatabaseException {
+		return getUserLastFavoriteSights(userId, "SightWishCounter");
+	}
+
+	@Override
+	public List getUserVisitedSights(int userId) throws DatabaseException {
+		return getUserLastFavoriteSights(userId, "SightVisitCounter");
+	}
+	private List getUserLastFavoriteSights(int userId, String counter) {
+		EntityManager entityManager = null;
+		List<Object[]> resultList = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String strQuery = generateUserFavoriteCounterSqlString(counter);
+			Query query = entityManager.createQuery(strQuery);
+			query.setParameter("userId", userId);
+			resultList = query.getResultList();
+			entityManager.getTransaction().commit();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		}
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return resultList;
+	}
+	private String generateUserFavoriteCounterSqlString(String counter) {
+		/*String strQuery = "SELECT sight.sightId, sight.label, sight.description, country.name" +
+				" FROM CountriesSight sight, " + counter + " counter, Country country," +
+				" User user" +
+				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
+				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";*/
+		String strQuery = "SELECT sight FROM CountriesSight sight, " + counter + " counter, Country country," +
+				" User user" +
+				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
+				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";
+		return strQuery;
 	}
 }

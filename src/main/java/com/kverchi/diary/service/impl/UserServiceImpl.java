@@ -13,7 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.kverchi.diary.dao.UserActivityDao;
-import com.kverchi.diary.domain.UserActivityLog;
+import com.kverchi.diary.domain.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +38,6 @@ import com.kverchi.diary.custom.exception.ServiceException;
 import com.kverchi.diary.dao.PasswordChangeRequestDao;
 import com.kverchi.diary.dao.RoleDao;
 import com.kverchi.diary.dao.UserDao;
-import com.kverchi.diary.domain.PasswordChangeRequest;
-import com.kverchi.diary.domain.ServiceResponse;
-import com.kverchi.diary.domain.User;
 import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
 import com.kverchi.diary.security.UserDetailsImpl;
@@ -93,11 +90,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUserInfo(int user_id, String info) {
-        userDao.updateUserInfo(user_id, info);
+    public void saveUserInfo(int userId, String info) {
+        userDao.updateUserInfo(userId, info);
         User user = getUserFromSession();
         user.setInformation(info);
         updateUserSession();
+    }
+
+    @Override
+    public List getUserWishedSights(int userId) {
+        List<CountriesSight> wishList = userDao.gerUserWishedSights(userId);
+        return wishList;
+    }
+
+    @Override
+    public List getUserVisitedSights(int userId) {
+        List<CountriesSight> visitList = userDao.getUserVisitedSights(userId);
+        return visitList;
     }
 
     @Override
