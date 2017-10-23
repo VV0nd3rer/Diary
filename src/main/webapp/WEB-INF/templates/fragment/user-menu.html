@@ -43,20 +43,22 @@
 </div>
 <div id="user-favorite" th:fragment="userFavorite">
     <h3 th:text="#{user.favorite.wishes}"></h3>
-    <table class="table table-bordered" th:if="${not #lists.isEmpty(userWishedSights)}">
+    <table class="table table-bordered user-fave" th:if="${not #lists.isEmpty(userWishedSights)}">
         <thead>
         <tr>
             <th width="80" th:text="#{user.favorite.label}">Label</th>
             <th width="120" th:text="#{user.favorite.description}">Description</th>
             <th width="120" th:text="#{user.favorite.country}">Country</th>
+            <th width="80" th:text="#{show.more}">Show sight</th>
         </tr>
         </thead>
         <tbody th:each="userWish : ${userWishedSights}">
         <tr>
-               <!--<a th:href="@{/posts/sight/{sight_id}(sight_id=${userWish.sightId})}">Link</a>-->
             <td th:text="${userWish.label}"></td>
             <td th:text="${userWish.description}"></td>
             <td th:text="${userWish.country.name}"></td>
+            <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userWish.sightId})}"
+                   th:text="#{user.favorite.show.sight}"></a> </td>
         </tr>
         </tbody>
     </table>
@@ -64,21 +66,22 @@
         <span th:text="#{user.favorite.no.wishes}"></span>
     </div>
     <h3 th:text="#{user.favorite.visits}"></h3>
-    <table class="table table-bordered" th:if="${not #lists.isEmpty(userVisitedSights)}">
+    <table class="table table-bordered user-fave" th:if="${not #lists.isEmpty(userVisitedSights)}">
         <thead>
         <tr>
             <th width="80" th:text="#{user.favorite.label}">Label</th>
             <th width="120" th:text="#{user.favorite.description}">Description</th>
             <th width="120" th:text="#{user.favorite.country}">Country</th>
+            <th width="80" th:text="#{show.more}">Show sight</th>
         </tr>
         </thead>
-        <tbody>
-           <tr th:each="userVisit : ${userVisitedSights}">
-              <a th:href="@{/posts/sight/{sight_id}(sight_id=${userVisit.sightId})}">
+        <tbody th:each="userVisit : ${userVisitedSights}">
+           <tr>
                 <td th:text="${userVisit.label}"></td>
                 <td th:text="${userVisit.description}"></td>
                 <td th:text="${userVisit.country.name}"></td>
-              </a>
+                <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userVisit.sightId})}"
+                th:text="#{user.favorite.show.sight}"></a> </td>
            </tr>
         </tbody>
     </table>
