@@ -54,7 +54,7 @@
 								</div>
 								<div class="col-sm-3">
 									<p class="pull-right">
-										by <a th:href="@{/users/profile/{user_id} (user_id=${post.user.userId})}"
+										by <a th:href="@{/users/profile/{username} (username=${post.user.username})}"
 											  th:text="${post.user.username}">someone</a>
 										<small><em th:text="${#temporals.format(post.postDatetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
 									</p>

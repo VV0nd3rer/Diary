@@ -12,7 +12,7 @@
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.
         id.click event doesn't work from dynamically loaded nav-bar page. -->
-    <a href="#" id="update-info-btn" class="btn btn-info top-row-buffer" role="button" onclick="showModalDialog();"
+    <a th:if="${ user.username == #authentication.name}" href="#" id="update-info-btn" class="btn btn-info top-row-buffer" role="button" onclick="showModalDialog();"
        th:text="#{user.info.edit}">Edit info</a>
 
 </div>
@@ -66,6 +66,7 @@
     </table>
     <div th:if="${#lists.isEmpty(userWishedSights)}">
         <span th:text="#{user.favorite.no.wishes}"></span>
+        <span th:if="${ user.username == #authentication.name}" th:text="#{user.favorite.no.wishes.motivation}"></span>
     </div>
     <h3 th:text="#{user.favorite.visits}"></h3>
     <table class="table table-bordered user-fave" th:if="${not #lists.isEmpty(userVisitedSights)}">
@@ -91,6 +92,7 @@
     </table>
     <div th:if="${#lists.isEmpty(userVisitedSights)}">
         <span th:text="#{user.favorite.no.visits}"></span>
+        <span th:if="${ user.username == #authentication.name}" th:text="#{user.favorite.no.visits.motivation}"></span>
     </div>
 </div>
 </body>

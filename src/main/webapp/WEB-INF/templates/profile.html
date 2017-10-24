@@ -80,10 +80,10 @@
                 <!-- END SIDEBAR USERPIC -->
                 <!-- SIDEBAR USER TITLE -->
                 <div class="profile-usertitle">
-                    <div class="profile-usertitle-name" th:text="${user.username}">
-                        Marcus Doe
+                    <div class="profile-usertitle-name" id="profile-username" th:text="${user.username}">
+                        John Doe
                     </div>
-                    <div class="profile-usertitle-role">
+                    <div class="profile-usertitle-role" th:if="${ user.username == #authentication.name}">
                         <span th:each="role: ${user.roles}">
                             <em th:text="${role.role}"></em>
                         </span>
@@ -91,13 +91,13 @@
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
-                <div class="profile-userbuttons">
+                <div class="profile-userbuttons" th:if="${ user.username != #authentication.name}">
                     <button type="button" class="btn btn-success btn-sm" th:text="#{user.profile.add.friend}">Become friends </button>
                     <button type="button" class="btn btn-info btn-sm top-row-buffer" th:text="#{user.profile.message}">Say something</button>
                 </div>
                 <!-- END SIDEBAR BUTTONS -->
                 <!-- SIDEBAR MENU -->
-                <div class="profile-usermenu">
+                <div class="profile-usermenu" th:if="${ user.username == #authentication.name}">
                     <ul class="nav">
                         <li class="active">
                             <a href="#">
@@ -125,7 +125,6 @@
             </div>
         </div>
         <div class="col-md-9">
-
             <div ng-controller="UserMenuCtrl" ng-cloak>
 
                 <md-content class="md-padding">
@@ -136,7 +135,9 @@
                         <md-nav-item md-nav-click="goto('info')" name="info">
                             <span th:text="#{user.top.nav.info}">Info</span>
                         </md-nav-item>
-                        <md-nav-item md-nav-click="goto('statistic')" name="statistic">
+
+                        <md-nav-item th:if="${ user.username == #authentication.name}"
+                                     md-nav-click="goto('statistic')" name="statistic">
                             <span th:text="#{user.top.nav.account.activity}">Account activity</span>
                         </md-nav-item>
                         <md-nav-item md-nav-click="goto('favorite')" name="favorite">

@@ -112,9 +112,11 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 		try {
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
-			String strQuery = generateUserFavoriteCounterSqlString("SightWishCounter");
-			Query query = entityManager.createQuery(strQuery);
+			StringBuilder strQuery = generateUserFavoriteCounterSqlString("SightWishCounter");
+			strQuery.append(" ORDER BY counter.wishDatetime desc");
+			Query query = entityManager.createQuery(strQuery.toString());
 			query.setParameter("userId", userId);
+			query.setMaxResults(3);
 			resultList = query.getResultList();
 			for(SightWishCounter counter : resultList) {
 				Hibernate.initialize(counter.getCountriesSight());
@@ -140,9 +142,11 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 		try {
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
-			String strQuery = generateUserFavoriteCounterSqlString("SightVisitCounter");
-			Query query = entityManager.createQuery(strQuery);
+			StringBuilder strQuery = generateUserFavoriteCounterSqlString("SightVisitCounter");
+			strQuery.append(" ORDER BY counter.visitDatetime desc");
+			Query query = entityManager.createQuery(strQuery.toString());
 			query.setParameter("userId", userId);
+			query.setMaxResults(3);
 			resultList = query.getResultList();
 			for(SightVisitCounter counter : resultList) {
 				Hibernate.initialize(counter.getCountriesSight());
@@ -160,38 +164,17 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 		}
 		return resultList;
 	}
-	private List getUserLastFavoriteSights(int userId, String counter) {
-		EntityManager entityManager = null;
-		List<Object[]> resultList = null;
-		try {
-			entityManager = entityManagerFactory.createEntityManager();
-			entityManager.getTransaction().begin();
-			String strQuery = generateUserFavoriteCounterSqlString(counter);
-			Query query = entityManager.createQuery(strQuery);
-			query.setParameter("userId", userId);
-			resultList = query.getResultList();
-			entityManager.getTransaction().commit();
-		} catch(PersistenceException  e) {
-			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
-			throw new DatabaseException(e);
-		}
-		finally {
-			if (entityManager != null && entityManager.isOpen()) {
-				entityManager.close();
-			}
-		}
-		return resultList;
-	}
-	private String generateUserFavoriteCounterSqlString(String counter) {
+	private StringBuilder generateUserFavoriteCounterSqlString(String counter) {
 		/*String strQuery = "SELECT sight.sightId, sight.label, sight.description, country.name" +
 				" FROM CountriesSight sight, " + counter + " counter, Country country," +
 				" User user" +
 				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
 				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";*/
-		String strQuery = "SELECT counter FROM CountriesSight sight, " + counter + " counter, Country country," +
+		StringBuilder strQuery = new StringBuilder();
+		strQuery.append("SELECT counter FROM CountriesSight sight, " + counter + " counter, Country country," +
 				" User user" +
 				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
-				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";
+				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId");
 		return strQuery;
 	}
 }

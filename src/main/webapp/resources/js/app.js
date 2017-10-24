@@ -12,8 +12,10 @@ profileApp.controller('UserMenuCtrl', function($scope){
 		$scope.goto = function (page) {
 			console.log("Goto " + page);
 			console.log("$scope.currentNavItem " + $scope.currentNavItem);
+			var profileUsername = $("#profile-username").text();
+			console.log('profile username ' + profileUsername);
 			if(page == 'info') {
-				$.get('/users/user-info', function(modelAndView) {
+				$.get('/users/user-info/'+profileUsername, function(modelAndView) {
 					$("#nav-bar-content").html(modelAndView);
 				});
 			}
@@ -23,10 +25,9 @@ profileApp.controller('UserMenuCtrl', function($scope){
 				});
 			}
 			if(page == 'favorite') {
-				$.get('/users/user-favorite', function(modelAndView) {
+				$.get('/users/user-favorite/'+profileUsername, function(modelAndView) {
 					$("#nav-bar-content").html(modelAndView);
 				});
-				//$("#nav-bar-content").html("Coming soon");
 			}
 		}
 

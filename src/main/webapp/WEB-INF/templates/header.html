@@ -36,7 +36,7 @@
             Bob
         </div>-->
         <a sec:authorize="isAuthenticated()" class="col-md-6 profile-link"
-           th:text="#{profile}" th:href="@{/users/profile}"}>Profile</a>
+           th:text="#{profile}" th:href="@{/users/profile/{username} (username=${#authentication.name})}"}>Profile</a>
         <div class="pull-right">
             <a href="?language=en_US">English</a>
             |<a href="?language=ru_RU">Russian</a>

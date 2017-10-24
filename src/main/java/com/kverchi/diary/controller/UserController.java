@@ -27,6 +27,8 @@ import java.util.List;
 @RequestMapping("users")
 public class UserController {
 	final static Logger logger = Logger.getLogger(UserController.class);
+	private final static String LOGIN = "login";
+	private final static String REDIRECT_TO_POSTS = "redirect:/posts/list";
 	@Autowired
 	UserService userService;
 	@Autowired
@@ -75,7 +77,7 @@ public class UserController {
 		if (registeredUser != null) {
 			if(!registeredUser.isEnabled()) {
 				userService.activateAccount(registeredUser);
-				return new ModelAndView("login");
+				return new ModelAndView(LOGIN);
 			}
 		}
 //		TODO return error info with error page
@@ -83,7 +85,7 @@ public class UserController {
 	}
 	@RequestMapping(value="/login")
 	public ModelAndView login() {
-		return new ModelAndView("login");
+		return new ModelAndView(LOGIN);
 	}
 	@RequestMapping(value="/forgot-password")
 	public ModelAndView recoverPassword() {
@@ -98,7 +100,7 @@ public class UserController {
 		boolean res = userService.createAndSendResetPasswordToken(email);
 		if(res) {
 			//TODO return info about reset link
-			return new ModelAndView("login");
+			return new ModelAndView(LOGIN);
 		}
 //		TODO return error info with error page
 		return new ModelAndView("error/generic-error");
@@ -125,7 +127,7 @@ public class UserController {
 		boolean res = userService.updatePassword(user);
 		if(res) {
 			//TODO return info about reset link
-			return new ModelAndView("login");
+			return new ModelAndView(LOGIN);
 		}
 //		TODO return error info with error page
 		return new ModelAndView("error/generic-error");
@@ -135,17 +137,27 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("profile");
 		User user = userService.getUserFromSession();
 		if(user == null) {
-			return new ModelAndView("login");
+			return new ModelAndView(LOGIN);
 		}
 		mv.addObject(user);
 		return mv;
 	}
-	@RequestMapping(value = "/user-info")
-	public ModelAndView showUserInfo() {
-		ModelAndView mv = new ModelAndView("fragment/user-menu::userInfo");
-		User user = userService.getUserFromSession();
+	@RequestMapping(value = "/profile/{username}")
+	public ModelAndView showProfile(@PathVariable("username") String username) {
+		ModelAndView mv = new ModelAndView("profile");
+		User user = userService.getUserByUsername(username);
 		if(user == null) {
-			return new ModelAndView("login");
+			return new ModelAndView(REDIRECT_TO_POSTS);
+		}
+		mv.addObject(user);
+		return mv;
+	}
+	@RequestMapping(value = "/user-info/{username}")
+	public ModelAndView showUserInfo(@PathVariable("username") String username) {
+		ModelAndView mv = new ModelAndView("fragment/user-menu::userInfo");
+		User user = userService.getUserByUsername(username);
+		if(user == null) {
+			return new ModelAndView(REDIRECT_TO_POSTS);
 		}
 		mv.addObject(user);
 		return mv;
@@ -155,19 +167,19 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("fragment/user-menu::userStatistic");
 		User user = userService.getUserFromSession();
 		if(user == null) {
-			return new ModelAndView("login");
+			return new ModelAndView(LOGIN);
 		}
 		List<UserActivityLog> userActivityLogList= userActivityLogService.getLastUserActivity(user.getUserId());
 		mv.addObject(user);
 		mv.addObject("userActivityLogList", userActivityLogList);
 		return mv;
 	}
-	@RequestMapping(value="/user-favorite")
-	public ModelAndView showUserFavorite() {
+	@RequestMapping(value="/user-favorite/{username}")
+	public ModelAndView showUserFavorite(@PathVariable("username") String username) {
 		ModelAndView mv = new ModelAndView("fragment/user-menu::userFavorite");
-		User user = userService.getUserFromSession();
+		User user = userService.getUserByUsername(username);
 		if(user == null) {
-			return new ModelAndView("login");
+			return new ModelAndView(REDIRECT_TO_POSTS);
 		}
 		List<SightWishCounter> userWishedList = userService.getUserWishedSights(user.getUserId());
 		List<CountriesSight> userVisitedList = userService.getUserVisitedSights(user.getUserId());
@@ -176,6 +188,7 @@ public class UserController {
 		mv.addObject("userVisitedSights", userVisitedList);
 		return mv;
 	}
+
 	@RequestMapping(value = "/save-info", method = RequestMethod.POST, consumes = "text/plain")
 	public String saveInfo(@RequestBody(required=false)  String info) {
 		User currentUser = userService.getUserFromSession();
