@@ -3,20 +3,19 @@ package com.kverchi.diary.dao.impl;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
-import com.kverchi.diary.domain.CountriesSight;
-import com.kverchi.diary.domain.Country;
+import com.kverchi.diary.domain.*;
 import org.apache.log4j.Logger;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.kverchi.diary.custom.exception.DatabaseException;
 import com.kverchi.diary.dao.UserDao;
-import com.kverchi.diary.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +107,58 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 
 	@Override
 	public List gerUserWishedSights(int userId) throws DatabaseException {
-		return getUserLastFavoriteSights(userId, "SightWishCounter");
+		EntityManager entityManager = null;
+		List<SightWishCounter> resultList = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String strQuery = generateUserFavoriteCounterSqlString("SightWishCounter");
+			Query query = entityManager.createQuery(strQuery);
+			query.setParameter("userId", userId);
+			resultList = query.getResultList();
+			for(SightWishCounter counter : resultList) {
+				Hibernate.initialize(counter.getCountriesSight());
+				Hibernate.initialize(counter.getUser());
+			}
+			entityManager.getTransaction().commit();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		}
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return resultList;
 	}
 
 	@Override
 	public List getUserVisitedSights(int userId) throws DatabaseException {
-		return getUserLastFavoriteSights(userId, "SightVisitCounter");
+		EntityManager entityManager = null;
+		List<SightVisitCounter> resultList = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			String strQuery = generateUserFavoriteCounterSqlString("SightVisitCounter");
+			Query query = entityManager.createQuery(strQuery);
+			query.setParameter("userId", userId);
+			resultList = query.getResultList();
+			for(SightVisitCounter counter : resultList) {
+				Hibernate.initialize(counter.getCountriesSight());
+				Hibernate.initialize(counter.getUser());
+			}
+			entityManager.getTransaction().commit();
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		}
+		finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return resultList;
 	}
 	private List getUserLastFavoriteSights(int userId, String counter) {
 		EntityManager entityManager = null;
@@ -143,7 +188,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao{
 				" User user" +
 				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
 				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";*/
-		String strQuery = "SELECT sight FROM CountriesSight sight, " + counter + " counter, Country country," +
+		String strQuery = "SELECT counter FROM CountriesSight sight, " + counter + " counter, Country country," +
 				" User user" +
 				" WHERE sight.sightId = counter.countriesSight.sightId AND user.userId = counter.user.userId " +
 				" AND sight.country.countryCode = country.countryCode AND counter.user.userId =:userId";

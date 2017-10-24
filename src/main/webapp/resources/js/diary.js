@@ -688,7 +688,7 @@ function isLetterOnNumberClicked(e) {
 }
 function checkSightSeachCriteria() {
 	var searchCriteria = null;
-	var sightIdVal = $("#sight_id").val();
+	var sightIdVal = $("#sight-id").val();
 	if(typeof sightIdVal != 'undefined') {
 		searchCriteria = {'BY_SIGHT_ID' : parseInt(sightIdVal)};
 	}

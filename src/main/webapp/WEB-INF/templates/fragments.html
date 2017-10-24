@@ -54,7 +54,8 @@
 								</div>
 								<div class="col-sm-3">
 									<p class="pull-right">
-										by <span th:text="${post.user.username}">someone</span>
+										by <a th:href="@{/users/profile/{user_id} (user_id=${post.user.userId})}"
+											  th:text="${post.user.username}">someone</a>
 										<small><em th:text="${#temporals.format(post.postDatetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
 									</p>
 								</div>
@@ -62,19 +63,15 @@
 						</div>
 					</div>
 	
-					<div class="panel-body" th:utext="${post.description}">Lorem
-						ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-						minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-						aliquip ex ea commodo consequat. Duis aute irure dolor in...</div>
-	
-	
+					<div class="panel-body" th:utext="${post.description}">Description</div>
 	
 					<div class="panel-footer">
 						<span><a href="#"
 							th:href="@{/posts/single-post/{post_id}(post_id=${post.postId}) }">Read
 								more</a></span>
-						<span class="pull-right"><span th:text="#{sight}"></span>: <em th:text="${post.countriesSight.label}"></em></span>
+						<span class="pull-right"><span th:text="#{sight}"></span>:
+							<a th:href="@{/posts/sight/{sight_id}(sight_id=${post.countriesSight.sightId})}"
+							   th:text="${post.countriesSight.label}"></a></span>
 					</div>
 				</div>
 				<!-- end of post -->

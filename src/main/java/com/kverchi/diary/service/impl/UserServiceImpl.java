@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List getUserWishedSights(int userId) {
-        List<CountriesSight> wishList = userDao.gerUserWishedSights(userId);
+        List<SightWishCounter> wishList = userDao.gerUserWishedSights(userId);
         return wishList;
     }
 

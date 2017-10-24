@@ -1,7 +1,6 @@
 package com.kverchi.diary.controller;
 
-import com.kverchi.diary.domain.CountriesSight;
-import com.kverchi.diary.domain.UserActivityLog;
+import com.kverchi.diary.domain.*;
 import com.kverchi.diary.service.UserActivityLogService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kverchi.diary.custom.exception.ServiceException;
-import com.kverchi.diary.domain.ServiceResponse;
-import com.kverchi.diary.domain.User;
 import com.kverchi.diary.form.ForgotPasswordForm;
 import com.kverchi.diary.form.NewPasswordForm;
 import com.kverchi.diary.form.RegistrationForm;
@@ -172,7 +169,7 @@ public class UserController {
 		if(user == null) {
 			return new ModelAndView("login");
 		}
-		List<CountriesSight> userWishedList = userService.getUserWishedSights(user.getUserId());
+		List<SightWishCounter> userWishedList = userService.getUserWishedSights(user.getUserId());
 		List<CountriesSight> userVisitedList = userService.getUserVisitedSights(user.getUserId());
 		mv.addObject(user);
 		mv.addObject("userWishedSights", userWishedList);

@@ -130,7 +130,7 @@ function prepareNewSightModalForm(results) {
 }
 
 function saveNewSight(map, sightBaseURL) {
-    var id = $("#sight_id");
+    var id = $("#sight-id");
     var code = $("#country_code");
     console.log('country code: ' + code.val());
     var country_name = $("#country_name");
@@ -190,7 +190,7 @@ function updSight(id) {
     var upd_sight_url = "../sights/edit/" + id;
     $.get(upd_sight_url, function (data) {
         //event.preventDefault();
-        $("#sight_id").val(id);
+        $("#sight-id").val(id);
         console.log('country code: ' + data.country.country_code);
         $("#country_code").val(data.country.country_code);
         $("#label").val(data.sight_label);

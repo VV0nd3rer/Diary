@@ -49,15 +49,17 @@
             <th width="80" th:text="#{user.favorite.label}">Label</th>
             <th width="120" th:text="#{user.favorite.description}">Description</th>
             <th width="120" th:text="#{user.favorite.country}">Country</th>
+            <th width="80" th:text="#{user.favorite.date}">Date</th>
             <th width="80" th:text="#{show.more}">Show sight</th>
         </tr>
         </thead>
         <tbody th:each="userWish : ${userWishedSights}">
         <tr>
-            <td th:text="${userWish.label}"></td>
-            <td th:text="${userWish.description}"></td>
-            <td th:text="${userWish.country.name}"></td>
-            <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userWish.sightId})}"
+            <td th:text="${userWish.countriesSight.label}"></td>
+            <td th:text="${userWish.countriesSight.description}"></td>
+            <td th:text="${userWish.countriesSight.country.name}"></td>
+            <td th:text="${#temporals.format(userWish.wishDatetime, 'dd/MM/yyyy HH:mm')}"></td>
+            <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userWish.countriesSight.sightId})}"
                    th:text="#{user.favorite.show.sight}"></a> </td>
         </tr>
         </tbody>
@@ -72,15 +74,17 @@
             <th width="80" th:text="#{user.favorite.label}">Label</th>
             <th width="120" th:text="#{user.favorite.description}">Description</th>
             <th width="120" th:text="#{user.favorite.country}">Country</th>
+            <th width="80" th:text="#{user.favorite.date}">Date</th>
             <th width="80" th:text="#{show.more}">Show sight</th>
         </tr>
         </thead>
         <tbody th:each="userVisit : ${userVisitedSights}">
            <tr>
-                <td th:text="${userVisit.label}"></td>
-                <td th:text="${userVisit.description}"></td>
-                <td th:text="${userVisit.country.name}"></td>
-                <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userVisit.sightId})}"
+                <td th:text="${userVisit.countriesSight.label}"></td>
+                <td th:text="${userVisit.countriesSight.description}"></td>
+                <td th:text="${userVisit.countriesSight.country.name}"></td>
+                <td th:text="${#temporals.format(userVisit.visitDatetime, 'dd/MM/yyyy HH:mm')}"></td>
+                <td><a th:href="@{/posts/sight/{sight_id}(sight_id=${userVisit.countriesSight.sightId})}"
                 th:text="#{user.favorite.show.sight}"></a> </td>
            </tr>
         </tbody>
