@@ -26,4 +26,5 @@ public interface UserService {
 	void saveUserInfo(int userId, String info);
 	List getUserWishedSights(int userId);
 	List getUserVisitedSights(int userId);
+	String encodePassword(String password);
 }

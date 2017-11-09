@@ -1,9 +1,38 @@
-var signupApp = angular.module('signup', ['ngMaterial','ngMessages']);
+//Common module
+angular.module('passwordVerifyModule', ['ngMaterial','ngMessages']).directive('passwordVerify', function() {
+	return {
+		restrict: 'A', // only activate on element attribute
+		require: '?ngModel', // get a hold of NgModelController
+		link: function(scope, elem, attrs, ngModel) {
+			if (!ngModel) return; // do nothing if no ng-model
+
+			// watch own value and re-validate on change
+			scope.$watch(attrs.ngModel, function() {
+				validate();
+			});
+
+			// observe the other value and re-validate on change
+			attrs.$observe('passwordVerify', function(val) {
+				validate();
+			});
+
+			var validate = function() {
+				// values
+				var val1 = ngModel.$viewValue;
+				var val2 = attrs.passwordVerify;
+
+				// set validity
+				ngModel.$setValidity('passwordVerify', val1 === val2);
+			};
+		}
+	}
+});
+var signupApp = angular.module('signup', ['ngMaterial','ngMessages','passwordVerifyModule']);
 var loginApp = angular.module('login', ['ngMaterial','ngMessages']);
 var forgotPassApp = angular.module('forgotPass', ['ngMaterial','ngMessages']);
-var resetPassApp = angular.module('resetPass', ['ngMaterial','ngMessages']);
+var resetPassApp = angular.module('resetPass', ['ngMaterial','ngMessages','passwordVerifyModule']);
 var searchApp = angular.module('search', ['ngMaterial','ngMessages']);
-var profileApp = angular.module('profile', ['ngMaterial']);
+var profileApp = angular.module('profile', ['ngMaterial', 'ngMessages','passwordVerifyModule']);
 
 profileApp.controller('UserMenuCtrl', function($scope){
 
@@ -202,7 +231,7 @@ signupApp.directive('emailAvailable',function($timeout, $q) {
 		}
 	}
 });
-signupApp.directive('passwordVerify', function() {
+/*signupApp.directive('passwordVerify', function() {
 	return {
 		restrict: 'A', // only activate on element attribute
 		require: '?ngModel', // get a hold of NgModelController
@@ -229,7 +258,7 @@ signupApp.directive('passwordVerify', function() {
 			};
 		}
 	}
-});
+});*/
 
 loginApp.directive('loginResult',function() {
 	return {

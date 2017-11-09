@@ -3,8 +3,18 @@ package com.kverchi.diary.form;
 public class NewPasswordForm {
 	private String username;
 	private int userId;
+	private String currentPassword;
+
 	private String password;
+
 	private String matchingPassword;
+	public String getCurrentPassword() {
+		return currentPassword;
+	}
+
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
+	}
 	public String getPassword() {
 		return password;
 	}

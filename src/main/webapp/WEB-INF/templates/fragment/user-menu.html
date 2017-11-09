@@ -12,8 +12,14 @@
    <!-- This button triggers showing Bootstrap modal form.
         This button loads in angularjs nav-bar.
         id.click event doesn't work from dynamically loaded nav-bar page. -->
-    <a th:if="${ user.username == #authentication.name}" href="#" id="update-info-btn" class="btn btn-info top-row-buffer" role="button" onclick="showModalDialog();"
-       th:text="#{user.info.edit}">Edit info</a>
+    <span th:if="${ user.username == #authentication.name}">
+        <a href="#" id="update-info-btn"
+           class="btn btn-info top-row-buffer" role="button" onclick="showUserInfoModalDialog();"
+           th:text="#{user.info.edit}">Edit info</a>
+        <a href="#" id="update-pass-btn" class="btn btn-info top-row-buffer" role="button"
+           onclick="showUpdatePasswordModalDialog();"
+           th:text="#{user.pass.update}">Update password</a>
+    </span>
 
 </div>
 <div id="user-statistic" th:fragment="userStatistic">

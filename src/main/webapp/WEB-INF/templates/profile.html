@@ -28,7 +28,7 @@
     <!-- Profile snippet took from https://bootsnipp.com/snippets/featured/user-profile-sidebar. Prepeard by keenthemes -->
     <div class="row profile">
 
-        <!-- Modal form -->
+        <!-- Update user info modal form -->
         <div class="modal fade" id="modal-form" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -55,7 +55,8 @@
                                                 <button type="submit" class="btn btn-default" id="modal-form-cancel-btn"
                                                         th:text="#{cancel}">Cancel
                                                 </button>
-                                                <button type="submit" class="btn btn-primary" id="modal-form-save-info-btn"
+                                                <button type="submit" class="btn btn-primary"
+                                                        id="modal-form-save-info-btn"
                                                         th:text="#{submit}">Save
                                                 </button>
                                             </div>
@@ -71,6 +72,91 @@
         </div><!-- /.modal fade -->
         <!-- End of modal form -->
 
+        <!-- Update user password modal form -->
+        <div class="modal fade" id="pass-modal-form" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding:40px 50px;">
+                        <div class="row">
+                            <!-- Modal dialog name -->
+                            <legend th:text="#{user.pass.update}">Update password</legend>
+                            <div class="form-group">
+                                <form name="newPassForm" method="post">
+                                    <p class="errorMessage" hidden>Error</p>
+                                    <md-input-container class="md-block">
+                                        <label th:text="#{user.current.pass}">Current password</label>
+                                        <input required type="password" name="current_password"
+                                               ng-model="current_password" id="current_password"
+                                               minlength="6" maxlength="12"/>
+                                        <div ng-messages="newPassForm.current_password.$error" role="alert">
+                                            <div ng-message-exp="['required', 'minlength', 'maxlength']"
+                                                 th:text="#{pass.error.description}">
+                                                Your password must be between 6 and 12 characters long.
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label th:text="#{new.password}">New password</label>
+                                        <input required type="password" name="password"
+                                               ng-model="password" id="password"
+                                               minlength="6" maxlength="12"
+                                               password-verify="{{confirm_password}}"/>
+
+                                        <div ng-messages="newPassForm.password.$error" role="alert">
+                                            <div ng-message-exp="['required', 'minlength', 'maxlength']"
+                                                 th:text="#{pass.error.description}">
+                                                Your password must be between 6 and 12 characters long.
+                                            </div>
+                                            <div ng-message="passwordVerify" th:text="#{password.verify}">No
+                                                match!
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Confirm password</label>
+                                        <input required type="password" name="confirm_password"
+                                               ng-model="confirm_password" id="confirm_password"
+                                               minlength="6" maxlength="12"
+                                               password-verify="{{password}}"/>
+
+                                        <div ng-messages="newPassForm.password.$error" role="alert">
+                                            <div ng-message-exp="['required', 'minlength', 'maxlength']"
+                                                 th:text="#{pass.error.description}">
+                                                Your password must be between 6 and 12 characters long.
+                                            </div>
+                                            <div ng-message="passwordVerify" th:text="#{password.verify}">No
+                                                match!
+                                            </div>
+
+                                        </div>
+                                    </md-input-container>
+                                    <div>
+                                        <md-button type="submit" ng-disabled="newPassForm.$invalid"
+                                                   th:text="#{submit}">Submit
+                                        </md-button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn btn-default" id="pass-modal-form-cancel-btn"
+                                                th:text="#{cancel}">Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-primary"
+                                                id="modal-form-save-pass-btn"
+                                                th:text="#{submit}">Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                    </div>
+                </div>
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal fade -->
+        <!-- -->
         <div class="col-md-3">
             <div class="profile-sidebar">
                 <!-- SIDEBAR USERPIC -->
@@ -92,8 +178,12 @@
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
                 <div class="profile-userbuttons" th:if="${ user.username != #authentication.name}">
-                    <button type="button" class="btn btn-success btn-sm" th:text="#{user.profile.add.friend}">Become friends </button>
-                    <button type="button" class="btn btn-info btn-sm top-row-buffer" th:text="#{user.profile.message}">Say something</button>
+                    <button type="button" class="btn btn-success btn-sm" th:text="#{user.profile.add.friend}">Become
+                        friends
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm top-row-buffer" th:text="#{user.profile.message}">
+                        Say something
+                    </button>
                 </div>
                 <!-- END SIDEBAR BUTTONS -->
                 <!-- SIDEBAR MENU -->
@@ -151,7 +241,6 @@
 
                 </md-content>
             </div>
-
 
 
             <!--<div class="profile-content">

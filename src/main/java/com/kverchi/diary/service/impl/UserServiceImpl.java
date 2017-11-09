@@ -110,6 +110,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+
+    }
+
+    @Override
     public ServiceResponse testRegisterAccount(RegistrationForm user) throws ServiceException {
         ServiceResponse response =
                 new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR, ServiceMessageResponse.UKNOWN_PROBLEM.toString());

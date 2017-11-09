@@ -1,6 +1,7 @@
 package com.kverchi.diary.controller;
 
 import com.kverchi.diary.domain.*;
+import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.service.UserActivityLogService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,11 @@ public class UserController {
 	}
 	@RequestMapping(value="/update-password", method = RequestMethod.POST)
 	public ModelAndView updatePassword(@ModelAttribute NewPasswordForm newPasswordForm) {
+		//AngularJS checks password matching too
+		if(!newPasswordForm.getPassword().equals(newPasswordForm.getMatchingPassword())) {
+			return new ModelAndView("error/generic-error");
+		}
+		//---//
 		User user = new User();
 		user.setUserId(newPasswordForm.getUserId());
 		user.setPassword(newPasswordForm.getPassword());
@@ -131,6 +137,35 @@ public class UserController {
 		}
 //		TODO return error info with error page
 		return new ModelAndView("error/generic-error");
+	}
+	@RequestMapping(value = "/update-password-in-session", method = RequestMethod.POST)
+	public ServiceMessageResponse updatePasswordInSession(@RequestBody NewPasswordForm newPasswordForm) {
+		ServiceMessageResponse response = ServiceMessageResponse.ERROR;
+		User user = userService.getUserFromSession();
+		String encodedCurrentPassword = userService.encodePassword(newPasswordForm.getCurrentPassword());
+		if(!user.getPassword().equals(encodedCurrentPassword)){
+			return response;
+		}
+		if (user == null) {
+			return response;
+		}
+		if(newPasswordForm.getCurrentPassword().equals(newPasswordForm.getPassword())) {
+			response = ServiceMessageResponse.NEW_PASSWORD_IS_THE_SAME;
+			return response;
+		}
+		if(!newPasswordForm.getPassword().equals(newPasswordForm.getMatchingPassword())) {
+			response = ServiceMessageResponse.NEW_PASSWORD_MISMATCHED;
+			return response;
+		}
+		user.setPassword(newPasswordForm.getPassword());
+		boolean res = userService.updatePassword(user);
+		if(res) {
+			response = ServiceMessageResponse.OK;
+			return response;
+		} else {
+			response = ServiceMessageResponse.TRANSACTION_PROBLEM;
+			return response;
+		}
 	}
 	@RequestMapping(value = "/profile")
 	public ModelAndView showProfile() {
@@ -162,6 +197,7 @@ public class UserController {
 		mv.addObject(user);
 		return mv;
 	}
+
 	@RequestMapping(value = "/user-statistic")
 	public ModelAndView showUserStatistic() {
 		ModelAndView mv = new ModelAndView("fragment/user-menu::userStatistic");
