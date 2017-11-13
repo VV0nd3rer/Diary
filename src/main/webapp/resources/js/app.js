@@ -65,7 +65,12 @@ profileApp.controller('UserMenuCtrl', function($scope){
 		$(':input','#pass-modal-form')
 			.not(':button, :submit, :reset, :hidden')
 			.val('');
+		$('.errorMessage').hide();
 	});
+	$scope.submit = function(){
+		console.log("form submitted");
+		$scope.submitted = true;
+	}
 	angular.element('#modal-form-save-pass-btn').click(function() {
 		var data = {};
 		var current_pass = $("#current_password").val();
@@ -89,8 +94,14 @@ profileApp.controller('UserMenuCtrl', function($scope){
 			success: function(res){
 				if(res == 'OK') {
 					$("#pass-modal-form").modal("hide");
-				} else  {
-					$(".errorMessage").show();
+				} else  if(res == 'ERROR') {
+					$("#error").show();
+				} else if(res == 'NEW_PASSWORD_IS_THE_SAME') {
+					$("#newPassAsOldError").show();
+				} else if(res == 'NEW_PASSWORD_MISMATCHED') {
+					$("#passMismatchingError").show();
+				} else {
+					$("#transactionError").show();
 				}
 
 			},

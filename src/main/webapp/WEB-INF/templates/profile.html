@@ -82,7 +82,11 @@
                             <legend th:text="#{user.pass.update}">Update password</legend>
                             <div class="form-group">
                                 <form name="newPassForm" method="post">
-                                    <p class="errorMessage" hidden>Error</p>
+                                    <p class="errorMessage" id="error" th:text="#{current.password.error}" hidden>Error</p>
+                                    <p class="errorMessage" id="newPassAsOldError" th:text="#{password.error.new.as.old}" hidden>Error</p>
+                                    <p class="errorMessage" id="passMismatchingError" th:text="#{password.error.mismatching}" hidden>Error</p>
+                                    <p class="errorMessage" id="transactionError" th:text="#{transaction.error}" hidden>Error</p>
+                                    
                                     <md-input-container class="md-block">
                                         <label th:text="#{user.current.pass}">Current password</label>
                                         <input required type="password" name="current_password"
@@ -107,7 +111,7 @@
                                                  th:text="#{pass.error.description}">
                                                 Your password must be between 6 and 12 characters long.
                                             </div>
-                                            <div ng-message="passwordVerify" th:text="#{password.verify}">No
+                                            <div ng-message="passwordVerify" th:text="#{password.error.mismatching}">No
                                                 match!
                                             </div>
                                         </div>
@@ -124,7 +128,7 @@
                                                  th:text="#{pass.error.description}">
                                                 Your password must be between 6 and 12 characters long.
                                             </div>
-                                            <div ng-message="passwordVerify" th:text="#{password.verify}">No
+                                            <div ng-message="passwordVerify" th:text="#{password.error.mismatching}">No
                                                 match!
                                             </div>
 

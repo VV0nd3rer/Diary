@@ -43,7 +43,7 @@
                 <div ng-message-exp="['required', 'minlength', 'maxlength']" th:text="#{pass.error.description}">
                     Your password must be between 6 and 12 characters long.
                 </div>
-                <div ng-message="passwordVerify" th:text="#{password.verify}">No match!</div>
+                <div ng-message="passwordVerify" th:text="#{password.error.mismatching}">No match!</div>
 
             </div>
         </md-input-container>
