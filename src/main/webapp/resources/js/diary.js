@@ -323,49 +323,6 @@ $(document).ready(function(){
 			});
 
 	});
-	$("#modal-form-save-pass-btn").click(function () {
-		var data = {};
-		var current_pass = $("#current_password").val();
-		var password = $("#password").val();
-		var confirm_password = $("#confirm_password").val();
-		data['currentPassword'] = current_pass;
-		data['password'] = password;
-		data['matchingPassword'] = confirm_password;
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		$(document).ajaxSend(function(e, xhr, options) {
-			xhr.setRequestHeader(header, token);
-		});
-
-		var upd_pass_url = root+"/users/update-password-in-session/";
-		$.ajax({
-			url: upd_pass_url,
-			type:"POST",
-			contentType:"application/json; charset=utf-8",
-			data: JSON.stringify(data),
-			success: function(res){
-				if(res == 'OK') {
-					$("#pass-modal-form").modal("hide");
-				} else  {
-				  $(".errorMessage").show();
-				}
-
-			},
-			error : function(e) {
-				console.log("Error: ", e);
-			},
-			done : function(e) {
-				alert("DONE");
-			}
-		});
-
-	});
-	$("#pass-modal-form-cancel-btn").click(function () {
-		$("#pass-modal-form").modal("hide");
-		$(':input','#pass-modal-form')
-			.not(':button, :submit, :reset, :hidden')
-			.val('');
-	})
 	//Books page CRUD functionality
 	$("#add-book-btn").click(function(){
         $("#modal-form").modal();

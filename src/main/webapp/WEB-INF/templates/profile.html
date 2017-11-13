@@ -132,25 +132,30 @@
                                     </md-input-container>
                                     <div>
                                         <md-button type="submit" ng-disabled="newPassForm.$invalid"
+                                                   id="modal-form-save-pass-btn"
                                                    th:text="#{submit}">Submit
+                                        </md-button>
+                                    </div>
+                                    <div>
+                                        <md-button id="pass-modal-form-cancel-btn" th:text="#{cancel}">Cancel
                                         </md-button>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-default" id="pass-modal-form-cancel-btn"
+                                        <button type="submit" class="btn btn-default"
                                                 th:text="#{cancel}">Cancel
                                         </button>
                                         <button type="submit" class="btn btn-primary"
-                                                id="modal-form-save-pass-btn"
+
                                                 th:text="#{submit}">Save
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div><!-- /.row -->
                     </div>
                 </div>

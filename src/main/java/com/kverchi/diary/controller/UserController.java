@@ -142,11 +142,12 @@ public class UserController {
 	public ServiceMessageResponse updatePasswordInSession(@RequestBody NewPasswordForm newPasswordForm) {
 		ServiceMessageResponse response = ServiceMessageResponse.ERROR;
 		User user = userService.getUserFromSession();
-		String encodedCurrentPassword = userService.encodePassword(newPasswordForm.getCurrentPassword());
-		if(!user.getPassword().equals(encodedCurrentPassword)){
+		if (user == null) {
 			return response;
 		}
-		if (user == null) {
+		boolean isCurrentPassValid =
+				userService.verifyPassword(newPasswordForm.getCurrentPassword(), user.getPassword());
+		if(!isCurrentPassValid){
 			return response;
 		}
 		if(newPasswordForm.getCurrentPassword().equals(newPasswordForm.getPassword())) {

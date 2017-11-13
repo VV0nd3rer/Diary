@@ -1,15 +1,10 @@
 package com.kverchi.diary.service;
 
-import com.kverchi.diary.domain.UserActivityLog;
-import org.springframework.stereotype.Service;
-
 import com.kverchi.diary.custom.exception.ServiceException;
 import com.kverchi.diary.domain.ServiceResponse;
 import com.kverchi.diary.domain.User;
-import com.kverchi.diary.enums.ServiceMessageResponse;
 import com.kverchi.diary.form.RegistrationForm;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserService {
@@ -26,5 +21,5 @@ public interface UserService {
 	void saveUserInfo(int userId, String info);
 	List getUserWishedSights(int userId);
 	List getUserVisitedSights(int userId);
-	String encodePassword(String password);
+	boolean verifyPassword(String rawPass, String encodedPass);
 }
