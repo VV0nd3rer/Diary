@@ -1,26 +1,60 @@
-var ws;
+var stompClient = null;
+
+function setConnected(connected) {
+    $("#connect").prop("disabled", connected);
+    $("#disconnect").prop("disabled", !connected);
+    if (connected) {
+        $("#conversation").show();
+    }
+    else {
+        $("#conversation").hide();
+    }
+    $("#greetings").html("");
+}
 
 function connect() {
-    var username = document.getElementById("username").value;
-
-    var host = document.location.host;
-    var pathname = document.location.pathname;
-
-    //ws = new WebSocket("ws://" +host  + pathname + "chat/" + username);
-    ws = new WebSocket("ws://localhost:8080/chat/" + username);
-    ws.onmessage = function(event) {
-        var log = document.getElementById("log");
-        console.log("on message: " + event.data);
-        var message = JSON.parse(event.data);
-        log.innerHTML += message.from + " : " + message.content + "\n";
-    };
-}
-
-function send() {
-    var content = document.getElementById("msg").value;
-    var json = JSON.stringify({
-        "content":content
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
     });
-
-    ws.send(json);
+    var socket = new SockJS('/messenger');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        });
+    });
 }
+
+function disconnect() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
+
+function sendName() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+    stompClient.send("/app/hello", {}, JSON.stringify({'from': $("#name").val()}));
+}
+
+function showGreeting(message) {
+    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+}
+
+$(function () {
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
+    $( "#connect" ).click(function() { connect(); });
+    $( "#disconnect" ).click(function() { disconnect(); });
+    $( "#send" ).click(function() { sendName(); });
+});

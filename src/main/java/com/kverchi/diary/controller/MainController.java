@@ -29,9 +29,4 @@ public class MainController {
 		ModelAndView mv = new ModelAndView("redirect:/posts/list");
 		return mv;
 	}
-	@RequestMapping("/messenger")
-	public ModelAndView showMessenger() {
-		ModelAndView mv = new ModelAndView("messenger");
-		return mv;
-	}
 }
