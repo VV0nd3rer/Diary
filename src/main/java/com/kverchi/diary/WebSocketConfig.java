@@ -22,6 +22,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                 .setRelayHost("localhost")
                 .setRelayPort(61613);*/
         config.setApplicationDestinationPrefixes("/app");
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override

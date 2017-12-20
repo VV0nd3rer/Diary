@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +25,8 @@ public class MessengerController {
     final static Logger logger = Logger.getLogger(MessengerController.class);
     @Autowired
     UserService userService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     /*
     @Autowired
     MessageSender messageSender;*/
@@ -35,17 +38,17 @@ public class MessengerController {
         ModelAndView mv = new ModelAndView("messenger");
         return mv;
     }
-    @MessageMapping("/send-msg/{to}")
-    @SendTo("/topic/{to}")
-    public ChatMessage greeting(Message<Object> msg, ChatMessage message, @DestinationVariable String to) throws Exception {
+    @MessageMapping("/send-msg")
+    //@SendTo("/topic/receive-msg")
+    public void greeting(Message<Object> msg, ChatMessage message/*, @DestinationVariable String to*/) throws Exception {
         //Thread.sleep(1000); // simulated delay
-
+        logger.debug(messagingTemplate);
         Principal principal = msg.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         logger.debug(principal.getName());
         message.setFrom(principal.getName());
         logger.debug("msg to : " + message.getTo());
         //message.setContent("Hello :) ");
         //messageSender.sendMessage(message);
-        return message;
+        messagingTemplate.convertAndSendToUser(message.getTo(), "/topic/receive-msg", message);
     }
 }
