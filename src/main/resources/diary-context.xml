@@ -1,12 +1,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:sec="http://www.springframework.org/schema/security"
+	   xmlns:amq="http://activemq.apache.org/schema/core"
 	   xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security.xsd">
+		http://activemq.apache.org/schema/core
+		http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
 
+	<!--<amq:broker useJmx="false" persistent="false">
+		<amq:transportConnectors>
+
+			<amq:transportConnector uri="stomp://localhost:61613" />
+		</amq:transportConnectors>
+	</amq:broker>-->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" depends-on="jasyptPropertyPlaceholderConfigurer">
 		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="587"/>
@@ -47,5 +53,6 @@
 		</property>
 		<property name="defaultEncoding" value="UTF-8"/>
 	</bean>
+
 
 </beans>

@@ -9,10 +9,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +24,9 @@ public class MessengerController {
     final static Logger logger = Logger.getLogger(MessengerController.class);
     @Autowired
     UserService userService;
+    /*
+    @Autowired
+    MessageSender messageSender;*/
 
     @RequestMapping("/show")
     public ModelAndView showMessenger() {
@@ -36,17 +35,17 @@ public class MessengerController {
         ModelAndView mv = new ModelAndView("messenger");
         return mv;
     }
-    @MessageMapping("/hello/{to}")
+    @MessageMapping("/send-msg/{to}")
     @SendTo("/topic/{to}")
     public ChatMessage greeting(Message<Object> msg, ChatMessage message, @DestinationVariable String to) throws Exception {
         //Thread.sleep(1000); // simulated delay
-        logger.debug("user from session: "+userService);
-        logger.debug("name: " + to);
+
         Principal principal = msg.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         logger.debug(principal.getName());
         message.setFrom(principal.getName());
         logger.debug("msg to : " + message.getTo());
-        message.setContent("Hello :) ");
+        //message.setContent("Hello :) ");
+        //messageSender.sendMessage(message);
         return message;
     }
 }

@@ -44,7 +44,7 @@ function sendName() {
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
-    stompClient.send("/app/hello/"+$("#name").val(), {}, JSON.stringify({'to': $("#name").val()}));
+    stompClient.send("/app/send-msg/"+$("#name").val(), {}, JSON.stringify({'to': $("#name").val(), 'content': "hello!!!"}));
 }
 
 function showGreeting(message) {
