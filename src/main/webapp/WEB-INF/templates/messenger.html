@@ -16,6 +16,7 @@
 <div th:replace="header :: header">&nbsp;</div>
 <div id="main-content" class="container">
     <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
+    <p th:text="${msgCount}"></p>
     <div class="row">
         <div class="col-md-6">
             <form class="form-inline">
@@ -38,7 +39,14 @@
         </div>
     </div>
     <div class="row">
+        <h3>Unread messages</h3>
         <div class="col-md-12">
+            <table>
+                <tr th:if="${not #lists.isEmpty(unreadMessages) and unreadMessages != null}"
+                    th:each="unreadMsg: ${unreadMessages}" class="unread-msg">
+                    <td>From: <span th:text="${unreadMsg.user.userId}"></span></td> <td><span th:text="${unreadMsg.text}"></span></td>
+                </tr>
+            </table>
             <table id="conversation" class="table table-striped">
                 <thead>
                 <tr>
@@ -49,6 +57,62 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="row">
+        <h3>Recent messages</h3>
+        <div class="col-md-12">
+            <table>
+                <tr th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
+                    th:each="recentMsg: ${recentMessages}" class="unread-msg">
+                    <td>From: <span th:text="${recentMsg.user.username}"></span></td> <td><span th:text="${recentMsg.text}"></span></td>
+                </tr>
+            </table>
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="list-group">
+        <a href="#" class="list-group-item">
+            <span>
+                <label>
+                    <input type="checkbox">
+                </label>
+            </span>
+            <span class="name" style="min-width: 120px;display: inline-block;">Mark Otto</span>
+            <span class="">Nice work on the lastest version</span>
+            <span class="badge">12:10 AM</span>
+        </a>
+        <a href="#" class="list-group-item">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">
+            </label>
+        </div>
+        <span class="name" style="min-width: 120px;
+                                        display: inline-block;">Jason Markus</span>
+            <span class="">This is big title</span>
+        <span class="text-muted" style="font-size: 11px;">- I saw that you had..</span>
+            <span class="badge">12:09 AM</span>
+        </a>
+        <a href="#" class="list-group-item read">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">
+            </label>
+        </div>
+        <span class="name" style="min-width: 120px;
+                                                display: inline-block;">Jane Patel</span>
+            <span class="">This is big title</span>
+        <span class="text-muted" style="font-size: 11px;">- Hi hello how r u ?</span>
+            <span class="badge">11:30 PM</span>
+        </a>
     </div>
 </div>
 </body>

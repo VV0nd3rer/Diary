@@ -8,11 +8,6 @@ public class ChatMessage {
     private String to;
     private String content;
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     public String getFrom() {
         return from;
     }
@@ -35,5 +30,10 @@ public class ChatMessage {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "From: " + from + "; To: " + to + "; Message: " + content;
     }
 }

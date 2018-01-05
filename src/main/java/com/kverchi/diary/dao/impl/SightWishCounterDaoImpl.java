@@ -40,7 +40,9 @@ public class SightWishCounterDaoImpl extends GenericDaoImpl<SightWishCounter> im
             CriteriaQuery<Long> criteriaQueryCount = criteriaBuilder.createQuery(Long.class);
             Root<SightWishCounter> wishCounterRoot = criteriaQueryCount.from(SightWishCounter.class);
             criteriaQueryCount.select(criteriaBuilder.count(wishCounterRoot));
-            criteriaQueryCount.where(criteriaBuilder.equal(wishCounterRoot.get("countriesSight").get("sightId"), counter_obj_id));
+            criteriaQueryCount.where(criteriaBuilder.equal(
+                    wishCounterRoot.get("countriesSight").get("sightId"),
+                    counter_obj_id));
             Query query = entityManager.createQuery(criteriaQueryCount);
             result = toIntExact((Long)query.getSingleResult());
 

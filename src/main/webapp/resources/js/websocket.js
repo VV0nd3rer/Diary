@@ -24,7 +24,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         var username = $("#username").text();
-        stompClient.subscribe('/user/topic/receive-msg', function (greeting) {
+        stompClient.subscribe('/user/queue/receive-msg', function (greeting) {
             showGreeting(JSON.parse(greeting.body));
         });
     });
@@ -45,6 +45,7 @@ function sendName() {
         xhr.setRequestHeader(header, token);
     });
     stompClient.send("/app/send-msg", {}, JSON.stringify({'to': $("#name").val(), 'content': "hello!!!"}));
+
 }
 
 function showGreeting(message) {

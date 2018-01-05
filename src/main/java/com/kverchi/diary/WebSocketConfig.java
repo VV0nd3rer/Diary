@@ -17,10 +17,10 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
-        /*config.enableStompBrokerRelay("/topic/", "/queue/")
+        //config.enableSimpleBroker("/topic");
+        config.enableStompBrokerRelay("/topic/", "/queue/")
                 .setRelayHost("localhost")
-                .setRelayPort(61613);*/
+                .setRelayPort(61613);
         config.setApplicationDestinationPrefixes("/app");
         config.setUserDestinationPrefix("/user");
     }
