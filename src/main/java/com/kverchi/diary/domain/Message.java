@@ -23,7 +23,7 @@ public class Message {
     @Column(name="receiver_id")
     private int receiverId;
     @Column(name="is_read")
-    private boolean isRead;
+    private boolean read;
     @Column(name="message_datetime")
     private ZonedDateTime messageDatetime;
 
@@ -66,11 +66,11 @@ public class Message {
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
     }
 
     public ZonedDateTime getMessageDatetime() {

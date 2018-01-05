@@ -38,7 +38,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             Root<Message> messageRoot = criteriaQueryCount.from(Message.class);
             criteriaQueryCount.select(criteriaBuilder.count(messageRoot));
             criteriaQueryCount.where(criteriaBuilder.equal(messageRoot.get(Message_.receiverId), receiverId),
-                    (criteriaBuilder.equal(messageRoot.get(Message_.isRead), false)));
+                    (criteriaBuilder.equal(messageRoot.get(Message_.read), false)));
             Query query = entityManager.createQuery(criteriaQueryCount);
             result = toIntExact((Long)query.getSingleResult());
             entityManager.getTransaction().commit();
@@ -66,7 +66,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             Root<Message> messageRoot = criteriaQuery.from(Message.class);
             criteriaQuery.select(messageRoot);
             criteriaQuery.where(criteriaBuilder.equal(messageRoot.get(Message_.receiverId), receiverId),
-                    (criteriaBuilder.equal(messageRoot.get(Message_.isRead), false)));
+                    (criteriaBuilder.equal(messageRoot.get(Message_.read), false)));
             Query query = entityManager.createQuery(criteriaQuery);
             result = query.getResultList();
         } catch (PersistenceException e) {

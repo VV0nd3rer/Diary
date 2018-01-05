@@ -7,6 +7,8 @@
             th:src="@{/resources/js/websocket.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="../../../resources/js/websocket.js"
+            th:src="@{/resources/js/websocket.js}"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Messeger</title>
@@ -78,41 +80,20 @@
             </table>
         </div>
     </div>
-    <div class="list-group">
-        <a href="#" class="list-group-item">
+    <div class="list-group"
+         th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
+         th:each="recentMsg: ${recentMessages}">
+        <a href="#" th:classappend="${recentMsg.read} ? list-group-item-warning : list-group-item-success" class="list-group-item">
             <span>
                 <label>
                     <input type="checkbox">
                 </label>
             </span>
-            <span class="name" style="min-width: 120px;display: inline-block;">Mark Otto</span>
-            <span class="">Nice work on the lastest version</span>
-            <span class="badge">12:10 AM</span>
+            <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
+            <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
+            <span class="badge" th:text="${#temporals.format(recentMsg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
         </a>
-        <a href="#" class="list-group-item">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox">
-            </label>
-        </div>
-        <span class="name" style="min-width: 120px;
-                                        display: inline-block;">Jason Markus</span>
-            <span class="">This is big title</span>
-        <span class="text-muted" style="font-size: 11px;">- I saw that you had..</span>
-            <span class="badge">12:09 AM</span>
-        </a>
-        <a href="#" class="list-group-item read">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox">
-            </label>
-        </div>
-        <span class="name" style="min-width: 120px;
-                                                display: inline-block;">Jane Patel</span>
-            <span class="">This is big title</span>
-        <span class="text-muted" style="font-size: 11px;">- Hi hello how r u ?</span>
-            <span class="badge">11:30 PM</span>
-        </a>
+
     </div>
 </div>
 </body>

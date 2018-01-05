@@ -1,4 +1,5 @@
 var stompClient = null;
+connect();
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -23,7 +24,6 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        var username = $("#username").text();
         stompClient.subscribe('/user/queue/receive-msg', function (greeting) {
             showGreeting(JSON.parse(greeting.body));
         });
