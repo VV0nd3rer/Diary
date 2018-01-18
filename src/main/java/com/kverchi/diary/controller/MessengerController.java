@@ -10,6 +10,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,6 +47,17 @@ public class MessengerController {
             mv.addObject("unreadMessages", unreadMessages);
             List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUsers(receiverUserId);
             mv.addObject("recentMessages", recentMessages);
+        }
+        return mv;
+    }
+    @RequestMapping("/conversation/{companionId}")
+    public ModelAndView openConversation(@PathVariable("companionId") int companionId) {
+        ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
+        User user = userService.getUserFromSession();
+        if(user != null) {
+            List<com.kverchi.diary.domain.Message> conversation =
+                    messengerService.getConversationMessages(user.getUserId(), companionId);
+            mv.addObject("conversationMessages", conversation);
         }
         return mv;
     }

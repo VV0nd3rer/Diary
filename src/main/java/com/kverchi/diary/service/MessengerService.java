@@ -12,4 +12,5 @@ public interface MessengerService {
     int getUnreadMessagesCount(int userId);
     List getUnreadMessages(int userId);
     List getRecentMessagesFromAllUsers(int receiverId);
+    List getConversationMessages(int userId, int companionId);
 }

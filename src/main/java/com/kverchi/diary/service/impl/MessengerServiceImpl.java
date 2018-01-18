@@ -46,4 +46,9 @@ public class MessengerServiceImpl implements MessengerService {
     public List getRecentMessagesFromAllUsers(int receiverId) {
         return messageDao.getRecentMessagesFromAllUsers(receiverId);
     }
+
+    @Override
+    public List getConversationMessages(int userId, int companionId) {
+        return messageDao.getConversationMessages(userId, companionId);
+    }
 }

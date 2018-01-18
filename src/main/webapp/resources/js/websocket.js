@@ -14,11 +14,11 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var token = $("meta[name='_csrf']").attr("content");
+   /* var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
-    });
+    });*/
     var socket = new SockJS('/messenger');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {

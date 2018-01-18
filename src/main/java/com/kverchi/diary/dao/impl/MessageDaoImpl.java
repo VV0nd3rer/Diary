@@ -1,23 +1,21 @@
 package com.kverchi.diary.dao.impl;
 
-import com.kverchi.diary.custom.exception.DatabaseException;
-import com.kverchi.diary.dao.MessageDao;
-import com.kverchi.diary.domain.Message;
-import com.kverchi.diary.domain.Message_;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+        import com.kverchi.diary.custom.exception.DatabaseException;
+        import com.kverchi.diary.dao.MessageDao;
+        import com.kverchi.diary.domain.Message;
+        import com.kverchi.diary.domain.Message_;
+        import com.kverchi.diary.domain.User_;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
-import java.util.List;
+        import javax.persistence.EntityManager;
+        import javax.persistence.EntityManagerFactory;
+        import javax.persistence.PersistenceException;
+        import javax.persistence.Query;
+        import javax.persistence.criteria.*;
+        import java.util.List;
 
-import static java.lang.Math.toIntExact;
+        import static java.lang.Math.toIntExact;
 
 /**
  * Created by Liudmyla Melnychuk on 21.12.2017.
@@ -115,5 +113,40 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             }
         }
         return messageList;
+    }
+
+    @Override
+    public List getConversationMessages(int userId /*kverchi*/, int companionId /*BC*/) {
+        EntityManager entityManager = null;
+        List<Message> result;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Message.class);
+            Root<Message> messageRoot = criteriaQuery.from(Message.class);
+            criteriaQuery.select(messageRoot);
+            Predicate predicateOnCompanionAsReceiver = criteriaBuilder.equal(messageRoot.get(Message_.receiverId), companionId);
+            Predicate predicateOnUserAsReceiver = criteriaBuilder.equal(messageRoot.get(Message_.receiverId), userId);
+            Predicate predicateOnCompanionAsSender = criteriaBuilder.equal(messageRoot.get(Message_.user).get(User_.userId), companionId);
+            Predicate predicateOnUserAsSender = criteriaBuilder.equal(messageRoot.get(Message_.user).get(User_.userId), userId);
+            Predicate predicateOnFinalCondition = criteriaBuilder.or(
+                    criteriaBuilder.and(predicateOnUserAsReceiver, predicateOnCompanionAsSender),
+                    criteriaBuilder.and(predicateOnCompanionAsReceiver, predicateOnUserAsSender)
+            );
+            criteriaQuery.where(predicateOnFinalCondition);
+
+            Query query = entityManager.createQuery(criteriaQuery);
+            result = query.getResultList();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+
+        return result;
     }
 }

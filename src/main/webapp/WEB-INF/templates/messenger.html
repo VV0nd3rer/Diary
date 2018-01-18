@@ -9,6 +9,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="../../../resources/js/websocket.js"
             th:src="@{/resources/js/websocket.js}"></script>
+    <script src="../../../resources/js/messenger.js"
+            th:src="@{/resources/js/messenger.js}"></script>
+    <link href="../../../resources/css/chat.css" rel="stylesheet" media="screen" th:href="@{/resources/css/chat.css}"/>
+
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Messeger</title>
@@ -63,12 +67,6 @@
     <div class="row">
         <h3>Recent messages</h3>
         <div class="col-md-12">
-            <table>
-                <tr th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
-                    th:each="recentMsg: ${recentMessages}" class="unread-msg">
-                    <td>From: <span th:text="${recentMsg.user.username}"></span></td> <td><span th:text="${recentMsg.text}"></span></td>
-                </tr>
-            </table>
             <table id="conversation" class="table table-striped">
                 <thead>
                 <tr>
@@ -80,20 +78,21 @@
             </table>
         </div>
     </div>
-    <div class="list-group"
-         th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
-         th:each="recentMsg: ${recentMessages}">
-        <a href="#" th:classappend="${recentMsg.read} ? list-group-item-warning : list-group-item-success" class="list-group-item">
-            <span>
-                <label>
-                    <input type="checkbox">
-                </label>
-            </span>
-            <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
-            <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-            <span class="badge" th:text="${#temporals.format(recentMsg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
-        </a>
-
+    <div th:replace="fragment/messenger :: inbox">
+        <!--<div class="list-group"
+             th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
+             th:each="recentMsg: ${recentMessages}">
+            <a href="#" th:classappend="${recentMsg.read} ? list-group-item-warning : list-group-item-success" class="list-group-item">
+                <span>
+                    <label>
+                        <input type="checkbox">
+                    </label>
+                </span>
+                <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
+                <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
+                <span class="badge" th:text="${#temporals.format(recentMsg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+            </a>
+        </div>-->
     </div>
 </div>
 </body>
