@@ -1,6 +1,5 @@
 package com.kverchi.diary.dao;
 
-import com.kverchi.diary.domain.ChatMessage;
 import com.kverchi.diary.domain.Message;
 
 import java.util.List;
@@ -11,6 +10,6 @@ import java.util.List;
 public interface MessageDao extends GenericDao<Message> {
     int getUnreadMessagesCount(int receiverId);
     List getUnreadMessages(int receiverId);
-    List getRecentMessagesFromAllUsers(int receiverId);
-    List getConversationMessages(int userId, int companionId);
+    List getConversations(int userId);
+    List getConversationMessages(int userId, int conversationId);
 }

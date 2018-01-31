@@ -20,12 +20,32 @@ public class Message {
     @ManyToOne
     @JoinColumn(name="sender_id")
     private User user;
-    @Column(name="receiver_id")
-    private int receiverId;
+
+    @ManyToOne
+    @JoinColumn(name="conversation_id")
+    private Conversation conversation;
+
+    @Column(name="sent_datetime")
+    private ZonedDateTime sentDatetime;
+
     @Column(name="is_read")
     private boolean read;
-    @Column(name="message_datetime")
-    private ZonedDateTime messageDatetime;
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
+    public ZonedDateTime getSentDatetime() {
+        return sentDatetime;
+    }
+
+    public void setSentDatetime(ZonedDateTime sentDatetime) {
+        this.sentDatetime = sentDatetime;
+    }
 
     public int getMessageId() {
         return messageId;
@@ -43,26 +63,12 @@ public class Message {
         this.text = text;
     }
 
-   /* public int getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
-    }*/
    public User getUser() {
        return user;
    }
 
     public void setUser(User user) {
         this.user = user;
-    }
-    public int getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
     }
 
     public boolean isRead() {
@@ -73,11 +79,5 @@ public class Message {
         this.read = read;
     }
 
-    public ZonedDateTime getMessageDatetime() {
-        return messageDatetime;
-    }
 
-    public void setMessageDatetime(ZonedDateTime messageDatetime) {
-        this.messageDatetime = messageDatetime;
-    }
 }

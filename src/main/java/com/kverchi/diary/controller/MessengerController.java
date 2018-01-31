@@ -50,13 +50,13 @@ public class MessengerController {
         }
         return mv;
     }
-    @RequestMapping("/conversation/{companionId}")
-    public ModelAndView openConversation(@PathVariable("companionId") int companionId) {
+    @RequestMapping("/conversation/{conversationId}")
+    public ModelAndView openConversation(@PathVariable("conversationId") int conversationId) {
         ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
         User user = userService.getUserFromSession();
         if(user != null) {
             List<com.kverchi.diary.domain.Message> conversation =
-                    messengerService.getConversationMessages(user.getUserId(), companionId);
+                    messengerService.getConversationMessages(user.getUserId(), conversationId);
             mv.addObject("conversationMessages", conversation);
         }
         return mv;

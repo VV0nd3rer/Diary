@@ -2,9 +2,7 @@ package com.kverchi.diary.dao.impl;
 
         import com.kverchi.diary.custom.exception.DatabaseException;
         import com.kverchi.diary.dao.MessageDao;
-        import com.kverchi.diary.domain.Message;
-        import com.kverchi.diary.domain.Message_;
-        import com.kverchi.diary.domain.User_;
+        import com.kverchi.diary.domain.*;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Repository;
 
@@ -35,8 +33,20 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             CriteriaQuery<Long> criteriaQueryCount = criteriaBuilder.createQuery(Long.class);
             Root<Message> messageRoot = criteriaQueryCount.from(Message.class);
             criteriaQueryCount.select(criteriaBuilder.count(messageRoot));
-            criteriaQueryCount.where(criteriaBuilder.equal(messageRoot.get(Message_.receiverId), receiverId),
-                    (criteriaBuilder.equal(messageRoot.get(Message_.read), false)));
+
+            Predicate predicateOnUser1Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user1).get(User_.userId), receiverId);
+            Predicate predicateOnUser2Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user2).get(User_.userId), receiverId);
+            Predicate predicateOnSenderId = criteriaBuilder.notEqual(
+                    messageRoot.get(Message_.user).get(User_.userId), receiverId);
+            Predicate predicateOnMessageStatus = criteriaBuilder.equal(messageRoot.get(Message_.read), false);
+            Predicate predicateOnFinalCondition = criteriaBuilder.and(
+                    predicateOnMessageStatus,
+                    criteriaBuilder.or(predicateOnUser1Id, predicateOnUser2Id),
+                    predicateOnSenderId);
+
+            criteriaQueryCount.where(predicateOnFinalCondition);
             Query query = entityManager.createQuery(criteriaQueryCount);
             result = toIntExact((Long)query.getSingleResult());
             entityManager.getTransaction().commit();
@@ -63,10 +73,23 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Message.class);
             Root<Message> messageRoot = criteriaQuery.from(Message.class);
             criteriaQuery.select(messageRoot);
-            criteriaQuery.where(criteriaBuilder.equal(messageRoot.get(Message_.receiverId), receiverId),
-                    (criteriaBuilder.equal(messageRoot.get(Message_.read), false)));
+
+
+            Predicate predicateOnUser1Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user1).get(User_.userId), receiverId);
+            Predicate predicateOnUser2Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user2).get(User_.userId), receiverId);
+            Predicate predicateOnSenderId = criteriaBuilder.notEqual(
+                    messageRoot.get(Message_.user).get(User_.userId), receiverId);
+            Predicate predicateOnMessageStatus = criteriaBuilder.equal(messageRoot.get(Message_.read), false);
+            Predicate predicateOnFinalCondition = criteriaBuilder.and(
+                    predicateOnMessageStatus,
+                    criteriaBuilder.or(predicateOnUser1Id, predicateOnUser2Id),
+                    predicateOnSenderId);
+            criteriaQuery.where(predicateOnFinalCondition);
             Query query = entityManager.createQuery(criteriaQuery);
             result = query.getResultList();
+            entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
             logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
             throw new DatabaseException(e);
@@ -80,27 +103,22 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
     }
 
     @Override
-    public List getRecentMessagesFromAllUsers(int receiverId) {
+    public List getConversations(int userId) {
         EntityManager entityManager = null;
         List<Message> messageList = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            /*String str_query = "FROM Message msg1, User user WHERE " +
-                    "msg1.messageDatetime = " +
-                    "(SELECT max(msg2.messageDatetime) FROM Message msg2 " +
-                    "WHERE msg2.senderId = msg1.senderId) " +
-                    "AND msg1.senderId = user.userId " +
-                    "AND msg1.receiverId = :receiverId " +
-                    "ORDER BY msg1.messageDatetime DESC";*/
+
             String str_query = "FROM Message msg1 WHERE " +
-                    "msg1.messageDatetime = " +
-                    "(SELECT max(msg2.messageDatetime) FROM Message msg2 " +
-                    "WHERE msg2.user.userId = msg1.user.userId) " +
-                    "AND msg1.receiverId = :receiverId " +
-                    "ORDER BY msg1.messageDatetime DESC";
+                    "msg1.sentDatetime = " +
+                    "(SELECT max(msg2.sentDatetime) FROM Message msg2 " +
+                    "WHERE msg2.conversation.conversationId = msg1.conversation.conversationId) " +
+                    "AND (msg1.conversation.user1.userId = :userId " +
+                    "OR msg1.conversation.user2.userId = :userId) " +
+                    "ORDER BY msg1.sentDatetime DESC";
             Query query = entityManager.createQuery(str_query);
-            query.setParameter("receiverId", receiverId);
+            query.setParameter("userId", userId);
             messageList = query.getResultList();
 
             entityManager.getTransaction().commit();
@@ -116,7 +134,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
     }
 
     @Override
-    public List getConversationMessages(int userId /*kverchi*/, int companionId /*BC*/) {
+    public List getConversationMessages(int userId, int conversationId) {
         EntityManager entityManager = null;
         List<Message> result;
         try {
@@ -126,18 +144,21 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Message.class);
             Root<Message> messageRoot = criteriaQuery.from(Message.class);
             criteriaQuery.select(messageRoot);
-            Predicate predicateOnCompanionAsReceiver = criteriaBuilder.equal(messageRoot.get(Message_.receiverId), companionId);
-            Predicate predicateOnUserAsReceiver = criteriaBuilder.equal(messageRoot.get(Message_.receiverId), userId);
-            Predicate predicateOnCompanionAsSender = criteriaBuilder.equal(messageRoot.get(Message_.user).get(User_.userId), companionId);
-            Predicate predicateOnUserAsSender = criteriaBuilder.equal(messageRoot.get(Message_.user).get(User_.userId), userId);
-            Predicate predicateOnFinalCondition = criteriaBuilder.or(
-                    criteriaBuilder.and(predicateOnUserAsReceiver, predicateOnCompanionAsSender),
-                    criteriaBuilder.and(predicateOnCompanionAsReceiver, predicateOnUserAsSender)
-            );
+            Predicate predicateOnConversationId =
+                    criteriaBuilder.equal(
+                            messageRoot.get(Message_.conversation).get(Conversation_.conversationId), conversationId);
+            Predicate predicateOnUser1Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user1).get(User_.userId), userId);
+            Predicate predicateOnUser2Id = criteriaBuilder.equal(
+                    messageRoot.get(Message_.conversation).get(Conversation_.user2).get(User_.userId), userId);
+            Predicate predicateOnFinalCondition = criteriaBuilder.and(
+                    predicateOnConversationId,
+                    criteriaBuilder.or(predicateOnUser1Id, predicateOnUser2Id));
             criteriaQuery.where(predicateOnFinalCondition);
 
             Query query = entityManager.createQuery(criteriaQuery);
             result = query.getResultList();
+            entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
             logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
             throw new DatabaseException(e);
@@ -149,4 +170,5 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
 
         return result;
     }
+
 }

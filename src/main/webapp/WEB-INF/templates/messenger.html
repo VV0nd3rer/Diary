@@ -90,7 +90,7 @@
                 </span>
                 <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
                 <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-                <span class="badge" th:text="${#temporals.format(recentMsg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+                <span class="badge" th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
             </a>
         </div>-->
     </div>

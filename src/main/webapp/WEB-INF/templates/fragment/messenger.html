@@ -16,10 +16,10 @@
                         <input type="checkbox">
                     </label>
                 </span>
-                <span class="companionId" th:text="${recentMsg.user.userId}"/>
+                <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
                 <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
                 <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-                <span class="badge" th:text="${#temporals.format(recentMsg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+                <span class="badge" th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
             </a>
         </div>
     </div>
@@ -54,14 +54,15 @@
                         <ul class="chat"
                             th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                             th:each="msg: ${conversationMessages}">
-                            <li th:if="${#authentication.name != msg.user.username}" class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar" class="img-circle">
-                        </span>
+                            <li th:if="${#authentication.name != msg.user.username}" class="left clearfix">
+                                <span class="chat-img pull-left">
+                                    <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar" class="img-circle">
+                                </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <strong class="primary-font" th:text="${msg.user.username}">Jack Sparrow</strong> <small class="pull-right text-muted">
                                         <span class="glyphicon glyphicon-time"></span>
-                                        <span th:text="${#temporals.format(msg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span></small>
+                                        <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span></small>
                                     </div>
                                     <p th:text="${msg.text}">
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
@@ -75,7 +76,7 @@
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>
-                                            <span th:text="${#temporals.format(msg.messageDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
+                                            <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
                                         </small>
                                         <strong class="pull-right primary-font" th:text="${msg.user.username}">Bhaumik Patel</strong>
                                     </div>

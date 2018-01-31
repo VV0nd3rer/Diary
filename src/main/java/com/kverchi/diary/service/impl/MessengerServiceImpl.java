@@ -27,7 +27,7 @@ public class MessengerServiceImpl implements MessengerService {
         User receiver = userService.getUserByUsername(message.getTo());
         Message persistentMessage = new Message();
         persistentMessage.setUser(sender);
-        persistentMessage.setReceiverId(receiver.getUserId());
+        //persistentMessage.setReceiverId(receiver.getUserId());
         persistentMessage.setText(message.getContent());
         messageDao.persist(persistentMessage);
     }
@@ -44,7 +44,7 @@ public class MessengerServiceImpl implements MessengerService {
 
     @Override
     public List getRecentMessagesFromAllUsers(int receiverId) {
-        return messageDao.getRecentMessagesFromAllUsers(receiverId);
+        return messageDao.getConversations(receiverId);
     }
 
     @Override
