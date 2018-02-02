@@ -12,10 +12,10 @@ public class Conversation {
     @Column(name="conversation_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int conversationId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="user_id1")
     private User user1;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="user_id2")
     private User user2;
 

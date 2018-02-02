@@ -1,7 +1,9 @@
 package com.kverchi.diary.service.impl;
 
+import com.kverchi.diary.dao.ConversationDao;
 import com.kverchi.diary.dao.MessageDao;
 import com.kverchi.diary.domain.ChatMessage;
+import com.kverchi.diary.domain.Conversation;
 import com.kverchi.diary.domain.Message;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.service.MessengerService;
@@ -20,16 +22,12 @@ public class MessengerServiceImpl implements MessengerService {
     UserService userService;
     @Autowired
     MessageDao messageDao;
+    @Autowired
+    ConversationDao conversationDao;
 
     @Override
-    public void saveMessage(ChatMessage message) {
-        User sender = userService.getUserByUsername(message.getFrom());
-        User receiver = userService.getUserByUsername(message.getTo());
-        Message persistentMessage = new Message();
-        persistentMessage.setUser(sender);
-        //persistentMessage.setReceiverId(receiver.getUserId());
-        persistentMessage.setText(message.getContent());
-        messageDao.persist(persistentMessage);
+    public void saveMessage(com.kverchi.diary.domain.Message message) {
+        messageDao.persist(message);
     }
 
     @Override
@@ -51,4 +49,10 @@ public class MessengerServiceImpl implements MessengerService {
     public List getConversationMessages(int userId, int companionId) {
         return messageDao.getConversationMessages(userId, companionId);
     }
+
+    @Override
+    public Conversation getConversation(int conversationId) {
+        return conversationDao.getById(conversationId);
+    }
+
 }

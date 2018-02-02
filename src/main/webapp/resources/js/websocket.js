@@ -44,12 +44,12 @@ function sendName() {
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
-    stompClient.send("/app/send-msg", {}, JSON.stringify({'to': $("#name").val(), 'content': "hello!!!"}));
+    stompClient.send("/app/send-msg", {}, JSON.stringify({'text': "hello!!!"}));
 
 }
 
 function showGreeting(message) {
-    $("#greetings").append("<tr><td>From: " + message.from + "</td><td>" + message.content + "</td></tr>");
+    $("#greetings").append("<tr><td>From: " + message.user.username + "</td><td>" + message.text + "</td></tr>");
 }
 
 $(function () {
@@ -58,5 +58,13 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    //$( "#send" ).click(function() { sendName(); });
+
+});
+$(document).ready(function() {
+    $("#btn-msg-send").click(function() {
+        e.preventDefault();
+        console.log("btn-msg-send clicked! ");
+        sendName();
+    });
 });

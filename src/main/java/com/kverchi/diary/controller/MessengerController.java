@@ -1,7 +1,9 @@
 package com.kverchi.diary.controller;
 
 import com.kverchi.diary.domain.ChatMessage;
+import com.kverchi.diary.domain.Conversation;
 import com.kverchi.diary.domain.User;
+import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.MessengerService;
 import com.kverchi.diary.service.UserService;
 import org.apache.log4j.Logger;
@@ -10,9 +12,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -23,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("messages")
+@SessionAttributes("currentConversation")
 public class MessengerController {
     final static Logger logger = Logger.getLogger(MessengerController.class);
     @Autowired
@@ -31,15 +32,18 @@ public class MessengerController {
     MessengerService messengerService;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-    /*
-    @Autowired
-    MessageSender messageSender;*/
+
+    @ModelAttribute("currentConversation")
+    public Conversation getCurrentConversation() {
+        return new Conversation();
+    }
 
     @RequestMapping("/show")
-    public ModelAndView showMessenger() {
+    public ModelAndView showMessenger(@ModelAttribute("currentConversation") Conversation currentConversation) {
         ModelAndView mv = new ModelAndView("messenger");
         User user = userService.getUserFromSession();
-        if(user != null) {
+        if (user != null) {
+            logger.debug("currentConversation: " + currentConversation.getConversationId());
             int receiverUserId = user.getUserId();
             int msgCount = messengerService.getUnreadMessagesCount(receiverUserId);
             mv.addObject("msgCount", msgCount);
@@ -50,29 +54,48 @@ public class MessengerController {
         }
         return mv;
     }
+
     @RequestMapping("/conversation/{conversationId}")
     public ModelAndView openConversation(@PathVariable("conversationId") int conversationId) {
         ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
         User user = userService.getUserFromSession();
-        if(user != null) {
-            List<com.kverchi.diary.domain.Message> conversation =
+        if (user != null) {
+            List<com.kverchi.diary.domain.Message> conversationMessages =
                     messengerService.getConversationMessages(user.getUserId(), conversationId);
-            mv.addObject("conversationMessages", conversation);
+            Conversation currentConversation = messengerService.getConversation(conversationId);
+            mv.addObject("conversationMessages", conversationMessages);
+            mv.addObject("currentConversation", currentConversation);
         }
         return mv;
     }
+
     @MessageMapping("/send-msg")
     //@SendTo("/topic/receive-msg")
-    public void greeting(Message<Object> msg, ChatMessage message/*, @DestinationVariable String to*/) throws Exception {
-        //Thread.sleep(1000); // simulated delay
+    public void greeting(Message<Object> completeWSMessage, com.kverchi.diary.domain.Message message,
+                         @ModelAttribute("currentConversation") Conversation currentConversation
+                         /*, @DestinationVariable String to*/) throws Exception {
         logger.debug(messagingTemplate);
-        Principal principal = msg.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
+        logger.debug("current conversation ID: " + currentConversation.getConversationId());
+        Principal principal = completeWSMessage.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         logger.debug(principal.getName());
-        message.setFrom(principal.getName());
-        logger.debug("msg to : " + message.getTo());
-        //message.setContent("Hello :) ");
-        //messageSender.sendMessage(message);
-        messagingTemplate.convertAndSendToUser(message.getTo(), "/queue/receive-msg", message);
-        messengerService.saveMessage(message);
+        if (principal instanceof UserDetailsImpl) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) principal;
+            int senderId = userDetails.getUser().getUserId();
+            logger.debug("User ID: " + senderId);
+            message.setUser(userDetails.getUser());
+            message.setConversation(currentConversation);
+
+            //messageSender.sendMessage(message);
+            int user1 = currentConversation.getUser1().getUserId();
+            int user2 = currentConversation.getUser2().getUserId();
+            String receiverUsername;
+            if(currentConversation.getUser1().getUserId() != senderId) {
+                receiverUsername = currentConversation.getUser1().getUsername();
+            } else {
+                receiverUsername = currentConversation.getUser2().getUsername();
+            }
+            messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
+            messengerService.saveMessage(message);
+        }
     }
 }

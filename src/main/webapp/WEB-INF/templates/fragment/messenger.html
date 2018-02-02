@@ -51,6 +51,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <span>Conversation ID: </span><span th:text="${currentConversationId}"></span>
                         <ul class="chat"
                             th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                             th:each="msg: ${conversationMessages}">
@@ -92,11 +93,12 @@
                     </div>
                     <div class="panel-footer">
                         <div class="input-group">
-                            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
-                                Send</button>
-                        </span>
+                            <input id="msg-input" type="text" class="form-control input-sm"
+                                   placeholder="Type your message here...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-warning btn-sm" id="btn-msg-send" onclick="sendName();">
+                                    Send</button>
+                            </span>
                         </div>
                     </div>
                 </div>
