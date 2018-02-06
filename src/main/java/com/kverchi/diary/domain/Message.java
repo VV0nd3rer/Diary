@@ -2,6 +2,7 @@ package com.kverchi.diary.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by Liudmyla Melnychuk on 21.12.2017.
@@ -43,8 +44,10 @@ public class Message {
         return sentDatetime;
     }
 
-    public void setSentDatetime(ZonedDateTime sentDatetime) {
-        this.sentDatetime = sentDatetime;
+    @PrePersist
+    @PreUpdate
+    public void setSentDatetime() {
+        this.sentDatetime = ZonedDateTime.now();
     }
 
     public int getMessageId() {

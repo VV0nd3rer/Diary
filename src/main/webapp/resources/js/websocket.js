@@ -44,12 +44,24 @@ function sendName() {
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
-    stompClient.send("/app/send-msg", {}, JSON.stringify({'text': "hello!!!"}));
-
+    //stompClient.send("/app/send-msg", {}, JSON.stringify({'text': "hello!!!"}));
+    var msgText = $("#msg-input").val();
+    if(msgText.length < 2) {
+        alert("Uh-oh, apparently, you don't know what to say... ")
+    }
+    $.ajax({
+        url: '/messages/send-message',
+        type: "POST",
+        data: JSON.stringify({'text': msgText}),
+        contentType: "application/json; charset=utf-8",
+        success: function () {
+            alert('OK :) ');
+        }
+    });
 }
 
 function showGreeting(message) {
-    $("#greetings").append("<tr><td>From: " + message.user.username + "</td><td>" + message.text + "</td></tr>");
+    $("#greetings").append("<tr><td>" + message.user.username + "</td><td>" + message.text + "</td></tr>");
 }
 
 $(function () {

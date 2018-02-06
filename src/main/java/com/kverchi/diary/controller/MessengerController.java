@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +40,11 @@ public class MessengerController {
     }
 
     @RequestMapping("/show")
-    public ModelAndView showMessenger(@ModelAttribute("currentConversation") Conversation currentConversation) {
+    public ModelAndView showMessenger(/*@ModelAttribute("currentConversation") Conversation currentConversation*/) {
         ModelAndView mv = new ModelAndView("messenger");
         User user = userService.getUserFromSession();
         if (user != null) {
-            logger.debug("currentConversation: " + currentConversation.getConversationId());
+            //logger.debug("currentConversation: " + currentConversation.getConversationId());
             int receiverUserId = user.getUserId();
             int msgCount = messengerService.getUnreadMessagesCount(receiverUserId);
             mv.addObject("msgCount", msgCount);
@@ -68,21 +69,15 @@ public class MessengerController {
         }
         return mv;
     }
-
-    @MessageMapping("/send-msg")
-    //@SendTo("/topic/receive-msg")
-    public void greeting(Message<Object> completeWSMessage, com.kverchi.diary.domain.Message message,
-                         @ModelAttribute("currentConversation") Conversation currentConversation
-                         /*, @DestinationVariable String to*/) throws Exception {
-        logger.debug(messagingTemplate);
-        logger.debug("current conversation ID: " + currentConversation.getConversationId());
-        Principal principal = completeWSMessage.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
-        logger.debug(principal.getName());
-        if (principal instanceof UserDetailsImpl) {
-            UserDetailsImpl userDetails = (UserDetailsImpl) principal;
-            int senderId = userDetails.getUser().getUserId();
+    @RequestMapping(value = "/send-message", method = RequestMethod.POST)
+    public void sendMessage(@RequestBody com.kverchi.diary.domain.Message message,
+                            @ModelAttribute("currentConversation") Conversation currentConversation) {
+        User sender = userService.getUserFromSession();
+        if(sender != null) {
+            int senderId = sender.getUserId();
             logger.debug("User ID: " + senderId);
-            message.setUser(userDetails.getUser());
+            logger.debug("Current conversation ID: " + currentConversation.getConversationId());
+            message.setUser(sender);
             message.setConversation(currentConversation);
 
             //messageSender.sendMessage(message);
@@ -94,8 +89,16 @@ public class MessengerController {
             } else {
                 receiverUsername = currentConversation.getUser2().getUsername();
             }
+            logger.debug("receiver username: " + receiverUsername);
             messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
             messengerService.saveMessage(message);
         }
+
+    }
+
+    @MessageMapping("/send-msg")
+    //@SendTo("/queue/receive-msg")
+    public void greeting(com.kverchi.diary.domain.Message message) throws Exception {
+        messagingTemplate.convertAndSendToUser("kverchi", "/queue/receive-msg", message);
     }
 }

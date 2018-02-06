@@ -65,9 +65,7 @@ public class Post {
 		postDatetime = ZonedDateTime.parse(text, formatter);
 		return postDatetime;
 	}
-	public void setPostDatetime(ZonedDateTime postDatetime) {
-		this.postDatetime = postDatetime;
-	}
+
 	@PrePersist
 	@PreUpdate
 	public void setPostDatetime() {
