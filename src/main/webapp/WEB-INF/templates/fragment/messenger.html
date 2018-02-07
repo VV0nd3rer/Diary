@@ -52,34 +52,18 @@
                     </div>
                     <div class="panel-body">
                         <span>Conversation ID: </span><span th:text="${currentConversationId}"></span>
-                        <ul class="chat"
-                            th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
-                            th:each="msg: ${conversationMessages}">
+                        <ul class="chat">
+                            <span th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
+                                  th:each="msg: ${conversationMessages}">
                             <li th:if="${#authentication.name != msg.user.username}" class="left clearfix">
-                                <span class="chat-img pull-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar" class="img-circle">
-                                </span>
-                                <div class="chat-body clearfix">
+
+                                <div class="pull-left">
                                     <div class="header">
-                                        <strong class="primary-font" th:text="${msg.user.username}">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>
-                                        <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span></small>
-                                    </div>
-                                    <p th:text="${msg.text}">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li th:if="${#authentication.name == msg.user.username}" class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff&amp;text=ME" alt="User Avatar" class="img-circle">
-                        </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>
+                                        <div><strong th:text="${msg.user.username}">Jack Sparrow</strong> </div>
+                                        <small class="text-muted">
+                                            <span class="glyphicon glyphicon-time"></span>
                                             <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
                                         </small>
-                                        <strong class="pull-right primary-font" th:text="${msg.user.username}">Bhaumik Patel</strong>
                                     </div>
                                     <p th:text="${msg.text}">
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
@@ -87,16 +71,32 @@
                                     </p>
                                 </div>
                             </li>
+                            <li th:if="${#authentication.name == msg.user.username}" class="right clearfix">
 
-
+                                <div class="pull-right">
+                                    <div class="header">
+                                        <div><strong th:text="${msg.user.username}">Bhaumik Patel</strong></div>
+                                        <small class=" text-muted">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                            <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
+                                        </small>
+                                    </div>
+                                    <p th:text="${msg.text}">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+                                        dolor, quis ullamcorper ligula sodales.
+                                    </p>
+                                </div>
+                            </li>
+                          </span>
                         </ul>
+
                     </div>
                     <div class="panel-footer">
                         <div class="input-group">
                             <input id="msg-input" type="text" class="form-control input-sm"
                                    placeholder="Type your message here...">
                             <span class="input-group-btn">
-                                <button class="btn btn-warning btn-sm" id="btn-msg-send" onclick="sendName();">
+                                <button class="btn btn-warning btn-sm" id="btn-msg-send" onclick="sendMessage();">
                                     Send</button>
                             </span>
                         </div>

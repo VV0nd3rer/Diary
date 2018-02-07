@@ -31,8 +31,8 @@ function connect() {
          your server instance will subscribe to a queue named queue/reply-user[session id]
          https://stackoverflow.com/questions/22367223/sending-message-to-specific-user-on-spring-websocket
          */
-        stompClient.subscribe('/user/queue/receive-msg', function (greeting) {
-            showGreeting(JSON.parse(greeting.body));
+        stompClient.subscribe('/user/queue/receive-msg', function (message) {
+            renderMessage(JSON.parse(message.body), true);
         });
     });
 }
@@ -45,7 +45,7 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
+function sendMessage() {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $(document).ajaxSend(function(e, xhr, options) {
@@ -59,16 +59,50 @@ function sendName() {
     $.ajax({
         url: '/messages/send-message',
         type: "POST",
-        data: JSON.stringify({'text': msgText}),
+        data: JSON.stringify({'text': msgText }),
         contentType: "application/json; charset=utf-8",
         success: function () {
             console.log('Message was sent :) ');
+            $("#msg-input").val('');
+            renderMessage(JSON.stringify({'text': msgText, 'sentDatetime': new Date($.now())}), false)
         }
     });
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message.user.username + "</td><td>" + message.text + "</td></tr>");
+function renderMessage(message, isInbox) {
+    var messageTemplate;
+    if(isInbox) {
+        messageTemplate =
+            '<li class="left clearfix">' +
+                '<div class="pull-left">' +
+                    '<div class="header">' +
+                    '<div><strong>' + message.user.username + '</strong></div>' +
+                    '<small class=" text-muted">' +
+                        '<span class="glyphicon glyphicon-time"></span>' + /*'dd/MM/yyyy HH:mm'*/
+                        '<span>' + message.sentDatetime + '</span>' +
+                    '</small>' +
+                    '</div>' +
+                '<p>' + message.text + '</p>' +
+                '</div>' +
+            '</li>';
+    }
+    else {
+        message = JSON.parse(message);
+        messageTemplate =
+            '<li class="right clearfix">' +
+                '<div class="pull-right">' +
+                    '<div class="header">' +
+                        '<div><strong>Me</strong></div>' +
+                        '<small class=" text-muted">' +
+                            '<span class="glyphicon glyphicon-time"></span>' + /*'dd/MM/yyyy HH:mm'*/
+                            '<span>' + message.sentDatetime + '</span>' +
+                        '</small>' +
+                    '</div>' +
+                    '<p>' + message.text + '</p>' +
+                '</div>' +
+            '</li>';
+    }
+    $("ul[class='chat']").append(messageTemplate);
 }
 
 $(function () {
@@ -77,12 +111,12 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    //$( "#send" ).click(function() { sendName(); });
+    //$( "#send" ).click(function() { sendMessage(); });
 
 });
 $(document).ready(function() {
     $("#btn-msg-send").click(function() {
         e.preventDefault();
-        sendName();
+        sendMessage();
     });
 });

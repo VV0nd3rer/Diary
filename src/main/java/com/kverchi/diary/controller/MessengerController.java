@@ -9,6 +9,7 @@ import com.kverchi.diary.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.core.MessagePostProcessor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,10 +81,6 @@ public class MessengerController {
             logger.debug("Current conversation ID: " + currentConversation.getConversationId());
             message.setUser(sender);
             message.setConversation(currentConversation);
-
-            //messageSender.sendMessage(message);
-            int user1 = currentConversation.getUser1().getUserId();
-            int user2 = currentConversation.getUser2().getUserId();
             String receiverUsername;
             if(currentConversation.getUser1().getUserId() != senderId) {
                 receiverUsername = currentConversation.getUser1().getUsername();
