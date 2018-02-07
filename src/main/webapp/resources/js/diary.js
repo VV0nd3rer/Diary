@@ -30,7 +30,6 @@ $(document).ready(function(){
 		paginationChangingBlock = 'books-block';
 		initializePaginationPlagin();
 	}
-	console.log("searchCriteria" + JSON.stringify(searchCriteria));
 	function initializePaginationPlagin() {
 		var defOpts = renderPaginationPlagin();
 		paginationElement.twbsPagination(defOpts);
@@ -117,11 +116,8 @@ $(document).ready(function(){
 
 		var catSuggestInput = $("#catSuggestInput");
 		var authSuggestInput = $("#authSuggestInput");
-	    console.log("authSuggestInput.attr id " + authSuggestInput.attr("id"));
 		var catSuggestHidden = $('#' + catSuggestInput.attr("id") + '-hidden');
 		var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
-		console.log("authSuggestHidde: " + authSuggestHidden.val());
-		console.log("catSuggestHidden: " + catSuggestHidden.val());
 		var searchText = $('#searchInTextInput');
 		var searchInTitleOnlyCheckBox = $('#searchCondition');
 		var filterSightsDropBox = $('#filterSights');
@@ -138,11 +134,8 @@ $(document).ready(function(){
 				searchCriteria["BY_TEXT"] = searchText.val();
 		}
 		if(filterSightsDropBox.val() > 0) {
-			console.log('filterSightsDropBox.val() ' + filterSightsDropBox.val());
 			filterSightsDropBox.val() == 1 ? postSortType = "BY_WISHES" : postSortType = "BY_VISITS";
-			console.log("sortType: " + postSortType);
 		}
-		console.log("searchCriteria" + JSON.stringify(searchCriteria));
 		paginationElement.trigger('page');
 	});
 
@@ -189,7 +182,6 @@ $(document).ready(function(){
 		//var sight_id = $("#sight").find(":selected");
 		var title = $("#title");
 		//var description = $("#description");
-		console.log("id: " + id.val());
 		//console.log("sight id: " + sight_id.val());
 		var data = {}
 		var sight = {}
@@ -295,8 +287,6 @@ $(document).ready(function(){
 	$("#modal-form-save-info-btn").click(function(event){
 		event.preventDefault();
 		var info = $("#edit-info").val();
-		console.log("info val: " + info);
-
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		$(document).ajaxSend(function(e, xhr, options) {
@@ -332,7 +322,6 @@ $(document).ready(function(){
 	});
     $("#update-book-btn").click(function() {
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
-    	console.log(id);
     	var upd_book_url = root + "/books/edit/"+id;
     	$.get(upd_book_url, function(data) {
     		//event.preventDefault();
@@ -353,10 +342,8 @@ $(document).ready(function(){
     $("#modal-dialog-ok-btn").click(function(event) {
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
-    	console.log (id); 
     	var rm_book_url = root+"/books/remove/"+id;
     	$.get(rm_book_url, function(data) {
-    		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();
 				paginationElement.trigger('page', [currentPage]);
     	})
@@ -372,10 +359,8 @@ $(document).ready(function(){
     $("#modal-dialog-ok-rm-sight-btn").click(function() {
     	event.preventDefault();
     	var id = $("#crud-tbl tr.danger").find('td:first').html();
-    	console.log (id); 
     	var rm_sight_url = root+"/sights/remove/"+id;
     	$.get(rm_sight_url, function(data) {
-    		console.log(data);
     		$("#crud-tbl tr:contains('" + id + "')").remove();  	  
     	})
     	  .done(function() {
@@ -411,12 +396,9 @@ $(document).ready(function(){
         
         tips = $( ".validateTips" );
         var valid = true;
-		console.log("is valid for add book dialog? " + valid);
         valid = valid && checkMinMaxLength( title, "title", 3, 255 );
         //valid = valid && checkMinMaxLength( description, "description", 3, 80 );
         valid = valid && checkMinMaxLength( author, "author", 2, 100 );
-
-		console.log("data " + JSON.stringify(data));
         var token = $("meta[name='_csrf']").attr("content");
  	    var header = $("meta[name='_csrf_header']").attr("content");
         $(document).ajaxSend(function(e, xhr, options) {
@@ -463,7 +445,6 @@ $(document).ready(function(){
    $('table').on('click', '.row_action', function(event) {
 	   event.preventDefault();
 	   var id = $("#crud-tbl tr.danger").find('td:first').html();
-	   console.log(id);
 	   window.location.replace("posts/sight_posts?sight_id="+id);
    });
    //--- End of Books page CRUD functionality	
@@ -564,16 +545,13 @@ function checkDataListInput(obj) {
 	var val = obj.val();
 	var hiddenInput = $("#" + obj.attr("id") + '-hidden');
 	var res = false;
-	console.log("input value: " + val);
 	if(val === '') {
-		console.log('val is empty');
 		hiddenInput.val('');
 		return res;
 	}
 	console.log("checking data list input...");
 
 	var listId = obj.attr('list');
-	console.log("list id is " + listId);
 	var options = $('#' + listId + ' option');
 
 	var hiddenInput = $("#" + obj.attr("id") + '-hidden');
@@ -594,8 +572,6 @@ function isDataListInput(options, val, hiddenInput) {
 
 	for (var i = 0; i < options.length; i++) {
 		var option = options[i];
-		console.log("option.innerText " + option.innerText);
-		console.log("value: " + val);
 		if (option.innerText === val) {
 			console.log("valid");
 			var dataValAttr = option.getAttribute('data-value');
@@ -660,17 +636,10 @@ function loadDataListFromDB(url, element) {
 	/*var options = $("option");
 	var inputId = element.attr('id');*/
 	var listId = element.attr('list');
-	console.log(listId);
 	//var hiddenInput = $(inputId + '-hidden');
-	console.log(inputValue);
-
 	$.get(url, { search_str: inputValue }).done (function (data) {
-		console.log("get data for datalist: ");
 		var options = '';
-		console.log(JSON.stringify(data));
 		$.each(data, function (index, value) {
-			console.log(JSON.stringify(value));
-			console.log(value.sight_label);
 			options += '<option data-value="' + value.sight_id + '">' + value.sight_label + '</option>';
 		});
 		$('#'+listId).empty();
@@ -699,7 +668,6 @@ function checkSightSeachCriteria() {
 }
 function initializeCRUDTableClickListener() {
 	$('#crud-tbl').on('click', '.clickable-row', function(event) {
-		console.log('click on crud-tbl class');
 		$('#update-book-btn').removeAttr('disabled');
 		$('#delete-book-btn').removeAttr('disabled');
 		$(this).addClass('danger').siblings().removeClass('danger');

@@ -24,6 +24,13 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
+        /*
+         When any websocket connection is open,
+         Spring will assign it a session id (not HttpSession, assign per connection).
+         And when your client subscribe to an channel start with /user/, eg: /user/queue/reply,
+         your server instance will subscribe to a queue named queue/reply-user[session id]
+         https://stackoverflow.com/questions/22367223/sending-message-to-specific-user-on-spring-websocket
+         */
         stompClient.subscribe('/user/queue/receive-msg', function (greeting) {
             showGreeting(JSON.parse(greeting.body));
         });
@@ -55,7 +62,7 @@ function sendName() {
         data: JSON.stringify({'text': msgText}),
         contentType: "application/json; charset=utf-8",
         success: function () {
-            alert('OK :) ');
+            console.log('Message was sent :) ');
         }
     });
 }
@@ -76,7 +83,6 @@ $(function () {
 $(document).ready(function() {
     $("#btn-msg-send").click(function() {
         e.preventDefault();
-        console.log("btn-msg-send clicked! ");
         sendName();
     });
 });
