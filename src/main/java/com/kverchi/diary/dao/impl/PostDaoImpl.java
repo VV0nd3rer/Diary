@@ -119,7 +119,9 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     }
 
     @Override
-    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
+    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes,
+                                           Map<String, String> includingAttributes,
+                                           Map<String, Object> choosingAttributes) {
         EntityManager entityManager = null;
         int rowsNumber = 0;
         try {
@@ -147,7 +149,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                 }
             }
             if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                for (Map.Entry<String, Object> entry : choosingAttributes.entrySet()) {
                     query.setParameter(entry.getKey(), "%"+entry.getValue().toString()+"%");
                 }
             }
@@ -167,7 +169,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
 
     @Override
     public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
-                                     Map<String, String> choosingAttributes, Pagination pagination) {
+                                     Map<String, Object> choosingAttributes, Pagination pagination) {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;
         try {
@@ -196,7 +198,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                 }
             }
             if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                for (Map.Entry<String, Object> entry : choosingAttributes.entrySet()) {
                     query.setParameter(entry.getKey(), "%" + entry.getValue().toString() + "%");
                 }
             }
@@ -226,7 +228,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
     @Override
     public List searchAndSortWithAttributes(Map<String, Object> hasAttributes,
                                             Map<String, String> includingAttributes,
-                                            Map<String, String> choosingAttributes,
+                                            Map<String, Object> choosingAttributes,
                                             String sortType, Pagination pagination) {
         EntityManager entityManager = null;
         List<Post> limitedPosts = null;
@@ -263,7 +265,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post> implements PostDao {
                 }
             }
             if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                for (Map.Entry<String, Object> entry : choosingAttributes.entrySet()) {
                     query.setParameter(entry.getKey(), "%" + entry.getValue().toString() + "%");
                 }
             }

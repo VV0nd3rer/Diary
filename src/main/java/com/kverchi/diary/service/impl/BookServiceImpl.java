@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
 		Map<BookSearchAttributes.BookSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
-		Map<String, String> choosingAttributes = new HashMap<>();
+		Map<String, Object> choosingAttributes = new HashMap<>();
 		if (searchCriteria != null && !searchCriteria.isEmpty()) {
 			for (Map.Entry<BookSearchAttributes.BookSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
@@ -61,8 +61,8 @@ public class BookServiceImpl implements BookService {
 						hasAttributes.put("authId", entry.getValue());
 						break;
 					case BY_TEXT:
-						choosingAttributes.put("description", entry.getValue().toString());
-						choosingAttributes.put("title", entry.getValue().toString());
+						choosingAttributes.put("description", entry.getValue());
+						choosingAttributes.put("title", entry.getValue());
 						break;
 					case IN_TITLE_ONLY:
 						includingAttributes.put("title", entry.getValue().toString());

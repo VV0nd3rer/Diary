@@ -79,7 +79,7 @@ function renderMessage(message, isInbox) {
                     '<div><strong>' + message.user.username + '</strong></div>' +
                     '<small class=" text-muted">' +
                         '<span class="glyphicon glyphicon-time"></span>' + /*'dd/MM/yyyy HH:mm'*/
-                        '<span>' + message.sentDatetime + '</span>' +
+                        '<span>now</span>' +
                     '</small>' +
                     '</div>' +
                 '<p>' + message.text + '</p>' +
@@ -103,6 +103,7 @@ function renderMessage(message, isInbox) {
             '</li>';
     }
     $("ul[class='chat']").append(messageTemplate);
+    $("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
 }
 
 $(function () {

@@ -1,7 +1,6 @@
 package com.kverchi.diary.service;
 
-import com.kverchi.diary.domain.ChatMessage;
-import com.kverchi.diary.domain.Conversation;
+import com.kverchi.diary.domain.*;
 
 import java.util.List;
 
@@ -13,6 +12,8 @@ public interface MessengerService {
     int getUnreadMessagesCount(int userId);
     List getUnreadMessages(int userId);
     List getRecentMessagesFromAllUsers(int receiverId);
-    List getConversationMessages(int userId, int companionId);
+    List getMessagesByConversationId(int userId, int companionId, int currentPage);
+    /* MessagePaginatedResponce instead of MessageSearchResults */
+   /* MessageSearchResults getMessagesByConversationId(MessageSearchAttributes searchAttributes);*/
     Conversation getConversation(int conversationId);
 }

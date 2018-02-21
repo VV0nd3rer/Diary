@@ -6,67 +6,71 @@
     <title>Title</title>
 </head>
 <body>
-    <div id="inbox" th:fragment="inbox">
-        <div class="list-group"
-             th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
-             th:each="recentMsg: ${recentMessages}">
-            <a href="#" th:classappend="${recentMsg.read} ? 'list-group-item-warning' : 'list-group-item-success' " class="list-group-item">
+<div id="inbox" th:fragment="inbox">
+    <div class="list-group">
+        <a th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
+           th:each="recentMsg: ${recentMessages}"
+           href="#" th:classappend="${recentMsg.read} ? 'list-group-item-warning' : 'list-group-item-success' "
+           class="list-group-item">
                 <span>
                     <label>
                         <input type="checkbox">
                     </label>
                 </span>
-                <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
-                <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
-                <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-                <span class="badge" th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
-            </a>
-        </div>
+            <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
+            <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
+            <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
+            <span class="badge"
+                  th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+        </a>
     </div>
+</div>
 <div id="conversation" th:fragment="conversation">
     <!-- Chat template was took from https://www.bootply.com/6mdOs5FvKU -->
-
-        <div class="row">
-            <div class="col-md-5">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-comment"></span> Chat
-                        <div class="btn-group pull-right">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </button>
-                            <ul class="dropdown-menu slidedown">
-                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-comment"></span> Chat
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        <ul class="dropdown-menu slidedown">
+                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
                             </span>Refresh</a></li>
-                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
+                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
                             </span>Available</a></li>
-                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
+                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
                             </span>Busy</a></li>
-                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
-                                    Away</a></li>
-                                <li class="divider"></li>
-                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
-                                    Sign Out</a></li>
-                            </ul>
-                        </div>
+                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
+                                Away</a></li>
+                            <li class="divider"></li>
+                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
+                                Sign Out</a></li>
+                        </ul>
                     </div>
-                    <div class="panel-body">
-                        <span>Conversation ID: </span><span th:text="${currentConversationId}"></span>
-                        <ul class="chat">
+                </div>
+
+                <div id="msg-container" class="panel-body">
+                    <span>Conversation ID: </span>
+                    <span class="conversationId" th:text="${currentConversation.conversationId}"></span>
+                    <ul class="chat" th:fragment="more">
                             <span th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                                   th:each="msg: ${conversationMessages}">
                             <li th:if="${#authentication.name != msg.user.username}" class="left clearfix">
 
                                 <div class="pull-left">
                                     <div class="header">
-                                        <div><strong th:text="${msg.user.username}">Jack Sparrow</strong> </div>
+                                        <div><strong th:text="${msg.user.username}">Jack Sparrow</strong></div>
                                         <small class="text-muted">
                                             <span class="glyphicon glyphicon-time"></span>
                                             <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
                                         </small>
                                     </div>
                                     <p th:text="${msg.text}">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                        ornare
                                         dolor, quis ullamcorper ligula sodales.
                                     </p>
                                 </div>
@@ -82,29 +86,35 @@
                                         </small>
                                     </div>
                                     <p th:text="${msg.text}">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
+                                        ornare
                                         dolor, quis ullamcorper ligula sodales.
                                     </p>
                                 </div>
                             </li>
                           </span>
-                        </ul>
+                        <p class="text-center"
+                           th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}">
+                            <a href="#" onclick="loadMoreMessages()">Show more messages</a>
+                        </p>
+                    </ul>
 
-                    </div>
-                    <div class="panel-footer">
-                        <div class="input-group">
-                            <input id="msg-input" type="text" class="form-control input-sm"
-                                   placeholder="Type your message here...">
+                </div>
+
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input id="msg-input" type="text" class="form-control input-sm"
+                               placeholder="Type your message here...">
                             <span class="input-group-btn">
                                 <button class="btn btn-warning btn-sm" id="btn-msg-send" onclick="sendMessage();">
-                                    Send</button>
+                                    Send
+                                </button>
                             </span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
 </div>
 </body>
 </html>

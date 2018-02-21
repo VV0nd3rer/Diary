@@ -12,6 +12,7 @@
     <script src="../../../resources/js/messenger.js"
             th:src="@{/resources/js/messenger.js}"></script>
     <link href="../../../resources/css/chat.css" rel="stylesheet" media="screen" th:href="@{/resources/css/chat.css}"/>
+    <script src="../../../resources/jQueryPagination/jquery.twbsPagination.min.js" th:src="@{/resources/jQueryPagination/jquery.twbsPagination.min.js}"></script>
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -21,6 +22,7 @@
 <body>
 <div th:replace="header :: header">&nbsp;</div>
 <div id="main-content" class="container">
+
     <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
     <p th:text="${msgCount}"></p>
     <div class="row">
@@ -53,47 +55,12 @@
                     <td>From: <span th:text="${unreadMsg.user.userId}"></span></td> <td><span th:text="${unreadMsg.text}"></span></td>
                 </tr>
             </table>
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
         </div>
     </div>
-    <div class="row">
-        <h3>Recent messages</h3>
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
-    </div>
+
     <div th:replace="fragment/messenger :: inbox">
-        <!--<div class="list-group"
-             th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
-             th:each="recentMsg: ${recentMessages}">
-            <a href="#" th:classappend="${recentMsg.read} ? list-group-item-warning : list-group-item-success" class="list-group-item">
-                <span>
-                    <label>
-                        <input type="checkbox">
-                    </label>
-                </span>
-                <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
-                <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-                <span class="badge" th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
-            </a>
-        </div>-->
     </div>
+    <div id="conversation"></div>
 </div>
 </body>
 </html>

@@ -17,19 +17,21 @@ public class Pagination {
 	public Pagination(int pageSize, int currentPage) {
 		this.pageSize = pageSize;
 		this.currentPage = currentPage;
+		calculateOffset();
 	}
+
 	public Pagination(int currentPage) {
 		this.currentPage = currentPage;
+		calculateOffset();
 	}
-	private void calculatePagesAndOffset() {
+	private void calculateTotalPages() {
 		totalPages = totalRows/pageSize;
 		if(totalRows % pageSize != 0) {
 			totalPages += 1;
 		}
+	}
+	private void calculateOffset() {
 		offset = pageSize * currentPage - pageSize;
-		//if(totalPages > 0) {
-		//pagination.setTotalPages(totalPages);
-		//}
 	}
 	public int getTotalPages() {
 		return totalPages;
@@ -53,7 +55,7 @@ public class Pagination {
 
 	public void setTotalRows(int totalRows) {
 		this.totalRows = totalRows;
-		calculatePagesAndOffset();
+		calculateTotalPages();
 	}
 
 	public int getPageSize() {
@@ -70,5 +72,6 @@ public class Pagination {
 
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
+		calculateOffset();
 	}
 }

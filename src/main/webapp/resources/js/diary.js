@@ -30,6 +30,12 @@ $(document).ready(function(){
 		paginationChangingBlock = 'books-block';
 		initializePaginationPlagin();
 	}
+	/*if($('#message-pagination').length) {
+		paginationElement = $('#message-pagination');
+		paginationURL = '/messages/pagination-messages';
+		paginationChangingBlock = 'messages-block';
+		initializePaginationPlagin();
+	}*/
 	function initializePaginationPlagin() {
 		var defOpts = renderPaginationPlagin();
 		paginationElement.twbsPagination(defOpts);
@@ -447,7 +453,7 @@ $(document).ready(function(){
 	   var id = $("#crud-tbl tr.danger").find('td:first').html();
 	   window.location.replace("posts/sight_posts?sight_id="+id);
    });
-   //--- End of Books page CRUD functionality	
+   //--- End of Books page CRUD functionality
 
 });
 //End of document.ready

@@ -34,7 +34,8 @@
     margin-right: 5px;
 }
 
-.panel-body
+/*.panel-body*/
+#msg-container
 {
     overflow-y: scroll;
     height: 250px;

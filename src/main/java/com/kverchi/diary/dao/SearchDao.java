@@ -11,13 +11,13 @@ public interface SearchDao {
 
 
     int getRowsNumberWithAttributes(Map <String, Object> hasAttributes, Map <String, String> includingAttributes,
-                                    Map <String, String> choosingAttributes);
+                                    Map <String, Object> choosingAttributes);
 
 
 
     List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
-                              Map<String, String> choosingAttributes, Pagination pagination);
+                              Map<String, Object> choosingAttributes, Pagination pagination);
     List searchAndSortWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
-                                     Map<String, String> choosingAttributes,
+                                     Map<String, Object> choosingAttributes,
                                      String sortType, Pagination pagination);
 }

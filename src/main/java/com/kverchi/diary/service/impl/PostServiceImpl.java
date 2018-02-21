@@ -127,7 +127,7 @@ public class PostServiceImpl implements PostService {
 
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
-		Map<String, String> choosingAttributes = new HashMap<>();
+		Map<String, Object> choosingAttributes = new HashMap<>();
 		if (searchCriteria != null && !searchCriteria.isEmpty()) {
 			for (Map.Entry<PostSearchAttributes.PostSearchType, Object> entry : searchCriteria.entrySet()) {
 				switch (entry.getKey()) {
@@ -138,9 +138,9 @@ public class PostServiceImpl implements PostService {
 						hasAttributes.put("sightId", entry.getValue());
 						break;
 					case BY_TEXT:
-						choosingAttributes.put("description", entry.getValue().toString());
-						choosingAttributes.put("text", entry.getValue().toString());
-						choosingAttributes.put("title", entry.getValue().toString());
+						choosingAttributes.put("description", entry.getValue());
+						choosingAttributes.put("text", entry.getValue());
+						choosingAttributes.put("title", entry.getValue());
 						break;
 					case IN_TITLE_ONLY:
 						includingAttributes.put("title", entry.getValue().toString());
@@ -153,7 +153,6 @@ public class PostServiceImpl implements PostService {
 		totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
 
 		pagination.setTotalRows(totalRows);
-		//pagination = paginationService.calculatePagination(pagination);
 		searchResults.setTotalPages(pagination.getTotalPages());
 		List results;
 		PostSearchAttributes.PostSortType sortType = searchAttributes.getPostSortType();

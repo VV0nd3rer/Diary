@@ -1,24 +1,15 @@
 package com.kverchi.diary.controller;
 
-import com.kverchi.diary.domain.ChatMessage;
-import com.kverchi.diary.domain.Conversation;
-import com.kverchi.diary.domain.User;
-import com.kverchi.diary.security.UserDetailsImpl;
+import com.kverchi.diary.domain.*;
 import com.kverchi.diary.service.MessengerService;
 import com.kverchi.diary.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.core.MessagePostProcessor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,13 +55,50 @@ public class MessengerController {
         User user = userService.getUserFromSession();
         if (user != null) {
             List<com.kverchi.diary.domain.Message> conversationMessages =
-                    messengerService.getConversationMessages(user.getUserId(), conversationId);
+                    messengerService.getMessagesByConversationId(user.getUserId(), conversationId, 1);
             Conversation currentConversation = messengerService.getConversation(conversationId);
             mv.addObject("conversationMessages", conversationMessages);
             mv.addObject("currentConversation", currentConversation);
         }
         return mv;
     }
+    @RequestMapping("/conversation/more/{currentPage}")
+    public ModelAndView showMoreConversation(@PathVariable("currentPage") int currentPage,
+                                             @ModelAttribute("currentConversation") Conversation currentConversation) {
+        logger.debug("Current conversation is " + currentConversation.getConversationId());
+        ModelAndView mv = new ModelAndView("fragment/messenger::more");
+        User user = userService.getUserFromSession();
+        if(user != null) {
+            List<com.kverchi.diary.domain.Message> conversationMessages =
+                    messengerService.getMessagesByConversationId(user.getUserId(),
+                            currentConversation.getConversationId(),
+                            currentPage);
+            mv.addObject("conversationMessages", conversationMessages);
+        }
+        return mv;
+    }
+    /*@RequestMapping("/conversation")
+    public ModelAndView showConversation() {
+        ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
+        return mv;
+    }
+    @RequestMapping(value = "/pagination-messages", method = RequestMethod.POST)
+    public ModelAndView showPaginationPosts(@RequestBody MessageSearchAttributes searchAttributes) {
+        ModelAndView mv = new ModelAndView("fragments :: messages-page");
+        User user = userService.getUserFromSession();
+        if (user != null) {
+            searchAttributes.addSearchCriteria(MessageSearchAttributes.MessageSearchType.BY_USER_ID,
+                    user.getUserId());
+            MessageSearchResults results = messengerService.search(searchAttributes);
+            Conversation currentConversation =
+                    messengerService.getConversation(results.getResults().get(0).getConversation().getConversationId());
+            mv.addObject("conversationMessages", results.getResults());
+            mv.addObject("totalPages", results.getTotalPages());
+            mv.addObject("currentConversation", currentConversation);
+        }
+        return mv;
+    }*/
+
     @RequestMapping(value = "/send-message", method = RequestMethod.POST)
     public void sendMessage(@RequestBody com.kverchi.diary.domain.Message message,
                             @ModelAttribute("currentConversation") Conversation currentConversation) {
@@ -88,8 +116,9 @@ public class MessengerController {
                 receiverUsername = currentConversation.getUser2().getUsername();
             }
             logger.debug("receiver username: " + receiverUsername);
-            messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
             messengerService.saveMessage(message);
+            messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
+
         }
 
     }

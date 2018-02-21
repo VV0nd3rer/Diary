@@ -12,6 +12,7 @@ package com.kverchi.diary.dao.impl;
         import javax.persistence.Query;
         import javax.persistence.criteria.*;
         import java.util.List;
+        import java.util.Map;
 
         import static java.lang.Math.toIntExact;
 
@@ -110,14 +111,14 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
 
-            String str_query = "FROM Message msg1 WHERE " +
+            String strQuery = "FROM Message msg1 WHERE " +
                     "msg1.sentDatetime = " +
                     "(SELECT max(msg2.sentDatetime) FROM Message msg2 " +
                     "WHERE msg2.conversation.conversationId = msg1.conversation.conversationId) " +
                     "AND (msg1.conversation.user1.userId = :userId " +
                     "OR msg1.conversation.user2.userId = :userId) " +
                     "ORDER BY msg1.sentDatetime DESC";
-            Query query = entityManager.createQuery(str_query);
+            Query query = entityManager.createQuery(strQuery);
             query.setParameter("userId", userId);
             messageList = query.getResultList();
 
@@ -134,7 +135,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
     }
 
     @Override
-    public List getConversationMessages(int userId, int conversationId) {
+    public List getMessagesByConversationId(int userId, int conversationId, Pagination pagination) {
         EntityManager entityManager = null;
         List<Message> result;
         try {
@@ -155,8 +156,13 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
                     predicateOnConversationId,
                     criteriaBuilder.or(predicateOnUser1Id, predicateOnUser2Id));
             criteriaQuery.where(predicateOnFinalCondition);
+            criteriaQuery.orderBy(criteriaBuilder.desc(messageRoot.get(Message_.sentDatetime)));
 
             Query query = entityManager.createQuery(criteriaQuery);
+            query.setFirstResult(pagination.getOffset());
+            if(pagination.getPageSize() != 0) {
+                query.setMaxResults(pagination.getPageSize());
+            }
             result = query.getResultList();
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
@@ -171,4 +177,114 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
         return result;
     }
 
+    @Override
+    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes,
+                                           Map<String, String> includingAttributes,
+                                           Map<String, Object> choosingAttributes) {
+        EntityManager entityManager = null;
+        int rowsNumber = 0;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            StringBuilder strQuery = new StringBuilder("SELECT count(*) from Message message");
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                if(hasAttributes.containsKey("conversationId")) {
+                    strQuery.append(" WHERE message.conversation.conversationId := conversationId");
+                }
+            }
+
+            if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
+               if(choosingAttributes.containsKey("userId")) {
+                   strQuery.append(" AND (message.conversation.user1.userId := userId" +
+                           " OR message.conversation.user2.userId := userId)");
+               }
+            }
+            Query query = entityManager.createQuery(strQuery.toString());
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                if(hasAttributes.containsKey("conversationId")) {
+                    query.setParameter("conversationId", hasAttributes.get("conversationId"));
+                }
+            }
+
+            if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                if(choosingAttributes.containsKey("userId")) {
+                    query.setParameter("userId", hasAttributes.get("userId"));
+                }
+            }
+            logger.debug("single result: " + query.getSingleResult());
+            rowsNumber = ((Long) query.getSingleResult()).intValue();
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return rowsNumber;
+    }
+
+    @Override
+    public List searchWithAttributes(Map<String, Object> hasAttributes,
+                                     Map<String, String> includingAttributes,
+                                     Map<String, Object> choosingAttributes, Pagination pagination) {
+        EntityManager entityManager = null;
+        List<Message> messageList = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+
+            StringBuilder strQuery = new StringBuilder("FROM Message message");
+
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                if(hasAttributes.containsKey("conversationId")) {
+                    strQuery.append(" WHERE message.conversation.conversationId := conversationId");
+                }
+            }
+
+            if(choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                if(choosingAttributes.containsKey("userId")) {
+                    strQuery.append(" AND (message.conversation.user1.userId := userId" +
+                            " OR message.conversation.user2.userId := userId)");
+                }
+            }
+            Query query = entityManager.createQuery(strQuery.toString());
+            if (hasAttributes != null && !hasAttributes.isEmpty()) {
+                if(hasAttributes.containsKey("conversationId")) {
+                    query.setParameter("conversationId", hasAttributes.get("conversationId"));
+                }
+            }
+
+            if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
+                if(choosingAttributes.containsKey("userId")) {
+                    query.setParameter("userId", hasAttributes.get("userId"));
+                }
+            }
+
+            query.setFirstResult(pagination.getOffset());
+            if(pagination.getPageSize() != 0) {
+                query.setMaxResults(pagination.getPageSize());
+            }
+            messageList = query.getResultList();
+
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return messageList;
+    }
+
+    @Override
+    public List searchAndSortWithAttributes(Map<String, Object> hasAttributes,
+                                            Map<String, String> includingAttributes,
+                                            Map<String, Object> choosingAttributes,
+                                            String sortType, Pagination pagination) {
+        return null;
+    }
 }

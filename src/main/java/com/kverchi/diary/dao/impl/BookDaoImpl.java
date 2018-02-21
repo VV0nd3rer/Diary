@@ -28,7 +28,9 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
 
 
     @Override
-    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes, Map<String, String> choosingAttributes) {
+    public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes,
+                                           Map<String, String> includingAttributes,
+                                           Map<String, Object> choosingAttributes) {
         EntityManager entityManager = null;
         int result;
         try {
@@ -52,7 +54,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
                 }
             }
             if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                for (Map.Entry<String, Object> entry : choosingAttributes.entrySet()) {
                     Predicate predicate = criteriaBuilder.like(bookRoot.get(entry.getKey()), "%"+entry.getValue()+"%");
                     predicates.add(predicate);
                 }
@@ -77,7 +79,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
 
     @Override
     public List searchWithAttributes(Map<String, Object> hasAttributes, Map<String, String> includingAttributes,
-                                     Map<String, String> choosingAttributes, Pagination pagination) {
+                                     Map<String, Object> choosingAttributes, Pagination pagination) {
         EntityManager entityManager = null;
         List<Book> result = null;
         try {
@@ -101,7 +103,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
                 }
             }
             if (choosingAttributes != null && !choosingAttributes.isEmpty()) {
-                for (Map.Entry<String, String> entry : choosingAttributes.entrySet()) {
+                for (Map.Entry<String, Object> entry : choosingAttributes.entrySet()) {
                     Predicate predicate = criteriaBuilder.like(bookRoot.get(entry.getKey()), "%"+entry.getValue()+"%");
                     choosingPredicates.add(predicate);
                 }
@@ -144,7 +146,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book> implements BookDao {
     @Override
     public List searchAndSortWithAttributes(Map<String, Object> hasAttributes,
                                             Map<String, String> includingAttributes,
-                                            Map<String, String> choosingAttributes, String sortType,
+                                            Map<String, Object> choosingAttributes, String sortType,
                                             Pagination pagination) {
         return null;
     }
