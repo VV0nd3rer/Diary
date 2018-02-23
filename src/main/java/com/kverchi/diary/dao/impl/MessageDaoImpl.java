@@ -40,7 +40,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             Predicate predicateOnUser2Id = criteriaBuilder.equal(
                     messageRoot.get(Message_.conversation).get(Conversation_.user2).get(User_.userId), receiverId);
             Predicate predicateOnSenderId = criteriaBuilder.notEqual(
-                    messageRoot.get(Message_.user).get(User_.userId), receiverId);
+                    messageRoot.get(Message_.sender).get(User_.userId), receiverId);
             Predicate predicateOnMessageStatus = criteriaBuilder.equal(messageRoot.get(Message_.read), false);
             Predicate predicateOnFinalCondition = criteriaBuilder.and(
                     predicateOnMessageStatus,
@@ -81,7 +81,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             Predicate predicateOnUser2Id = criteriaBuilder.equal(
                     messageRoot.get(Message_.conversation).get(Conversation_.user2).get(User_.userId), receiverId);
             Predicate predicateOnSenderId = criteriaBuilder.notEqual(
-                    messageRoot.get(Message_.user).get(User_.userId), receiverId);
+                    messageRoot.get(Message_.sender).get(User_.userId), receiverId);
             Predicate predicateOnMessageStatus = criteriaBuilder.equal(messageRoot.get(Message_.read), false);
             Predicate predicateOnFinalCondition = criteriaBuilder.and(
                     predicateOnMessageStatus,

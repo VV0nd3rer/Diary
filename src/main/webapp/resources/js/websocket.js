@@ -54,7 +54,8 @@ function sendMessage() {
     //stompClient.send("/app/send-msg", {}, JSON.stringify({'text': "hello!!!"}));
     var msgText = $("#msg-input").val();
     if(msgText.length < 2) {
-        alert("Uh-oh, apparently, you don't know what to say... ")
+        alert("Uh-oh, apparently, you don't know what to say... ");
+        return;
     }
     $.ajax({
         url: '/messages/send-message',
@@ -73,10 +74,12 @@ function renderMessage(message, isInbox) {
     var messageTemplate;
     if(isInbox) {
         messageTemplate =
-            '<li class="left clearfix">' +
+            '<li class="left clearfix list-group-item-success" ' +
+            '    data-msgid="' + message.messageId + '" ' +
+            '    onclick="setMessageAsRead()">' +
                 '<div class="pull-left">' +
                     '<div class="header">' +
-                    '<div><strong>' + message.user.username + '</strong></div>' +
+                    '<div><strong>' + message.sender.username + '</strong></div>' +
                     '<small class=" text-muted">' +
                         '<span class="glyphicon glyphicon-time"></span>' + /*'dd/MM/yyyy HH:mm'*/
                         '<span>now</span>' +
@@ -89,7 +92,9 @@ function renderMessage(message, isInbox) {
     else {
         message = JSON.parse(message);
         messageTemplate =
-            '<li class="right clearfix">' +
+            '<li class="right clearfix" ' +
+            '    data-msgid="' + message.messageId + '" ' +
+            '    onclick="setMessageAsRead()">' +
                 '<div class="pull-right">' +
                     '<div class="header">' +
                         '<div><strong>Me</strong></div>' +
@@ -102,8 +107,10 @@ function renderMessage(message, isInbox) {
                 '</div>' +
             '</li>';
     }
-    $("ul[class='chat']").append(messageTemplate);
-    $("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
+    $("ul[class='chat']").prepend(messageTemplate);
+    if(!isInbox) {
+        $("#msg-container").stop().animate({scrollTop: 0}, 1000);
+    }
 }
 
 $(function () {

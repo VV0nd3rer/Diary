@@ -95,6 +95,31 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		}
 		return isUpdated;
 	}
+
+	@Transactional
+	@Override
+	public boolean updateBatch(List list) throws DatabaseException {
+		EntityManager entityManager = null;
+		boolean isUpdated = false;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			for(Object entity : list) {
+				entityManager.merge(entity);
+			}
+			entityManager.getTransaction().commit();
+			isUpdated = true;
+		} catch(PersistenceException  e) {
+			logger.error("DBException: message -> " +  e.getMessage() + " cause -> " + e.getCause());
+			throw new DatabaseException(e);
+		} finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return isUpdated;
+	}
+
 	@Transactional
 	@Override
 	public void delete(T t) throws DatabaseException {

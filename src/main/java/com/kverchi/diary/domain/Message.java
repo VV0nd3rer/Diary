@@ -2,7 +2,6 @@ package com.kverchi.diary.domain;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Created by Liudmyla Melnychuk on 21.12.2017.
@@ -20,7 +19,7 @@ public class Message {
         private int senderId;*/
     @ManyToOne
     @JoinColumn(name="sender_id")
-    private User user;
+    private User sender;
 
     @ManyToOne
     @JoinColumn(name="conversation_id")
@@ -66,12 +65,12 @@ public class Message {
         this.text = text;
     }
 
-   public User getUser() {
-       return user;
+   public User getSender() {
+       return sender;
    }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
     public boolean isRead() {

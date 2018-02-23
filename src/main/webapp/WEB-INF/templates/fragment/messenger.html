@@ -18,7 +18,7 @@
                     </label>
                 </span>
             <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
-            <span class="name" th:text="${recentMsg.user.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
+            <span class="name" th:text="${recentMsg.sender.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
             <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
             <span class="badge"
                   th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
@@ -55,14 +55,16 @@
                 <div id="msg-container" class="panel-body">
                     <span>Conversation ID: </span>
                     <span class="conversationId" th:text="${currentConversation.conversationId}"></span>
-                    <ul class="chat" th:fragment="more">
-                            <span th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
+                    <ul class="chat">
+                            <span th:fragment="more"
+                                  th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                                   th:each="msg: ${conversationMessages}">
-                            <li th:if="${#authentication.name != msg.user.username}" class="left clearfix">
+                            <li th:if="${#authentication.name != msg.sender.username}"
+                                class="left clearfix" th:attr="data-msgid=${msg.messageId}">
 
                                 <div class="pull-left">
                                     <div class="header">
-                                        <div><strong th:text="${msg.user.username}">Jack Sparrow</strong></div>
+                                        <div><strong th:text="${msg.sender.username}">Jack Sparrow</strong></div>
                                         <small class="text-muted">
                                             <span class="glyphicon glyphicon-time"></span>
                                             <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
@@ -75,11 +77,12 @@
                                     </p>
                                 </div>
                             </li>
-                            <li th:if="${#authentication.name == msg.user.username}" class="right clearfix">
+                            <li th:if="${#authentication.name == msg.sender.username}"
+                                class="right clearfix" th:attr="data-msgid=${msg.messageId}">
 
                                 <div class="pull-right">
                                     <div class="header">
-                                        <div><strong th:text="${msg.user.username}">Bhaumik Patel</strong></div>
+                                        <div><strong th:text="${msg.sender.username}">Bhaumik Patel</strong></div>
                                         <small class=" text-muted">
                                             <span class="glyphicon glyphicon-time"></span>
                                             <span th:text="${#temporals.format(msg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12 mins ago</span>
@@ -93,12 +96,10 @@
                                 </div>
                             </li>
                           </span>
-                        <p class="text-center"
-                           th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}">
-                            <a href="#" onclick="loadMoreMessages()">Show more messages</a>
-                        </p>
                     </ul>
-
+                    <p class="text-center">
+                        <a id="more-messages" onclick="loadMoreMessages()">Show more messages</a>
+                    </p>
                 </div>
 
                 <div class="panel-footer">

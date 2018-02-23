@@ -15,7 +15,8 @@ public interface GenericDao<T> {
 	//Serializable create(final T t);
 	T persist(T t) throws DatabaseException;
     T getById(final Serializable id) throws DatabaseException;
-    boolean update(final T t) throws DatabaseException;   
+    boolean update(final T t) throws DatabaseException;
+    boolean updateBatch(final List list) throws DatabaseException;
     void delete(final T t) throws DatabaseException;
     List<T> getAllRecords() throws DatabaseException;
     boolean isRecordPresent(String key, Object value) throws DatabaseException;

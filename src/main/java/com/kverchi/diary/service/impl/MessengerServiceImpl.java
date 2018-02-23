@@ -8,6 +8,7 @@ import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,22 @@ public class MessengerServiceImpl implements MessengerService {
     @Override
     public List getMessagesByConversationId(int userId, int companionId, int currentPage) {
         Pagination pagination = new Pagination(currentPage);
-        return messageDao.getMessagesByConversationId(userId, companionId, pagination);
+        List<Message> messages = messageDao.getMessagesByConversationId(userId, companionId, pagination);
+        List<Message> readMessages = new ArrayList();
+        for(Message message : messages) {
+            if(message.isRead() != true) {
+                int senderId = message.getSender().getUserId();
+                if (senderId != userId) {
+                    Message updatedMessage = message;
+                    updatedMessage.setRead(true);
+                    readMessages.add(updatedMessage);
+                }
+            }
+        }
+        if(!readMessages.isEmpty()) {
+            messageDao.updateBatch(readMessages);
+        }
+        return messages;
     }
 
     /*@Override

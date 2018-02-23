@@ -52,7 +52,7 @@
             <table>
                 <tr th:if="${not #lists.isEmpty(unreadMessages) and unreadMessages != null}"
                     th:each="unreadMsg: ${unreadMessages}" class="unread-msg">
-                    <td>From: <span th:text="${unreadMsg.user.userId}"></span></td> <td><span th:text="${unreadMsg.text}"></span></td>
+                    <td>From: <span th:text="${unreadMsg.sender.userId}"></span></td> <td><span th:text="${unreadMsg.text}"></span></td>
                 </tr>
             </table>
         </div>

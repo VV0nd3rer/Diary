@@ -107,7 +107,7 @@ public class MessengerController {
             int senderId = sender.getUserId();
             logger.debug("User ID: " + senderId);
             logger.debug("Current conversation ID: " + currentConversation.getConversationId());
-            message.setUser(sender);
+            message.setSender(sender);
             message.setConversation(currentConversation);
             String receiverUsername;
             if(currentConversation.getUser1().getUserId() != senderId) {
