@@ -178,6 +178,32 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
     }
 
     @Override
+    public void updateMessagesReadStatus(List<Integer> messagesIds) {
+        EntityManager entityManager = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+            for (int id : messagesIds) {
+                CriteriaUpdate<Message> updateMessage = criteriaBuilder.createCriteriaUpdate(Message.class);
+                Root<Message> messageRoot = updateMessage.from(Message.class);
+                updateMessage.set("read", true);
+                updateMessage.where(criteriaBuilder.equal(messageRoot.get(Message_.messageId), id));
+                entityManager.createQuery(updateMessage).executeUpdate();
+            }
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+    }
+
+    @Override
     public int getRowsNumberWithAttributes(Map<String, Object> hasAttributes,
                                            Map<String, String> includingAttributes,
                                            Map<String, Object> choosingAttributes) {

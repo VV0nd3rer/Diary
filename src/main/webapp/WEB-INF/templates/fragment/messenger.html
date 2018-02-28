@@ -4,19 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
 <div id="inbox" th:fragment="inbox">
     <div class="list-group">
         <a th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
            th:each="recentMsg: ${recentMessages}"
-           href="#" th:classappend="${recentMsg.read} ? 'list-group-item-warning' : 'list-group-item-success' "
+           href="#" th:classappend="${recentMsg.read != true and #authentication.name != recentMsg.sender.username} ?
+                      'list-group-item-success' : 'list-group-item-warning' "
            class="list-group-item">
-                <span>
-                    <label>
-                        <input type="checkbox">
-                    </label>
-                </span>
             <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
             <span class="name" th:text="${recentMsg.sender.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
             <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
@@ -60,7 +57,10 @@
                                   th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                                   th:each="msg: ${conversationMessages}">
                             <li th:if="${#authentication.name != msg.sender.username}"
-                                class="left clearfix" th:attr="data-msgid=${msg.messageId}">
+                                class="left clearfix"
+                                th:classappend="${msg.read} ? '' : 'list-group-item-success' "
+                                th:onclick="${'setMessageAsRead()'}"
+                                th:attr="data-msgid=${msg.messageId}">
 
                                 <div class="pull-left">
                                     <div class="header">

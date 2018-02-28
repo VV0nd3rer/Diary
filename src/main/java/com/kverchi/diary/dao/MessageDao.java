@@ -13,4 +13,5 @@ public interface MessageDao extends GenericDao<Message>, SearchDao {
     List getUnreadMessages(int receiverId);
     List getConversations(int userId);
     List getMessagesByConversationId(int userId, int conversationId, Pagination pagination);
+    void updateMessagesReadStatus(List<Integer> messagesIds);
 }

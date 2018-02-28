@@ -50,7 +50,7 @@ public class MessengerController {
     }
 
     @RequestMapping("/conversation/{conversationId}")
-    public ModelAndView openConversation(@PathVariable("conversationId") int conversationId) {
+    public ModelAndView openConversation(@PathVariable ("conversationId") int conversationId) {
         ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
         User user = userService.getUserFromSession();
         if (user != null) {
@@ -61,6 +61,15 @@ public class MessengerController {
             mv.addObject("currentConversation", currentConversation);
         }
         return mv;
+    }
+    @RequestMapping(value = "/conversation/set-read", method = RequestMethod.POST)
+    public void setMessagesAsRead(@RequestBody List<Integer> readMessagesId) {
+        User user = userService.getUserFromSession();
+        if(user != null) {
+            messengerService.setMessagesAsRead(readMessagesId);
+
+            //messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
+        }
     }
     @RequestMapping("/conversation/more/{currentPage}")
     public ModelAndView showMoreConversation(@PathVariable("currentPage") int currentPage,

@@ -44,7 +44,6 @@ public class Message {
     }
 
     @PrePersist
-    @PreUpdate
     public void setSentDatetime() {
         this.sentDatetime = ZonedDateTime.now();
     }

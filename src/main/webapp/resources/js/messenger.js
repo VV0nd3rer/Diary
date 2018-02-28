@@ -17,6 +17,7 @@ $(document).ready(function(){
         });
 
     });
+
 });
 function loadMoreMessages() {
     currentPageNum++;
@@ -34,13 +35,31 @@ function loadMoreMessages() {
     return false;
 }
 function setMessageAsRead() {
-    var readMessages = [];
-    $('.chat li[data-msgid]').each(function(){
-        alert($(this).data("msgid"));
-        readMessages.push($(this).data("msgid"));
-    });
-    //element.classList.remove("list-group-item-success");
-    //element.removeClass("list-group-item-success").siblings().removeClass("list-group-item-success");
-    $('.chat li.list-group-item-success').removeClass("list-group-item-success");
+    var readMessagesId = [];
 
+    $('.chat li.list-group-item-success').each(function() {
+        var msg_id = $(this).data("msgid");
+        readMessagesId.push(msg_id);
+        alert(msg_id);
+    });
+    $('.chat li.list-group-item-success').removeClass("list-group-item-success");
+    var update_messages_url = "/messages/conversation/set-read";
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+
+    $.ajax({
+        url: update_messages_url,
+        type: "POST",
+        data: JSON.stringify(readMessagesId),
+        contentType: "application/json; charset=utf-8",
+        dataType:"json",
+        success: function () {
+            console.log('Messages were updated.');
+        }
+    });
+    return;
 }

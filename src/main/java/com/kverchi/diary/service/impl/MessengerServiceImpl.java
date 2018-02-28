@@ -44,24 +44,26 @@ public class MessengerServiceImpl implements MessengerService {
     }
 
     @Override
-    public List getMessagesByConversationId(int userId, int companionId, int currentPage) {
+    public List getMessagesByConversationId(int userId, int conversationId, int currentPage) {
         Pagination pagination = new Pagination(currentPage);
-        List<Message> messages = messageDao.getMessagesByConversationId(userId, companionId, pagination);
-        List<Message> readMessages = new ArrayList();
+        List<Message> messages = messageDao.getMessagesByConversationId(userId, conversationId, pagination);
+
+        /*List<Integer> userReadMessagesIds = new ArrayList();
         for(Message message : messages) {
             if(message.isRead() != true) {
                 int senderId = message.getSender().getUserId();
                 if (senderId != userId) {
-                    Message updatedMessage = message;
-                    updatedMessage.setRead(true);
-                    readMessages.add(updatedMessage);
+                    userReadMessagesIds.add(message.getMessageId());
                 }
             }
         }
-        if(!readMessages.isEmpty()) {
-            messageDao.updateBatch(readMessages);
-        }
+        messageDao.updateMessagesReadStatus(userReadMessagesIds);*/
         return messages;
+    }
+
+    @Override
+    public void setMessagesAsRead(List<Integer> readMessagesId) {
+        messageDao.updateMessagesReadStatus(readMessagesId);
     }
 
     /*@Override

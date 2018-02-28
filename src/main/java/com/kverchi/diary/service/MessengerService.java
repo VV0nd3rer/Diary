@@ -12,7 +12,8 @@ public interface MessengerService {
     int getUnreadMessagesCount(int userId);
     List getUnreadMessages(int userId);
     List getRecentMessagesFromAllUsers(int receiverId);
-    List getMessagesByConversationId(int userId, int companionId, int currentPage);
+    List getMessagesByConversationId(int userId, int conversationId, int currentPage);
+    void setMessagesAsRead(List<Integer> readMessagesId);
     /* MessagePaginatedResponce instead of MessageSearchResults */
    /* MessageSearchResults getMessagesByConversationId(MessageSearchAttributes searchAttributes);*/
     Conversation getConversation(int conversationId);
