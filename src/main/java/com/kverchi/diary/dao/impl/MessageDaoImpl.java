@@ -104,7 +104,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
     }
 
     @Override
-    public List getConversations(int userId) {
+    public List getRecentMessagesFromAllUserConversations(int userId) {
         EntityManager entityManager = null;
         List<Message> messageList = null;
         try {

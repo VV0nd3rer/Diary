@@ -43,7 +43,7 @@ public class MessengerController {
             mv.addObject("msgCount", msgCount);
             List<com.kverchi.diary.domain.Message> unreadMessages = messengerService.getUnreadMessages(receiverUserId);
             mv.addObject("unreadMessages", unreadMessages);
-            List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUsers(receiverUserId);
+            List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUserConversations(receiverUserId);
             mv.addObject("recentMessages", recentMessages);
         }
         return mv;

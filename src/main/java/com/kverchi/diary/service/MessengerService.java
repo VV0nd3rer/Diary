@@ -11,7 +11,7 @@ public interface MessengerService {
     void saveMessage(com.kverchi.diary.domain.Message message);
     int getUnreadMessagesCount(int userId);
     List getUnreadMessages(int userId);
-    List getRecentMessagesFromAllUsers(int receiverId);
+    List getRecentMessagesFromAllUserConversations(int userId);
     List getMessagesByConversationId(int userId, int conversationId, int currentPage);
     void setMessagesAsRead(List<Integer> readMessagesId);
     /* MessagePaginatedResponce instead of MessageSearchResults */

@@ -8,7 +8,6 @@ import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,8 +38,8 @@ public class MessengerServiceImpl implements MessengerService {
     }
 
     @Override
-    public List getRecentMessagesFromAllUsers(int receiverId) {
-        return messageDao.getConversations(receiverId);
+    public List getRecentMessagesFromAllUserConversations(int userId) {
+        return messageDao.getRecentMessagesFromAllUserConversations(userId);
     }
 
     @Override
