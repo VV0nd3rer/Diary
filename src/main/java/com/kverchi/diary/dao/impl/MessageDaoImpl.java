@@ -188,7 +188,7 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
             for (int id : messagesIds) {
                 CriteriaUpdate<Message> updateMessage = criteriaBuilder.createCriteriaUpdate(Message.class);
                 Root<Message> messageRoot = updateMessage.from(Message.class);
-                updateMessage.set("read", true);
+                updateMessage.set(messageRoot.get(Message_.read), true);
                 updateMessage.where(criteriaBuilder.equal(messageRoot.get(Message_.messageId), id));
                 entityManager.createQuery(updateMessage).executeUpdate();
             }
@@ -201,6 +201,50 @@ public class MessageDaoImpl extends GenericDaoImpl<Message> implements MessageDa
                 entityManager.close();
             }
         }
+    }
+
+    @Override
+    public int getUnreadMessagesCountByConversationId(int conversationId, int receiverId) {
+        EntityManager entityManager = null;
+        int rowsCount = 0;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+
+            /*CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Message> messageRoot = criteriaQuery.from(Message.class);
+            criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(Message.class)));
+            Predicate predicateOnConversationId =
+                    criteriaBuilder.equal(
+                            messageRoot.get(Message_.conversation).get(Conversation_.conversationId), conversationId);
+            Predicate predicateOnSenderId = criteriaBuilder.notEqual(
+                    messageRoot.get(Message_.sender).get(User_.userId), receiverId);
+            Predicate predicateOnReadMessage = criteriaBuilder.equal(messageRoot.get(Message_.read), false);
+            criteriaQuery.where(predicateOnConversationId, predicateOnSenderId, predicateOnReadMessage);
+            Query query = entityManager.createQuery(criteriaQuery);*/
+
+
+            StringBuilder strQuery = new StringBuilder("select count(*) from Message m" +
+                    " JOIN Conversation c ON m.conversation.conversationId = c.conversationId" +
+                    " WHERE c.conversationId = :conversationId" +
+                    " AND m.sender.userId != :receiverId" +
+                    " AND m.read = :read");
+            Query query = entityManager.createQuery(strQuery.toString());
+            query.setParameter("conversationId", conversationId);
+            query.setParameter("receiverId", receiverId);
+            query.setParameter("read", false);
+            rowsCount = ((Long) query.getSingleResult()).intValue();
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            logger.error("DBException: message -> " + e.getMessage() + " cause -> " + e.getCause());
+            throw new DatabaseException(e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+        return rowsCount;
     }
 
     @Override

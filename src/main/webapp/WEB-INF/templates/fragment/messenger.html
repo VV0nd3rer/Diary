@@ -13,12 +13,21 @@
            th:each="recentMsg: ${recentMessages}"
            href="#" th:classappend="${recentMsg.read != true and #authentication.name != recentMsg.sender.username} ?
                       'list-group-item-success' : 'list-group-item-warning' "
-           class="list-group-item">
-            <span class="conversationId" th:text="${recentMsg.conversation.conversationId}"/>
-            <span class="name" th:text="${recentMsg.sender.username}" style="min-width: 120px;display: inline-block;">Mark Otto</span>
-            <span th:text="${recentMsg.text}">Nice work on the lastest version</span>
-            <span class="badge"
-                  th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+           class="list-group-item"
+           th:attr="data-convid=${recentMsg.conversation.conversationId}">
+            <span th:text="${recentMsg.conversation.user1.username}">Funny person</span>
+            <span> & </span>
+            <span class="name"
+                  th:text="${recentMsg.conversation.user2.username}">Good fellow</span>
+            <span class="inbox-content">
+                <span th:switch="${recentMsg.sender.username}">
+                    <span th:case="${#authentication.name}" th:text="${#strings.concat('You', ':')}"></span>
+                    <span th:case="*" th:text="${recentMsg.sender.username} + ':'"></span>
+                </span>
+                <span class="name" th:text="${recentMsg.text}">Nice work on the lastest version</span>
+                <span class="badge pull-right"
+                      th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
+            </span>
         </a>
     </div>
 </div>
@@ -28,7 +37,9 @@
         <div class="col-md-5">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <span class="glyphicon glyphicon-comment"></span> Chat
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <span>+<span th:if="${unreadMessagesCount != 0}" th:text="${unreadMessagesCount}"></span></span>
+                    Chat
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-chevron-down"></span>
@@ -52,7 +63,7 @@
                 <div id="msg-container" class="panel-body">
                     <span>Conversation ID: </span>
                     <span class="conversationId" th:text="${currentConversation.conversationId}"></span>
-                    <ul class="chat">
+                    <ul class="chat" th:attr="data-convid=${currentConversation.conversationId}">
                             <span th:fragment="more"
                                   th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
                                   th:each="msg: ${conversationMessages}">

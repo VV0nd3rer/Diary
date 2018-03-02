@@ -72,7 +72,12 @@ function sendMessage() {
 
 function renderMessage(message, isInbox) {
     var messageTemplate;
+    var inboxTemplateContent;
     if(isInbox) {
+        inboxTemplateContent =
+            '<span>' + message.sender.username + ': </span>' +
+            '<span class="name">' + message.text + '</span>'
+            '<span class="badge pull-right">' + message.sentDatetime + '</span>';
         messageTemplate =
             '<li class="left clearfix list-group-item-success" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -91,6 +96,11 @@ function renderMessage(message, isInbox) {
     }
     else {
         message = JSON.parse(message);
+
+        inboxTemplateContent =
+            '<span>You: </span>' +
+            '<span class="name">' + message.text + '</span>'
+            '<span class="badge pull-right">' + message.sentDatetime + '</span>';
         messageTemplate =
             '<li class="right clearfix" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -107,7 +117,38 @@ function renderMessage(message, isInbox) {
                 '</div>' +
             '</li>';
     }
-    $("ul[class='chat']").prepend(messageTemplate);
+
+    var current_conv_id = $('.chat').data('convid');
+    var inbox_message_conv_id;
+    if(isInbox) {
+      inbox_message_conv_id = message.conversation.conversationId;
+    } else {
+        inbox_message_conv_id = current_conv_id;
+    }
+    var isNewConversation = true;
+    $('#inbox a.list-group-item').each(function() {
+        var conv_id = $(this).data("convid");
+        if(inbox_message_conv_id == conv_id) {
+            $(this).find('.inbox-content').replaceWith(inboxTemplateContent);
+            isNewConversation = false;
+        }
+    });
+    if(isNewConversation) {
+         var inboxTemplate =
+            '<a class="list-group-item list-group-item-success" ' +
+                'data-convid="' + message.conversation.conversationId + '">' +
+                '<span>' + message.conversation.user1.username + '</span>' +
+                '<span> & </span>' +
+                '<span class="name">' + message.conversation.user2.username + '</span>' +
+                inboxTemplateContent +
+            '</a>'
+        $('#inbox').prepend(inboxTemplate);
+    }
+    if(current_conv_id == inbox_message_conv_id) {
+        $("ul[class='chat']").prepend(messageTemplate);
+    }
+
+
     if(!isInbox) {
         $("#msg-container").stop().animate({scrollTop: 0}, 1000);
     }

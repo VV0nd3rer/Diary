@@ -28,12 +28,12 @@ public class MessengerServiceImpl implements MessengerService {
     }
 
     @Override
-    public int getUnreadMessagesCount(int userId) {
+    public int geAllUnreadUserMessagesCount(int userId) {
         return messageDao.getUnreadMessagesCount(userId);
     }
 
     @Override
-    public List getUnreadMessages(int userId) {
+    public List getAllUnreadUserMessages(int userId) {
         return messageDao.getUnreadMessages(userId);
     }
 
@@ -43,7 +43,7 @@ public class MessengerServiceImpl implements MessengerService {
     }
 
     @Override
-    public List getMessagesByConversationId(int userId, int conversationId, int currentPage) {
+    public List getUserMessagesByConversationId(int userId, int conversationId, int currentPage) {
         Pagination pagination = new Pagination(currentPage);
         List<Message> messages = messageDao.getMessagesByConversationId(userId, conversationId, pagination);
 
@@ -61,7 +61,7 @@ public class MessengerServiceImpl implements MessengerService {
     }
 
     @Override
-    public void setMessagesAsRead(List<Integer> readMessagesId) {
+    public void setUserMessagesAsRead(List<Integer> readMessagesId) {
         messageDao.updateMessagesReadStatus(readMessagesId);
     }
 
@@ -100,6 +100,11 @@ public class MessengerServiceImpl implements MessengerService {
     @Override
     public Conversation getConversation(int conversationId) {
         return conversationDao.getById(conversationId);
+    }
+
+    @Override
+    public int getUnreadMessagesCountByConversationId(int conversationId, int receiverId) {
+        return messageDao.getUnreadMessagesCountByConversationId(conversationId, receiverId);
     }
 
 }

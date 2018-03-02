@@ -39,9 +39,9 @@ public class MessengerController {
         if (user != null) {
             //logger.debug("currentConversation: " + currentConversation.getConversationId());
             int receiverUserId = user.getUserId();
-            int msgCount = messengerService.getUnreadMessagesCount(receiverUserId);
+            int msgCount = messengerService.geAllUnreadUserMessagesCount(receiverUserId);
             mv.addObject("msgCount", msgCount);
-            List<com.kverchi.diary.domain.Message> unreadMessages = messengerService.getUnreadMessages(receiverUserId);
+            List<com.kverchi.diary.domain.Message> unreadMessages = messengerService.getAllUnreadUserMessages(receiverUserId);
             mv.addObject("unreadMessages", unreadMessages);
             List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUserConversations(receiverUserId);
             mv.addObject("recentMessages", recentMessages);
@@ -54,9 +54,13 @@ public class MessengerController {
         ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
         User user = userService.getUserFromSession();
         if (user != null) {
+            int currentUserId = user.getUserId();
             List<com.kverchi.diary.domain.Message> conversationMessages =
-                    messengerService.getMessagesByConversationId(user.getUserId(), conversationId, 1);
+                    messengerService.getUserMessagesByConversationId(currentUserId, conversationId, 1);
             Conversation currentConversation = messengerService.getConversation(conversationId);
+            int unreadMessagesCount = messengerService.getUnreadMessagesCountByConversationId(
+                    conversationId, currentUserId);
+            mv.addObject("unreadMessagesCount", unreadMessagesCount);
             mv.addObject("conversationMessages", conversationMessages);
             mv.addObject("currentConversation", currentConversation);
         }
@@ -66,7 +70,7 @@ public class MessengerController {
     public void setMessagesAsRead(@RequestBody List<Integer> readMessagesId) {
         User user = userService.getUserFromSession();
         if(user != null) {
-            messengerService.setMessagesAsRead(readMessagesId);
+            messengerService.setUserMessagesAsRead(readMessagesId);
 
             //messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
         }
@@ -79,7 +83,7 @@ public class MessengerController {
         User user = userService.getUserFromSession();
         if(user != null) {
             List<com.kverchi.diary.domain.Message> conversationMessages =
-                    messengerService.getMessagesByConversationId(user.getUserId(),
+                    messengerService.getUserMessagesByConversationId(user.getUserId(),
                             currentConversation.getConversationId(),
                             currentPage);
             mv.addObject("conversationMessages", conversationMessages);
