@@ -22,7 +22,10 @@
 <div id="main-content" class="container">
 
     <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
-    <p th:text="${msgCount}"></p>
+    <a href="/messages/show" id="all-msgs">
+        <span th:text="#{user.profile.messages}">Messages</span>
+        <span id="msg-counter" th:if="${msgCount > 0}" th:text="${msgCount}"></span>
+    </a>
     <div class="row">
         <div class="col-md-6">
             <form class="form-inline">

@@ -1,4 +1,5 @@
 var stompClient = null;
+var currentPageNum = 1;
 connect();
 
 function setConnected(connected) {
@@ -72,12 +73,12 @@ function sendMessage() {
 
 function renderMessage(message, isInbox) {
     var messageTemplate;
-    var inboxTemplateContent;
+    //var inboxTemplateContent;
     if(isInbox) {
-        inboxTemplateContent =
+        /*inboxTemplateContent =
             '<span>' + message.sender.username + ': </span>' +
             '<span class="name">' + message.text + '</span>'
-            '<span class="badge pull-right">' + message.sentDatetime + '</span>';
+            '<span class="badge pull-right">' + message.sentDatetime + '</span>';*/
         messageTemplate =
             '<li class="left clearfix list-group-item-success" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -97,10 +98,10 @@ function renderMessage(message, isInbox) {
     else {
         message = JSON.parse(message);
 
-        inboxTemplateContent =
+        /*inboxTemplateContent =
             '<span>You: </span>' +
             '<span class="name">' + message.text + '</span>'
-            '<span class="badge pull-right">' + message.sentDatetime + '</span>';
+            '<span class="badge pull-right">' + message.sentDatetime + '</span>';*/
         messageTemplate =
             '<li class="right clearfix" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -122,18 +123,19 @@ function renderMessage(message, isInbox) {
     var inbox_message_conv_id;
     if(isInbox) {
       inbox_message_conv_id = message.conversation.conversationId;
+        increaseMessagesCounter();
     } else {
         inbox_message_conv_id = current_conv_id;
     }
-    var isNewConversation = true;
+    /*var isNewConversation = true;
     $('#inbox a.list-group-item').each(function() {
         var conv_id = $(this).data("convid");
         if(inbox_message_conv_id == conv_id) {
             $(this).find('.inbox-content').replaceWith(inboxTemplateContent);
             isNewConversation = false;
         }
-    });
-    if(isNewConversation) {
+    });*/
+    /*if(isNewConversation) {
          var inboxTemplate =
             '<a class="list-group-item list-group-item-success" ' +
                 'data-convid="' + message.conversation.conversationId + '">' +
@@ -143,15 +145,72 @@ function renderMessage(message, isInbox) {
                 inboxTemplateContent +
             '</a>'
         $('#inbox').prepend(inboxTemplate);
-    }
+    }*/
     if(current_conv_id == inbox_message_conv_id) {
         $("ul[class='chat']").prepend(messageTemplate);
     }
 
-
     if(!isInbox) {
         $("#msg-container").stop().animate({scrollTop: 0}, 1000);
     }
+}
+function increaseMessagesCounter() {
+    var current_msg_counter = parseInt($('#msg-counter').html(), 10);
+    console.log("current msg counter: " + current_msg_counter);
+    current_msg_counter = current_msg_counter + 1;
+    $('#msg-counter').html(current_msg_counter);
+}
+function decreaseMessagesCounter(val) {
+    var current_msg_counter = parseInt($('#msg-counter').html(), 10);
+    console.log("current msg counter: " + current_msg_counter);
+    current_msg_counter = current_msg_counter - val;
+    $('#msg-counter').html(current_msg_counter);
+}
+function loadMoreMessages() {
+    currentPageNum++;
+    console.log('current page num: ' + currentPageNum);
+    var conversation_more_url = "/messages/conversation/more/" + currentPageNum;
+    $.get(conversation_more_url, function (data) {
+        console.log(data === '');
+        if(data === '') {
+            $('#more-messages').replaceWith("No more messages");
+        } else {
+            $('ul[class="chat"]').append(data);
+            //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
+        }
+    });
+    return false;
+}
+function setMessageAsRead() {
+    var readMessagesId = [];
+
+    $('.chat li.list-group-item-success').each(function() {
+        var msg_id = $(this).data("msgid");
+        readMessagesId.push(msg_id);
+        alert(msg_id);
+    });
+    $('.chat li.list-group-item-success').removeClass("list-group-item-success");
+    var update_messages_url = "/messages/conversation/set-read";
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+
+    $.ajax({
+        url: update_messages_url,
+        type: "POST",
+        data: JSON.stringify(readMessagesId),
+        contentType: "application/json; charset=utf-8",
+        dataType:"json",
+        success: function () {
+            console.log('Messages were updated.');
+        }
+    });
+    console.log("number of read messages: " + readMessagesId.length);
+    decreaseMessagesCounter(readMessagesId.length);
+    return;
 }
 
 $(function () {
@@ -167,5 +226,18 @@ $(document).ready(function() {
     $("#btn-msg-send").click(function() {
         e.preventDefault();
         sendMessage();
+    });
+    $("a.list-group-item").click(function(e) {
+        e.preventDefault();
+        console.log("inbox div clicked!");
+        var conv_id = $(this).data('convid');
+        console.log('conversation ID: ' + conv_id);
+        var conversation_url = "/messages/conversation/" + conv_id;
+        console.log(conversation_url);
+        $.get(conversation_url, function (data) {
+            $("#conversation").replaceWith(data);
+            //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
+        });
+
     });
 });
