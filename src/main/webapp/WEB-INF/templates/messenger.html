@@ -21,34 +21,18 @@
 <div th:replace="header :: header">&nbsp;</div>
 <div id="main-content" class="container">
 
-    <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
-    <a href="/messages/show" id="all-msgs">
-        <span th:text="#{user.profile.messages}">Messages</span>
-        <span id="msg-counter" th:if="${msgCount > 0}" th:text="${msgCount}"></span>
-    </a>
+
+
     <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="name">What is the name of your friend?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Friend name here...">
-                </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <h3>Unread messages</h3>
+        <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
+        <a href="/messages/show" id="all-msgs">
+            <span th:text="#{user.profile.messages}">Messages</span>
+            <span id="total-unread-msg-counter">
+                <p th:if="${msgCount > 0}" th:text="${msgCount}"></p>
+                <p th:if="${msgCount == 0}"></p>
+            </span>
+        </a>
+
         <div class="col-md-12">
             <table>
                 <tr th:if="${not #lists.isEmpty(unreadMessages) and unreadMessages != null}"
@@ -57,11 +41,11 @@
                 </tr>
             </table>
         </div>
+        <div th:replace="fragment/messenger :: inbox"></div>
+        <div id="conversation"></div>
     </div>
 
-    <div th:replace="fragment/messenger :: inbox">
-    </div>
-    <div id="conversation"></div>
+
 </div>
 </body>
 </html>

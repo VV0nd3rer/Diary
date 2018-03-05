@@ -38,7 +38,10 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-comment"></span>
-                    <span>+<span th:if="${unreadMessagesCount != 0}" th:text="${unreadMessagesCount}"></span></span>
+                    <span id="unread-msg-counter">
+                        <p th:if="${unreadMessagesCount > 0}" th:text="'+' + ${unreadMessagesCount}"></p>
+                        <p th:if="${unreadMessagesCount <= 0}"></p>
+                    </span>
                     Chat
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">

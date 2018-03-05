@@ -155,16 +155,24 @@ function renderMessage(message, isInbox) {
     }
 }
 function increaseMessagesCounter() {
-    var current_msg_counter = parseInt($('#msg-counter').html(), 10);
-    console.log("current msg counter: " + current_msg_counter);
-    current_msg_counter = current_msg_counter + 1;
-    $('#msg-counter').html(current_msg_counter);
+    var current_total_msg_counter = parseInt($('#total-unread-msg-counter p').html(), 10) || 0;
+    var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
+    console.log("current msg counter: " + current_total_msg_counter);
+    console.log("current conversation msg counter: " + current_conversation_msg_counter);
+    current_total_msg_counter += 1;
+    current_conversation_msg_counter += 1;
+    $('#total-unread-msg-counter p').html(current_total_msg_counter);
+    $('#unread-msg-counter p').html(current_conversation_msg_counter);
 }
 function decreaseMessagesCounter(val) {
-    var current_msg_counter = parseInt($('#msg-counter').html(), 10);
-    console.log("current msg counter: " + current_msg_counter);
-    current_msg_counter = current_msg_counter - val;
-    $('#msg-counter').html(current_msg_counter);
+    var current_total_msg_counter = parseInt($('#total-unread-msg-counter p').html(), 10) || 0;
+    var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
+    console.log("current msg counter: " + current_total_msg_counter);
+    console.log("current conversation msg counter: " + current_conversation_msg_counter);
+    current_total_msg_counter -= val;
+    current_conversation_msg_counter -= val;
+    $('#total-unread-msg-counter p').html(current_total_msg_counter);
+    $('#unread-msg-counter p').html(current_conversation_msg_counter);
 }
 function loadMoreMessages() {
     currentPageNum++;
