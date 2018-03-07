@@ -48,7 +48,21 @@ public class MessengerController {
         }
         return mv;
     }
-
+    @RequestMapping("/all")
+    public ModelAndView allMessages() {
+        ModelAndView mv = new ModelAndView("fragment/messenger::inbox");
+        User user = userService.getUserFromSession();
+        if (user != null) {
+            int receiverUserId = user.getUserId();
+            int msgCount = messengerService.geAllUnreadUserMessagesCount(receiverUserId);
+            mv.addObject("msgCount", msgCount);
+            List<com.kverchi.diary.domain.Message> unreadMessages = messengerService.getAllUnreadUserMessages(receiverUserId);
+            mv.addObject("unreadMessages", unreadMessages);
+            List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUserConversations(receiverUserId);
+            mv.addObject("recentMessages", recentMessages);
+        }
+        return mv;
+    }
     @RequestMapping("/conversation/{conversationId}")
     public ModelAndView openConversation(@PathVariable ("conversationId") int conversationId) {
         ModelAndView mv = new ModelAndView("fragment/messenger::conversation");

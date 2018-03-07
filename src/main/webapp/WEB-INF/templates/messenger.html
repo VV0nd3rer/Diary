@@ -20,32 +20,36 @@
 <body>
 <div th:replace="header :: header">&nbsp;</div>
 <div id="main-content" class="container">
-
-
-
     <div class="row">
-        <div sec:authorize="isAuthenticated()" id="username" th:text="${#authentication.name}" >none</div>
-        <a href="/messages/show" id="all-msgs">
-            <span th:text="#{user.profile.messages}">Messages</span>
-            <span id="total-unread-msg-counter">
-                <p th:if="${msgCount > 0}" th:text="${msgCount}"></p>
-                <p th:if="${msgCount == 0}"></p>
-            </span>
-        </a>
-
-        <div class="col-md-12">
-            <table>
-                <tr th:if="${not #lists.isEmpty(unreadMessages) and unreadMessages != null}"
-                    th:each="unreadMsg: ${unreadMessages}" class="unread-msg">
-                    <td>From: <span th:text="${unreadMsg.sender.userId}"></span></td> <td><span th:text="${unreadMsg.text}"></span></td>
-                </tr>
-            </table>
+        <div class="col-md-4">
+            <div class="row bottom-row-buffer">
+                <div class="col-md-4">
+                    <a href="#" id="all-msgs">
+                        <span th:text="#{user.profile.messages}">Messages</span>
+                    <span id="total-unread-msg-counter">
+                        <em th:if="${msgCount > 0}" th:text="'+' + ${msgCount}"></em>
+                        <em th:if="${msgCount == 0}"></em>
+                    </span>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Do you want to start a new conversation with someone?</label>
+                            <input type="text" id="name" class="form-control" placeholder="Find user...">
+                        </div>
+                        <button id="send" class="btn btn-default pull-right" type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div th:replace="fragment/messenger :: inbox"></div>
-        <div id="conversation"></div>
+        <div class="col-md-8 top-row-buffer">
+            <div th:replace="fragment/messenger :: inbox"></div>
+            <div id="conversation"></div>
+        </div>
     </div>
-
-
 </div>
 </body>
 </html>

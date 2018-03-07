@@ -155,23 +155,23 @@ function renderMessage(message, isInbox) {
     }
 }
 function increaseMessagesCounter() {
-    var current_total_msg_counter = parseInt($('#total-unread-msg-counter p').html(), 10) || 0;
+    var current_total_msg_counter = parseInt($('#total-unread-msg-counter em').html(), 10) || 0;
     var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
     console.log("current msg counter: " + current_total_msg_counter);
     console.log("current conversation msg counter: " + current_conversation_msg_counter);
     current_total_msg_counter += 1;
     current_conversation_msg_counter += 1;
-    $('#total-unread-msg-counter p').html(current_total_msg_counter);
+    $('#total-unread-msg-counter em').html(current_total_msg_counter);
     $('#unread-msg-counter p').html(current_conversation_msg_counter);
 }
 function decreaseMessagesCounter(val) {
-    var current_total_msg_counter = parseInt($('#total-unread-msg-counter p').html(), 10) || 0;
+    var current_total_msg_counter = parseInt($('#total-unread-msg-counter em').html(), 10) || 0;
     var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
     console.log("current msg counter: " + current_total_msg_counter);
     console.log("current conversation msg counter: " + current_conversation_msg_counter);
     current_total_msg_counter -= val;
     current_conversation_msg_counter -= val;
-    $('#total-unread-msg-counter p').html(current_total_msg_counter);
+    $('#total-unread-msg-counter em').html(current_total_msg_counter);
     $('#unread-msg-counter p').html(current_conversation_msg_counter);
 }
 function loadMoreMessages() {
@@ -220,7 +220,17 @@ function setMessageAsRead() {
     decreaseMessagesCounter(readMessagesId.length);
     return;
 }
-
+function loadConversation(element) {
+    console.log("inbox div clicked!");
+    var conv_id = element.getAttribute('data-convid');
+    console.log('conversation ID: ' + conv_id);
+    var conversation_url = "/messages/conversation/" + conv_id;
+    console.log(conversation_url);
+    $.get(conversation_url, function (data) {
+        $("#inbox").replaceWith(data);
+        //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
+    });
+}
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
@@ -235,7 +245,7 @@ $(document).ready(function() {
         e.preventDefault();
         sendMessage();
     });
-    $("a.list-group-item").click(function(e) {
+    /*$("a.list-group-item").click(function(e) {
         e.preventDefault();
         console.log("inbox div clicked!");
         var conv_id = $(this).data('convid');
@@ -243,9 +253,36 @@ $(document).ready(function() {
         var conversation_url = "/messages/conversation/" + conv_id;
         console.log(conversation_url);
         $.get(conversation_url, function (data) {
-            $("#conversation").replaceWith(data);
+            $("#inbox").replaceWith(data);
             //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
         });
-
+    });*/
+    $("#all-msgs").click(function(e) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+        var all_messages_url = "/messages/all";
+        $.get(all_messages_url, function (data) {
+            if($("#inbox").length == 0) {
+                console.log("no inbox id there ");
+                $("#conversation").replaceWith(data);
+            } else {
+                console.log(" inbox id is there ");
+                $("#inbox").replaceWith(data);
+            }
+        });
+        /*$.ajax({
+            url: all_messages_url,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType:"json",
+            success: function (data) {
+                alert(JSON.stringify(data));
+               $("#conversation").replaceWith(data);
+            }
+        });*/
+        return;
     });
 });
