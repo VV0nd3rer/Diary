@@ -20,12 +20,12 @@ import java.util.List;
 @SessionAttributes("currentConversation")
 public class MessengerController {
     final static Logger logger = Logger.getLogger(MessengerController.class);
+    final static int NEW_CONVERSATION_ID = 0;
     @Autowired
     UserService userService;
     @Autowired
     MessengerService messengerService;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+
 
     @ModelAttribute("currentConversation")
     public Conversation getCurrentConversation() {
@@ -45,6 +45,7 @@ public class MessengerController {
             mv.addObject("unreadMessages", unreadMessages);
             List<com.kverchi.diary.domain.Message> recentMessages = messengerService.getRecentMessagesFromAllUserConversations(receiverUserId);
             mv.addObject("recentMessages", recentMessages);
+            mv.addObject("authors", userService.getAllUsers());
         }
         return mv;
     }
@@ -69,14 +70,46 @@ public class MessengerController {
         User user = userService.getUserFromSession();
         if (user != null) {
             int currentUserId = user.getUserId();
+            Conversation currentConversation = messengerService.getConversation(conversationId);
             List<com.kverchi.diary.domain.Message> conversationMessages =
                     messengerService.getUserMessagesByConversationId(currentUserId, conversationId, 1);
-            Conversation currentConversation = messengerService.getConversation(conversationId);
             int unreadMessagesCount = messengerService.getUnreadMessagesCountByConversationId(
                     conversationId, currentUserId);
             mv.addObject("unreadMessagesCount", unreadMessagesCount);
             mv.addObject("conversationMessages", conversationMessages);
             mv.addObject("currentConversation", currentConversation);
+        }
+        return mv;
+    }
+    @RequestMapping(value = "/conversation/new", method = RequestMethod.POST)
+    public ModelAndView openNewConversation(@RequestBody User companion) {
+        ModelAndView mv = new ModelAndView("fragment/messenger::conversation");
+        User user = userService.getUserFromSession();
+        if(user != null) {
+            Conversation conversation =
+                    messengerService.getConversationByUsersIds(user.getUserId(), companion.getUserId());
+            if(conversation != null) {
+                List<com.kverchi.diary.domain.Message> conversationMessages =
+                        messengerService.getUserMessagesByConversationId(
+                                user.getUserId(), conversation.getConversationId(), 1);
+                int unreadMessagesCount = messengerService.getUnreadMessagesCountByConversationId(
+                        conversation.getConversationId(), user.getUserId());
+                mv.addObject("unreadMessagesCount", unreadMessagesCount);
+                mv.addObject("conversationMessages", conversationMessages);
+                mv.addObject("currentConversation", conversation);
+            } else {
+                Conversation newConversation = new Conversation();
+                newConversation.setConversationId(NEW_CONVERSATION_ID);
+                User user1 = new User();
+                user1.setUserId(user.getUserId());
+                user1.setUsername(user.getUsername());
+                User user2 = new User();
+                user2.setUserId(companion.getUserId());
+                user2.setUsername(companion.getUsername());
+                newConversation.setUser1(user1);
+                newConversation.setUser2(user2);
+                mv.addObject("currentConversation", newConversation);
+            }
         }
         return mv;
     }
@@ -131,28 +164,25 @@ public class MessengerController {
                             @ModelAttribute("currentConversation") Conversation currentConversation) {
         User sender = userService.getUserFromSession();
         if(sender != null) {
-            int senderId = sender.getUserId();
-            logger.debug("User ID: " + senderId);
-            logger.debug("Current conversation ID: " + currentConversation.getConversationId());
-            message.setSender(sender);
-            message.setConversation(currentConversation);
-            String receiverUsername;
-            if(currentConversation.getUser1().getUserId() != senderId) {
-                receiverUsername = currentConversation.getUser1().getUsername();
-            } else {
-                receiverUsername = currentConversation.getUser2().getUsername();
-            }
-            logger.debug("receiver username: " + receiverUsername);
-            messengerService.saveMessage(message);
-            messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
-
+            messengerService.saveMessage(message, currentConversation, sender);
         }
-
+    }
+    @RequestMapping(value="/new-conversation/send-message", method = RequestMethod.POST)
+    public int sendMessageInNewConversation(@RequestBody com.kverchi.diary.domain.Message message,
+                            @ModelAttribute("currentConversation") Conversation currentConversation) {
+        User sender = userService.getUserFromSession();
+        if(sender != null) {
+            if (currentConversation.getConversationId() == NEW_CONVERSATION_ID) {
+                User user1 = userService.getUserByUsername(currentConversation.getUser1().getUsername());
+                User user2 = userService.getUserByUsername(currentConversation.getUser2().getUsername());
+                currentConversation.setUser1(user1);
+                currentConversation.setUser2(user2);
+                currentConversation = messengerService.createConversation(currentConversation);
+                message.setConversation(currentConversation);
+            }
+            messengerService.saveMessage(message, currentConversation, sender);
+        }
+        return currentConversation.getConversationId();
     }
 
-    @MessageMapping("/send-msg")
-    //@SendTo("/queue/receive-msg")
-    public void greeting(com.kverchi.diary.domain.Message message) throws Exception {
-        messagingTemplate.convertAndSendToUser("kverchi", "/queue/receive-msg", message);
-    }
 }

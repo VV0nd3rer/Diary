@@ -40,10 +40,12 @@
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-comment"></span>
                     <span id="unread-msg-counter">
-                        <p th:if="${unreadMessagesCount > 0}" th:text="'+' + ${unreadMessagesCount}"></p>
-                        <p th:if="${unreadMessagesCount <= 0}"></p>
+                        <em th:if="${unreadMessagesCount > 0}" th:text="'+' + ${unreadMessagesCount}"></em>
+                        <em th:if="${unreadMessagesCount <= 0}"></em>
                     </span>
-                    Chat
+                    Chat between
+                    <span th:text="${currentConversation.user1.username}"></span> and
+                    <span th:text="${currentConversation.user2.username}"></span>
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-chevron-down"></span>

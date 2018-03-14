@@ -38,7 +38,6 @@
         </md-input-container>-->
 
         <div th:fragment="searchUser">
-            <div class="col-md-3">
                 <label th:text="${authLabel}">Author</label>
                 <input class="form-control" list="authSuggestList" type="text" id="authSuggestInput"/>
                 <datalist id="authSuggestList">
@@ -46,7 +45,6 @@
                             th:text="${auth.username}"></span></option>
                 </datalist>
                 <input type="hidden" name="answer" id="authSuggestInput-hidden">
-            </div>
         </div>
         <div th:fragment="searchAuthor">
             <div class="col-md-3">

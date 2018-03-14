@@ -24,7 +24,7 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        console.log('Connected: ' + frame);
+        console.log('Connected: ');
         /*
          When any websocket connection is open,
          Spring will assign it a session id (not HttpSession, assign per connection).
@@ -52,33 +52,43 @@ function sendMessage() {
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
-    //stompClient.send("/app/send-msg", {}, JSON.stringify({'text': "hello!!!"}));
     var msgText = $("#msg-input").val();
     if(msgText.length < 2) {
         alert("Uh-oh, apparently, you don't know what to say... ");
         return;
     }
+    var send_message_url;
+    if($('.chat').data('convid') == 0) {
+        send_message_url = '/messages/new-conversation/send-message';
+    } else {
+        send_message_url = '/messages/send-message';
+    }
     $.ajax({
-        url: '/messages/send-message',
+        url: send_message_url,
         type: "POST",
         data: JSON.stringify({'text': msgText }),
         contentType: "application/json; charset=utf-8",
-        success: function () {
+        success: function (data) {
             console.log('Message was sent :) ');
             $("#msg-input").val('');
             renderMessage(JSON.stringify({'text': msgText, 'sentDatetime': new Date($.now())}), false)
+            if(data.length != 0) {
+                $('.chat').data('convid', data);
+            }
         }
     });
 }
 
 function renderMessage(message, isInbox) {
     var messageTemplate;
-    //var inboxTemplateContent;
+    var inboxTemplateContent;
     if(isInbox) {
-        /*inboxTemplateContent =
-            '<span>' + message.sender.username + ': </span>' +
-            '<span class="name">' + message.text + '</span>'
-            '<span class="badge pull-right">' + message.sentDatetime + '</span>';*/
+        inboxTemplateContent =
+            '<span class="inbox-content">' +
+                '<span>' + message.sender.username + ': </span>' +
+                '<span class="name">' + message.text + '</span>'
+                '<span class="badge pull-right">' + message.sentDatetime + '</span>' +
+            '</span>';
         messageTemplate =
             '<li class="left clearfix list-group-item-success" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -98,10 +108,12 @@ function renderMessage(message, isInbox) {
     else {
         message = JSON.parse(message);
 
-        /*inboxTemplateContent =
-            '<span>You: </span>' +
-            '<span class="name">' + message.text + '</span>'
-            '<span class="badge pull-right">' + message.sentDatetime + '</span>';*/
+        inboxTemplateContent =
+            '<span class="inbox-content">' +
+                '<span>You: </span>' +
+                '<span class="name">' + message.text + '</span>'
+                '<span class="badge pull-right">' + message.sentDatetime + '</span>' +
+            '</span>';
         messageTemplate =
             '<li class="right clearfix" ' +
             '    data-msgid="' + message.messageId + '" ' +
@@ -127,25 +139,28 @@ function renderMessage(message, isInbox) {
     } else {
         inbox_message_conv_id = current_conv_id;
     }
-    /*var isNewConversation = true;
-    $('#inbox a.list-group-item').each(function() {
-        var conv_id = $(this).data("convid");
-        if(inbox_message_conv_id == conv_id) {
-            $(this).find('.inbox-content').replaceWith(inboxTemplateContent);
-            isNewConversation = false;
-        }
-    });*/
-    /*if(isNewConversation) {
-         var inboxTemplate =
-            '<a class="list-group-item list-group-item-success" ' +
-                'data-convid="' + message.conversation.conversationId + '">' +
+    if($("#inbox").length != 0) {
+        var isNewConversation = true;
+        $('#inbox a.list-group-item').each(function () {
+            var conv_id = $(this).data("convid");
+            if (inbox_message_conv_id == conv_id) {
+                $(this).addClass("list-group-item-success").removeClass("list-group-item-warning");
+                $(this).find('.inbox-content').replaceWith(inboxTemplateContent);
+                isNewConversation = false;
+            }
+        });
+        if (isNewConversation) {
+            var inboxTemplate =
+                '<a class="list-group-item list-group-item-success" ' +
+                'data-convid="' + message.conversation.conversationId + '" onclick=loadConversation(this)>' +
                 '<span>' + message.conversation.user1.username + '</span>' +
                 '<span> & </span>' +
                 '<span class="name">' + message.conversation.user2.username + '</span>' +
                 inboxTemplateContent +
-            '</a>'
-        $('#inbox').prepend(inboxTemplate);
-    }*/
+                '</a>'
+            $('#inbox').prepend(inboxTemplate);
+        }
+    }
     if(current_conv_id == inbox_message_conv_id) {
         $("ul[class='chat']").prepend(messageTemplate);
     }
@@ -156,30 +171,24 @@ function renderMessage(message, isInbox) {
 }
 function increaseMessagesCounter() {
     var current_total_msg_counter = parseInt($('#total-unread-msg-counter em').html(), 10) || 0;
-    var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
-    console.log("current msg counter: " + current_total_msg_counter);
-    console.log("current conversation msg counter: " + current_conversation_msg_counter);
+    var current_conversation_msg_counter = parseInt($('#unread-msg-counter em').html(), 10) || 0;
     current_total_msg_counter += 1;
     current_conversation_msg_counter += 1;
-    $('#total-unread-msg-counter em').html(current_total_msg_counter);
-    $('#unread-msg-counter p').html(current_conversation_msg_counter);
+    $('#total-unread-msg-counter em').html('+' + current_total_msg_counter);
+    $('#unread-msg-counter em').html('+' + current_conversation_msg_counter);
 }
 function decreaseMessagesCounter(val) {
     var current_total_msg_counter = parseInt($('#total-unread-msg-counter em').html(), 10) || 0;
-    var current_conversation_msg_counter = parseInt($('#unread-msg-counter p').html(), 10) || 0;
-    console.log("current msg counter: " + current_total_msg_counter);
-    console.log("current conversation msg counter: " + current_conversation_msg_counter);
+    var current_conversation_msg_counter = parseInt($('#unread-msg-counter em').html(), 10) || 0;
     current_total_msg_counter -= val;
     current_conversation_msg_counter -= val;
-    $('#total-unread-msg-counter em').html(current_total_msg_counter);
-    $('#unread-msg-counter p').html(current_conversation_msg_counter);
+    $('#total-unread-msg-counter em').html(current_total_msg_counter > 0 ? '+' + current_total_msg_counter : '');
+    $('#unread-msg-counter em').html(current_conversation_msg_counter > 0 ? '+' + current_conversation_msg_counter : '');
 }
 function loadMoreMessages() {
     currentPageNum++;
-    console.log('current page num: ' + currentPageNum);
     var conversation_more_url = "/messages/conversation/more/" + currentPageNum;
     $.get(conversation_more_url, function (data) {
-        console.log(data === '');
         if(data === '') {
             $('#more-messages').replaceWith("No more messages");
         } else {
@@ -195,7 +204,6 @@ function setMessageAsRead() {
     $('.chat li.list-group-item-success').each(function() {
         var msg_id = $(this).data("msgid");
         readMessagesId.push(msg_id);
-        alert(msg_id);
     });
     $('.chat li.list-group-item-success').removeClass("list-group-item-success");
     var update_messages_url = "/messages/conversation/set-read";
@@ -214,21 +222,52 @@ function setMessageAsRead() {
         dataType:"json",
         success: function () {
             console.log('Messages were updated.');
+        },
+        error: function(e) {
+            console.log('Error ' + e);
+        },
+        complete: function() {
+            console.log('Complete ');
         }
     });
-    console.log("number of read messages: " + readMessagesId.length);
     decreaseMessagesCounter(readMessagesId.length);
     return;
 }
 function loadConversation(element) {
-    console.log("inbox div clicked!");
     var conv_id = element.getAttribute('data-convid');
-    console.log('conversation ID: ' + conv_id);
     var conversation_url = "/messages/conversation/" + conv_id;
-    console.log(conversation_url);
     $.get(conversation_url, function (data) {
         $("#inbox").replaceWith(data);
         //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
+    });
+}
+function createConversation() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+    var create_conversation_url = "/messages/conversation/new";
+    var authSuggestInput = $("#authSuggestInput");
+    var authSuggestHidden = $('#' + authSuggestInput.attr("id") + '-hidden');
+    var user = {};
+    user["userId"] = parseInt(authSuggestHidden.val());
+    user["username"] =  authSuggestInput.val();
+   $.ajax({
+        url: create_conversation_url,
+        type: "POST",
+        data: JSON.stringify(user),
+        contentType: "application/json; charset=utf-8",
+        //dataType:"json",
+        success: function (data) {
+            $("#inbox").replaceWith(data);
+        },
+        error: function(e) {
+            console.log('Error ');
+        },
+        complete: function() {
+            console.log('Complete ');
+        }
     });
 }
 $(function () {
@@ -245,18 +284,11 @@ $(document).ready(function() {
         e.preventDefault();
         sendMessage();
     });
-    /*$("a.list-group-item").click(function(e) {
-        e.preventDefault();
-        console.log("inbox div clicked!");
-        var conv_id = $(this).data('convid');
-        console.log('conversation ID: ' + conv_id);
-        var conversation_url = "/messages/conversation/" + conv_id;
-        console.log(conversation_url);
-        $.get(conversation_url, function (data) {
-            $("#inbox").replaceWith(data);
-            //$("#msg-container").stop().animate({ scrollTop: $("#msg-container")[0].scrollHeight}, 1000);
-        });
-    });*/
+    $("#new-conversation").click(function() {
+        createConversation();
+
+        return;
+    });
     $("#all-msgs").click(function(e) {
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -266,10 +298,8 @@ $(document).ready(function() {
         var all_messages_url = "/messages/all";
         $.get(all_messages_url, function (data) {
             if($("#inbox").length == 0) {
-                console.log("no inbox id there ");
                 $("#conversation").replaceWith(data);
             } else {
-                console.log(" inbox id is there ");
                 $("#inbox").replaceWith(data);
             }
         });

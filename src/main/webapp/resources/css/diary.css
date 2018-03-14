@@ -106,9 +106,7 @@ hr.double-bold {
 	width: 100%;
 	padding: 10px 15px;
 }
-.profile-link {
-	font-size: 15px;
-}
+
 .nav>li>a:hover, .nav>li>a:focus {
 	background-color: #5bc0de;
 }

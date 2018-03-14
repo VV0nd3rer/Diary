@@ -6,6 +6,7 @@ import com.kverchi.diary.domain.*;
 import com.kverchi.diary.service.MessengerService;
 import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +22,26 @@ public class MessengerServiceImpl implements MessengerService {
     MessageDao messageDao;
     @Autowired
     ConversationDao conversationDao;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public void saveMessage(com.kverchi.diary.domain.Message message) {
+    public void saveMessage(com.kverchi.diary.domain.Message message, Conversation currentConversation, User sender) {
+        message.setSender(sender);
+        message.setConversation(currentConversation);
+        String receiverUsername;
+        int senderId = sender.getUserId();
+        if (currentConversation.getUser1().getUserId() != senderId) {
+            receiverUsername = currentConversation.getUser1().getUsername();
+        } else {
+            receiverUsername = currentConversation.getUser2().getUsername();
+        }
         messageDao.persist(message);
+        messagingTemplate.convertAndSendToUser(receiverUsername, "/queue/receive-msg", message);
+    }
+    @Override
+    public Conversation createConversation(Conversation newConversation) {
+        return conversationDao.persist(newConversation);
     }
 
     @Override
@@ -58,6 +75,11 @@ public class MessengerServiceImpl implements MessengerService {
         }
         messageDao.updateMessagesReadStatus(userReadMessagesIds);*/
         return messages;
+    }
+
+    @Override
+    public Conversation getConversationByUsersIds(int user1Id, int user2Id) {
+        return conversationDao.getConversationByUsersIds(user1Id, user2Id);
     }
 
     @Override
