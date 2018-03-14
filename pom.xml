@@ -20,7 +20,7 @@
                 <build.profile.id>local</build.profile.id>
             </properties>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <resources>
@@ -37,9 +37,9 @@
             <properties>
                 <build.profile.id>heroku</build.profile.id>
             </properties>
-            <!--<activation>
+            <activation>
                 <activeByDefault>true</activeByDefault>
-            </activation>-->
+            </activation>
             <build>
                 <resources>
                     <resource>
