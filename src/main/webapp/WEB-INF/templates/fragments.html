@@ -9,7 +9,7 @@
     <input class="btn pull-right btn-success" action="action" th:fragment="return" type="submit" onclick="history.go(-1);" th:value="#{return}" />
     <!-- Footer fragment -->
 	<div class="blog-footer" th:fragment="footer">
-        &copy; <span ${#dates.year(#dates.createNow())}></span><span th:text="#{signature}"></span>
+        &copy; <span th:text="${#dates.year(#dates.createNow())}"></span> <span th:text="#{signature}"></span>
     </div>
 
 	<!-- Book fragment for pagination -->

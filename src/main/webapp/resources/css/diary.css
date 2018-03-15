@@ -128,6 +128,7 @@ input:disabled:focus {
 }
 .bottom-row-buffer { margin-bottom:10px; }
 .top-row-buffer {margin-top: 23px; }
+.left-row-buffer {margin-left: 10px; }
 .label-large {
 	font-size: 20px;
 }

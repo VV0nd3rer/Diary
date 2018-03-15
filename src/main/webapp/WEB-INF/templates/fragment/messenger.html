@@ -25,7 +25,7 @@
                     <span th:case="${#authentication.name}" th:text="${#strings.concat('You', ':')}"></span>
                     <span th:case="*" th:text="${recentMsg.sender.username} + ':'"></span>
                 </span>
-                <span class="name" th:text="${recentMsg.text}">Nice work on the lastest version</span>
+                <span class="text left-row-buffer" th:text="${recentMsg.text}">Nice work on the lastest version</span>
                 <span class="badge pull-right"
                       th:text="${#temporals.format(recentMsg.sentDatetime, 'dd/MM/yyyy HH:mm')}">12:10 AM</span>
             </span>

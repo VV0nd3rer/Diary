@@ -63,3 +63,11 @@
     min-width: 120px;
     display: inline-block;
 }
+.text {
+    /*display: inline-block;*/
+    position: absolute;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

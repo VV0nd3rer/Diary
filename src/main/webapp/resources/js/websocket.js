@@ -260,7 +260,11 @@ function createConversation() {
         contentType: "application/json; charset=utf-8",
         //dataType:"json",
         success: function (data) {
-            $("#inbox").replaceWith(data);
+            if($("#inbox").length == 0) {
+                $("#conversation").replaceWith(data);
+            } else {
+                $("#inbox").replaceWith(data);
+            }
         },
         error: function(e) {
             console.log('Error ');
