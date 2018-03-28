@@ -8,6 +8,7 @@
 </head>
 <body>
 <div id="inbox" th:fragment="inbox">
+    <div class="list-group" th:if="${#lists.isEmpty(recentMessages) or recentMessages == null}" th:text="#{messenger.no.messages}"></div>
     <div class="list-group">
         <a th:if="${not #lists.isEmpty(recentMessages) and recentMessages != null}"
            th:each="recentMsg: ${recentMessages}"
@@ -67,8 +68,7 @@
                 </div>
 
                 <div id="msg-container" class="panel-body">
-                    <span>Conversation ID: </span>
-                    <span class="conversationId" th:text="${currentConversation.conversationId}"></span>
+
                     <ul class="chat" th:attr="data-convid=${currentConversation.conversationId}">
                             <span th:fragment="more"
                                   th:if="${not #lists.isEmpty(conversationMessages) and conversationMessages != null}"
