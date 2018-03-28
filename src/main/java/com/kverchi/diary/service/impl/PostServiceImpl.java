@@ -121,8 +121,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostSearchResults search(PostSearchAttributes searchAttributes) {
 		PostSearchResults searchResults = new PostSearchResults();
-		Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
-
+		//Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
+		Pagination pagination = searchAttributes.getPagination();
 		Map<PostSearchAttributes.PostSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 
 		Map<String, Object> hasAttributes = new HashMap<>();
@@ -153,7 +153,8 @@ public class PostServiceImpl implements PostService {
 		totalRows = postDao.getRowsNumberWithAttributes(hasAttributes, includingAttributes, choosingAttributes);
 
 		pagination.setTotalRows(totalRows);
-		searchResults.setTotalPages(pagination.getTotalPages());
+		//searchResults.setTotalPages(pagination.getTotalPages());
+		searchResults.setPagination(pagination);
 		List results;
 		PostSearchAttributes.PostSortType sortType = searchAttributes.getPostSortType();
 		logger.debug("sortType: " + sortType);

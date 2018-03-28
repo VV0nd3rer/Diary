@@ -79,7 +79,7 @@ public class PostController {
 		PostSearchResults results = postService.search(searchAttributes);
 		ModelAndView mv = new ModelAndView("fragments :: page");
 		mv.addObject("posts", results.getResults());
-		mv.addObject("totalPages", results.getTotalPages());
+		mv.addObject("totalPages", results.getPagination().getTotalPages());
 		return mv;
 	}
 

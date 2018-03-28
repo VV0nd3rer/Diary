@@ -57,8 +57,10 @@ $(document).ready(function(){
 			onPageClick: function (event, page) {
 				console.log("pgn clicked " + page);
 				var searchAttributes = {};
+				var pagination = {};
+				pagination['currentPage'] = page;
 				searchAttributes['searchCriteria'] = searchCriteria;
-				searchAttributes['currentPage'] = page;
+				searchAttributes['pagination'] = pagination;
 				searchAttributes['postSortType'] = postSortType;
 
 				var token = $("meta[name='_csrf']").attr("content");

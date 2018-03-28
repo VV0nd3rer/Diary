@@ -49,7 +49,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookSearchResults search(BookSearchAttributes searchAttributes) {
-		Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
+		//Pagination pagination = new Pagination(searchAttributes.getPageSize(), searchAttributes.getCurrentPage());
+		Pagination pagination = searchAttributes.getPagination();
 		Map<BookSearchAttributes.BookSearchType, Object> searchCriteria = searchAttributes.getSearchCriteria();
 		Map<String, Object> hasAttributes = new HashMap<>();
 		Map<String, String> includingAttributes = new HashMap<>();
@@ -75,7 +76,7 @@ public class BookServiceImpl implements BookService {
 		pagination.setTotalRows(totalRows);
 		//pagination = paginationService.calculatePagination(pagination);
 		BookSearchResults searchResults = new BookSearchResults();
-		searchResults.setTotalPages(pagination.getTotalPages());
+		searchResults.setPagination(pagination);
 		List results;
 		results = bookDao.searchWithAttributes(hasAttributes, includingAttributes,
 				choosingAttributes, pagination);

@@ -61,7 +61,7 @@ public class BookController {
 		BookSearchResults results = bookService.search(searchAttributes);
 		ModelAndView mv = new ModelAndView("fragments :: books-page");
 		mv.addObject("obj_list", results.getResults());
-		mv.addObject("totalPages", results.getTotalPages());
+		mv.addObject("totalPages", results.getPagination().getTotalPages());
 		return mv;
 	}
 
