@@ -7,16 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kverchi.diary.domain.Role;
@@ -26,6 +17,7 @@ import com.kverchi.diary.domain.Role;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements Serializable {
 	@Id
+	//@SequenceGenerator(name="users_user_id_seq")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_id")
 	private int userId;
@@ -34,6 +26,7 @@ public class User implements Serializable {
     private boolean enabled;
     private String email;
 	private String information;
+	@Column(name = "registration_date", insertable=false)
 	private ZonedDateTime registration_date;
 
 

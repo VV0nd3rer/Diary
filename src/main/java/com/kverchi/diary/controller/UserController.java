@@ -61,12 +61,12 @@ public class UserController {
 	public ModelAndView addUser(@RequestBody RegistrationForm regForm) throws ServiceException {
 		ModelAndView mv = new ModelAndView("fragment/signup-result :: content");
 		ServiceResponse response = userService.registerAccount(regForm); /*userService.testRegisterAccount(regForm);*/
-		if(response.getRespCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+		/*if(response.getRespCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 			throw new ServiceException(response.getRespMsg());
 		}
 		else if(response.getRespCode() == HttpStatus.PRECONDITION_FAILED) {
 			throw new ServiceException(response.getRespMsg());
-		}
+		}*/
 		mv.addObject("message", response);
 		return mv;
 	}
