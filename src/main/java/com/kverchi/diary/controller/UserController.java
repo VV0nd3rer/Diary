@@ -75,10 +75,7 @@ public class UserController {
 	public ModelAndView confirmRegistration(@PathVariable("username") String username) {
 		User registeredUser;
 		registeredUser = userService.getUserByUsername(username);
-		logger.debug("registered user: " + registeredUser);
 		if (registeredUser != null) {
-			logger.debug("registered user username: " + registeredUser.getUsername());
-			logger.debug("is registered user enabled: " + registeredUser.isEnabled());
 			if(!registeredUser.isEnabled()) {
 				userService.activateAccount(registeredUser);
 				return new ModelAndView(LOGIN);

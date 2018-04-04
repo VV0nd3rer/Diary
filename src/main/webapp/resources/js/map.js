@@ -109,6 +109,7 @@ function prepareNewSightModalForm(results) {
     var country_code;
     var country_name;
     var long_name;
+    console.log("results[0]: " + JSON.stringify(results[0]));
     //find country name
     for (var i = 0; i < results[0].address_components.length; i++) {
             for (var j = 0; j < results[0].address_components[i].types.length; j++) {
@@ -124,6 +125,8 @@ function prepareNewSightModalForm(results) {
     }
     $("#lat").val(latlng.lat());
     $("#lng").val(latlng.lng());
+    console.log('country code: ' + country_code);
+    console.log('country name: ' + country_name);
     $("#country_code").val(country_code);
     $("#country_name").val(country_name);
     $("#label").val(long_name);
@@ -140,15 +143,15 @@ function saveNewSight(map, sightBaseURL) {
     var lng = $("#lng");
     var data = {}
     var country = {}
-    country["country_code"] = code.val();
-    country["country_name"] = country_name.val();
-    data["sight_id"] = id.val();
+    country["countryCode"] = code.val();
+    country["countryName"] = country_name.val();
+    data["sightId"] = id.val();
 
     data["country"] = country;
-    data["sight_label"] = label.val();
-    data["sight_description"] = description.val();
-    data["map_coord_x"] = lat.val();
-    data["map_coord_y"] = lng.val();
+    data["label"] = label.val();
+    data["description"] = description.val();
+    data["mapCoordX"] = lat.val();
+    data["mapCoordY"] = lng.val();
 
     tips = $(".validateTips");
     var valid = false;
@@ -173,7 +176,8 @@ function saveNewSight(map, sightBaseURL) {
             dataType: "json",
             success: function (obj) {
                 hideModalDialog();
-                window.location.href = sightBaseURL + obj.sight_id;
+                console.log("sight id: " + obj.sightId);
+                window.location.href = sightBaseURL + obj.sightId;
             },
             error: function (e) {
                 console.log("Error: ", e);

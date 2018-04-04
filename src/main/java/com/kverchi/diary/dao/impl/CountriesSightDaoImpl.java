@@ -61,8 +61,8 @@ public class CountriesSightDaoImpl extends GenericDaoImpl<CountriesSight>impleme
 		try {
 			entityManager = entityManagerFactory.createEntityManager();
 			entityManager.getTransaction().begin();
-			String str_query = " FROM CountriesSight cs WHERE cs.map_coord_x = :x AND cs.map_coord_y = :y";
-	    	Query query = entityManager.createQuery(str_query);
+			String strQuery = " FROM CountriesSight cs WHERE cs.mapCoordX = :x AND cs.mapCoordY = :y";
+	    	Query query = entityManager.createQuery(strQuery);
 	    	query.setParameter("x", x);   
 	    	query.setParameter("y", y);
 	        sight = (CountriesSight) query.getSingleResult();
