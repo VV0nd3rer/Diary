@@ -83,7 +83,7 @@
 </div>
 <div id="user-statistic" th:fragment="userStatistic">
     <p> <span th:text="#{user.statistic.joined}">Joined since</span>
-        <em th:text="${#temporals.format(user.registration_date, 'dd/MM/yyyy HH:mm')}">Some date</em>
+        <em th:text="${#temporals.format(user.registrationDate, 'dd/MM/yyyy HH:mm')}">Some date</em>
     </p>
 
     <table class="table table-bordered">

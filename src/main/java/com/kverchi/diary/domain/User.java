@@ -5,12 +5,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.kverchi.diary.domain.Role;
 
 @Entity
 @Table(name="users")
@@ -27,7 +25,7 @@ public class User implements Serializable {
     private String email;
 	private String information;
 	@Column(name = "registration_date", insertable=false)
-	private ZonedDateTime registration_date;
+	private ZonedDateTime registrationDate;
 
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -80,15 +78,15 @@ public class User implements Serializable {
 		this.information = information;
 	}
 
-	public ZonedDateTime getRegistration_date() {
+	public ZonedDateTime getRegistrationDate() {
 		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-		String text = registration_date.format(formatter);
-		registration_date = ZonedDateTime.parse(text, formatter);
-		return registration_date;
+		String text = registrationDate.format(formatter);
+		registrationDate = ZonedDateTime.parse(text, formatter);
+		return registrationDate;
 	}
 
-	public void setRegistration_date(ZonedDateTime registration_date) {
-		this.registration_date = registration_date;
+	public void setRegistrationDate(ZonedDateTime registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 	public Collection<Role> getRoles() {
