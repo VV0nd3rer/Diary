@@ -59,7 +59,9 @@ function loadSights(map, infowindow, sightBaseURL) {
                     id: data[i].sightId
                 });
                 marker.addListener('click', function () {
-                    infowindow.setContent('<p>' + this.title + '</p><p>' + this.description + '</p><a href=' + sightBaseURL + this.id + '>See more</a> or <button onclick="updSight(' + this.id + ')" type="submit"/>Update sight</button>');
+                    infowindow.setContent('<p>' + this.title + '</p><p>' + this.description + '</p>' +
+                        '<a href=' + sightBaseURL + this.id + '>See more</a> ' +
+                        'or <button onclick="updateSight(' + this.id + ')" type="submit"/>Update sight</button>');
                     infowindow.open(map, this);
                 });
             }
@@ -133,7 +135,7 @@ function prepareNewSightModalForm(results) {
 }
 
 function saveNewSight(map, sightBaseURL) {
-    var id = $("#sight-id");
+    var id = $("#sight_id");
     var code = $("#country_code");
     console.log('country code: ' + code.val());
     var country_name = $("#country_name");
@@ -189,18 +191,18 @@ function saveNewSight(map, sightBaseURL) {
         });
     }
 }
-function updSight(id) {
-    alert('ok, ' + id);
+function updateSight(id) {
     var upd_sight_url = "../sights/edit/" + id;
+    console.log("update sight url: " + upd_sight_url);
     $.get(upd_sight_url, function (data) {
         //event.preventDefault();
-        $("#sight-id").val(id);
-        console.log('country code: ' + data.country.country_code);
-        $("#country_code").val(data.country.country_code);
-        $("#label").val(data.sight_label);
-        $("#description").val(data.sight_description);
-        $("#lat").val(data.map_coord_x);
-        $("#lng").val(data.map_coord_y);
+        $("#sight_id").val(id);
+        console.log('country code: ' + data.country.countryCode);
+        $("#country_code").val(data.country.countryCode);
+        $("#label").val(data.label);
+        $("#description").val(data.description);
+        $("#lat").val(data.mapCoordX);
+        $("#lng").val(data.mapCoordY);
         $("#modal-form").modal();
     });
 }
@@ -217,7 +219,10 @@ function addNewMarker(map, obj) {
     console.log('new marker title: ' + newMarker.title);
 
     newMarker.addListener('click', function () {
-        infowindow.setContent('<p>' + this.title + '</p><p>' + this.description + '</p><a href="../posts/sight/' + this.id + '">See more</a> or <button onclick="updSight(' + this.id + ')" type="submit"/>Update sight</button>');
+        infowindow.setContent('<p>' + this.title + '</p>' +
+            '<p>' + this.description + '</p>' +
+            '<a href="../posts/sight/' + this.id + '">See more</a> ' +
+            'or <button onclick="updateSight(' + this.id + ')" type="submit"/>Update sight</button>');
         infowindow.open(map, this);
     });
 }
