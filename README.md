@@ -1,3 +1,14 @@
 ## Diary for travellers
-Java application with Spring Security and Spring MVC started on Tomcat with PostgresSQL.  
-Deployed on Heroku.
+This appliation is available here: https://travel-diary.herokuapp.com/posts/list
+
+Key technologies:
+* Java 7
+* JavaMail API
+* JPA
+* Spring Security
+* Spring MVC
+* WebSockets
+* Jasypt
+* Tomcat
+* PostgresSQL
+
