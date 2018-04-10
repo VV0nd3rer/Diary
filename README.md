@@ -1,5 +1,5 @@
 ## Diary for travellers
-This appliation is available here: https://travel-diary.herokuapp.com/posts/list
+This appliation is available here: https://travel-diary.herokuapp.com/
 
 Key technologies:
 * Java 7
