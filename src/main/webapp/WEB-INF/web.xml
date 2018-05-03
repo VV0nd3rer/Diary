@@ -12,7 +12,7 @@
   </filter>
   <filter-mapping>
     <filter-name>metricFilter</filter-name>
-    <url-pattern>posts/list</url-pattern>
+    <url-pattern>/posts/list</url-pattern>
   </filter-mapping>
 
   <filter>
