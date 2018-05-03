@@ -1,8 +1,10 @@
 package com.kverchi.diary.service.impl;
 
 import com.kverchi.diary.dao.UserActivityDao;
+import com.kverchi.diary.dao.WebVisitingDao;
 import com.kverchi.diary.domain.User;
 import com.kverchi.diary.domain.UserActivityLog;
+import com.kverchi.diary.domain.WebVisitingLog;
 import com.kverchi.diary.security.UserDetailsImpl;
 import com.kverchi.diary.service.UserActivityLogService;
 import org.apache.log4j.Logger;
@@ -26,6 +28,8 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
 
     @Autowired
     private UserActivityDao userActivityDao;
+    @Autowired
+    private WebVisitingDao webVisitingDao;
 
     @Override
     public void addUserActivityLog(Authentication authentication) {
@@ -66,6 +70,28 @@ public class UserActivityLogServiceImpl implements UserActivityLogService {
         userActivityLog.setActiveSession(false);
         userActivityDao.update(userActivityLog);
     }
+
+    @Override
+    public String getUserInfoFromHttpRequest() {
+        return request.getHeader("User-Agent");
+    }
+
+    @Override
+    public void saveUserInfoFromHttpRequest() {
+        String ipAddress = null;
+        String gateWay = request.getHeader("VIA");
+        ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if(ipAddress == null)
+        {
+            ipAddress = request.getRemoteAddr();
+        }
+        logger.debug("IP address: " + ipAddress);
+        WebVisitingLog webVisitingLog = new WebVisitingLog();
+        webVisitingLog.setUserAgent(request.getHeader("User-Agent"));
+        webVisitingLog.setIpAddress(ipAddress);
+        webVisitingDao.persist(webVisitingLog);
+    }
+
     private String getOSInformation(String userAgentInfo) {
 
         String os;

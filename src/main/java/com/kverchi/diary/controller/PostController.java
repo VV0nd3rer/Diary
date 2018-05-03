@@ -70,7 +70,6 @@ public class PostController {
 		mv.addObject("currentSight", currentSight);
 		mv.addObject("authors", userService.getAllUsers());
 		mv.addObject("sights", countriesSightService.getAllSights());
-		
 		return mv;
 	}
 
