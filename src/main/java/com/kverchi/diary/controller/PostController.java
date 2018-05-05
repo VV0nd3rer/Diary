@@ -228,7 +228,7 @@ public class PostController {
 	}
 	@RequestMapping(value="/add-visit")
 	public ModelAndView addVisitCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
-		ModelAndView mv = new ModelAndView("fragment/counter-buttons::visitLabel");
+		ModelAndView mv = new ModelAndView("fragment/counter-buttons::authVisitedLabel");
 		User currentUser = userService.getUserFromSession();
 		if(currentSight.getSightId() == 0 || currentUser == null) {
 			return new ModelAndView("fragment/counter-buttons::addVisitButton");
@@ -242,7 +242,7 @@ public class PostController {
 	}
 	@RequestMapping(value="/add-wish")
 	public ModelAndView addWishCounterValue(@ModelAttribute("currentSight") CountriesSight currentSight) {
-		ModelAndView mv = new ModelAndView("fragment/counter-buttons::wishLabel");
+		ModelAndView mv = new ModelAndView("fragment/counter-buttons::authWishedLabel");
 		User currentUser = userService.getUserFromSession();
 		if(currentSight.getSightId() == 0 || currentUser == null) {
 			return new ModelAndView("fragment/counter-buttons::addWishButton");
