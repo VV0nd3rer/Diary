@@ -2,13 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <object th:include="fragments/resources" th:remove="tag"/>
     <title>Home</title>
 </head>
 <body>
 
-<h2>Hello</h2>
-<h2>John Doe</h2>
+<div th:replace="fragments/header">&nbsp;</div>
+
+<div class="container">
+    <h2>Hello, John Doe</h2>
+</div>
+
+<div th:replace="fragments/footer"></div>
 
 </body>
 </html>

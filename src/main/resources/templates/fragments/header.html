@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div id="header" th:fragment="header">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#" th:href="@{/posts/list}" th:text="#{posts}">Where to go</a></li>
+                <li><a href="#" th:href="@{/sights/gmap}" th:text="#{sights}">Map</a></li>
+                <li><a href="#" th:href="@{/books/list}" th:text="#{books}">What to read</a></li>
+                <li><a href="#" th:href="@{/media/list}" th:text="#{media}">What to listen/watch</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" th:href="@{/users/signup}" th:text="#{signup}">Registration</a>
+                <li><a href="#" th:href="@{/users/login}" th:text="#{login}">Sign in</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-bottom">
+        <div class="pull-right">
+            <a href="?lang=en_US">English</a>
+            |<a href="?lang=ru_RU">Russian</a>
+            |<a href="?lang=cs_CS">Czech</a>
+        </div>
+    </div>
+</div>

@@ -85,7 +85,7 @@ hr.double-bold {
 	height: 50px;
 }
 #header {
-	background-image: url('/resources/img/header.png');
+	background-image: url('/img/header.png');
 	background-repeat: no-repeat;
 	height: 246px;
 	background-size: cover;
