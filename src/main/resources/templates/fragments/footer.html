@@ -1,8 +1,4 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
 <body>
 <div class="blog-footer" th:fragment="footer">
     &copy; <span th:text="${#dates.year(#dates.createNow())}"></span> <span th:text="#{signature}">Kverchi</span>
