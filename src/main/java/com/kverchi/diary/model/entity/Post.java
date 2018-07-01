@@ -36,7 +36,7 @@ public class Post {
 	private String description;
 	@Column(name="text")
 	private String text;
-	@ManyToOne(fetch = FetchType.LAZY)
+	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="sight_id")
 	private CountriesSight countriesSight;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -44,7 +44,7 @@ public class Post {
 	private User user;
 	@OneToMany(fetch=FetchType.LAZY, orphanRemoval=true)
 	@JoinColumn(name="post_id")
-	private Set<Comment> postComments;
+	private Set<Comment> postComments;*/
 
 	public Post() {};
 	public Post(int postId, String title, String text) {
@@ -89,7 +89,7 @@ public class Post {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public CountriesSight getCountriesSight() {
+	/*public CountriesSight getCountriesSight() {
 		return countriesSight;
 	}
 
@@ -108,7 +108,7 @@ public class Post {
 	}
 	public void setUser(User user) {
 		this.user = user;
-	}
+	}*/
 	@Override
 	public String toString(){
 		return "id="+ postId +", title="+title+", text="+text;

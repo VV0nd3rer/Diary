@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <div id="posts-block" th:fragment="postContent">
-		<span th:if="${not #lists.isEmpty(posts)}">
-            <span th:attr="data-total-pages=${totalPages}"></span>
+		<span th:if="${not #lists.isEmpty(posts)}" th:attr="data-total-pages=${totalPages}">
 			<div class="post" th:each="post: ${posts}">
                 <!-- Each post -->
                 <div class="panel">
@@ -15,8 +14,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <p class="pull-right">
-                                        by <a th:href="@{/users/profile/{username} (username=${post.user.username})}"
-                                              th:text="${post.user.username}">someone</a>
+
                                         <small><em th:text="${#temporals.format(post.postDatetime, 'dd/MM/yyyy HH:mm')}">dd.dd.dd</em></small>
                                     </p>
                                 </div>
@@ -30,9 +28,7 @@
 						<span><a href="#"
                                  th:href="@{/posts/single-post/{post_id}(post_id=${post.postId}) }">Read
                             more</a></span>
-						<span class="pull-right"><span th:text="#{sight}"></span>:
-							<a th:href="@{/posts/sight/{sight_id}(sight_id=${post.countriesSight.sightId})}"
-                               th:text="${post.countriesSight.label}"></a></span>
+
                     </div>
                 </div>
                 <!-- end of post -->

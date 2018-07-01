@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <object th:include="include-res::links" th:remove="tag"/>
-    <script src="webjars/bower/twbs-pagination/1.4.1/jquery.twbsPagination.js"></script>
+    <object th:include="fragments/resources" th:remove="tag"/>
+    <script src="/webjars/twbs-pagination/1.4.1/jquery.twbsPagination.js"></script>
+    <script src="/static/js/src/posts.js" th:src="@{/js/src/posts.js}"></script>
     <title>Inspiration</title>
+
 </head>
 <body>
 <div th:replace="fragments/header">&nbsp;</div>
@@ -12,7 +14,7 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-8">
-            <div th:replace="fragments/content :: postContent"></div>
+            <div th:replace="fragments/content/postContent"></div>
             <ul class="text-center pagination-sm" id="post-pagination"></ul>
 
         </div>

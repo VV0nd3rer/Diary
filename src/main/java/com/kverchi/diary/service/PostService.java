@@ -4,10 +4,12 @@ import java.util.List;
 import com.kverchi.diary.model.Pagination;
 import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 	List<Post> getAllPosts();
-	List<Post> getAllPosts(Pagination pagination);
+	Page<Post> getAllPosts(Pageable pageable);
 	Post getPostById(int postId);
 	ServiceResponse addPost(Post post);
 	ServiceResponse updatePost(Post post);
