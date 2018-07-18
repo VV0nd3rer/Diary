@@ -1,7 +1,10 @@
 package com.kverchi.diary.controller;
 
 import com.kverchi.diary.model.Pagination;
+import com.kverchi.diary.model.PostSearchRequest;
+import com.kverchi.diary.model.entity.CountriesSight;
 import com.kverchi.diary.model.entity.Post;
+import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +23,8 @@ public class PostController {
     private final static String POSTS = "posts";
     @Autowired
     PostService postService;
+    @Autowired
+    CountriesSightService countriesSightService;
 
     @RequestMapping("/main")
     public ModelAndView showMain(
@@ -32,18 +37,28 @@ public class PostController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView loadPostsPage() {
         ModelAndView mv = new ModelAndView(POSTS);
+        List<CountriesSight> sights = countriesSightService.findAll();
+        mv.addObject("sights", sights);
         return mv;
     }
     @RequestMapping(value = "/paginated-posts/{currentPage}")
     public ModelAndView showPaginatedPosts(@PathVariable("currentPage") int currentPage) {
         ModelAndView mv = new ModelAndView("fragments/content/postContent");
-        Page<Post> paginatedPosts = postService.getAllPosts(PageRequest.of(currentPage-1, 5));
+        Page<Post> paginatedPosts = postService.getAllPosts(currentPage);
         List<Post> posts = paginatedPosts.getContent();
         int totalPages = paginatedPosts.getTotalPages();
         mv.addObject("posts", posts);
         mv.addObject("totalPages", totalPages);
         return mv;
     }
-    /*@RequestMapping(value="/search-paginated-posts", method = RequestMethod.POST)
-    public ModelAndView searchPaginatedPosts(@RequestBody PostSearchAttributes searchAttributes)*/
+    @RequestMapping(value="/search-paginated-posts", method = RequestMethod.POST)
+    public ModelAndView searchPaginatedPosts(@RequestBody PostSearchRequest postSearchRequest) {
+        ModelAndView mv = new ModelAndView("fragments/content/postContent");
+        Page<Post>  paginatedPosts = postService.searchPosts(postSearchRequest);
+        List<Post> posts = paginatedPosts.getContent();
+        int totalPages = paginatedPosts.getTotalPages();
+        mv.addObject("posts", posts);
+        mv.addObject("totalPages", totalPages);
+        return mv;
+    }
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="searchBySight">
+    <div class="col-md-3">
+        <label th:text="#{sight}">Sight</label>
+        <input type="text" class="form-control" id="sightSuggestionInput" list="sightSuggestionList"/>
+        <datalist id="sightSuggestionList">
+            <option th:each="sight: ${sights}" th:attr="data-value=${sight.sightId}"><span
+                    th:text="${sight.label}"></span></option>
+        </datalist>
+        <input type="hidden" name="answer" id="sightSuggestionInput-hidden">
+    </div>
+</div>
+
+<div th:fragment="searchByPostAuthor">
+    <label th:text="#{post.author}">Author</label>
+    <input class="form-control" list="authorSuggestionList" type="text" id="authorSuggestionInput"/>
+    <datalist id="authorSuggestionList">
+        <option th:each="auth: ${authors}" th:attr="data-value=${auth.userId}"><span
+                th:text="${auth.username}"></span></option>
+    </datalist>
+    <input type="hidden" name="answer" id="authorSuggestionInput-hidden">
+</div>
+
+<div th:fragment="searchInTextWithOnlyTitleCondition">
+    <div class="col-md-3">
+        <label th:text="#{search.in.text}">Search in text</label>
+
+        <div class="form-group">
+            <input class="form-control" type="text" id="searchInTextInput"/>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="searchInTitleOnlyCondition" value="">
+                    <span th:text="#{search.in.title.only}"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="sortingSights">
+    <div class="col-md-2">
+        <label th:text="#{sorting}">Sorting by</label>
+        <select class="form-control" id="sortingSights">
+            <option value="-1" selected th:text="#{sorting.no.selected}">No selected</option>
+            <option value="1" th:text="#{sorting.by.desired}">Most desired</option>
+            <option value="2" th:text="#{sorting.by.visited}">Most visited</option>
+        </select>
+    </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -36,10 +36,10 @@ public class Post {
 	private String description;
 	@Column(name="text")
 	private String text;
-	/*@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="sight_id")
 	private CountriesSight countriesSight;
-	@ManyToOne(fetch = FetchType.LAZY)
+	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 	@OneToMany(fetch=FetchType.LAZY, orphanRemoval=true)
@@ -89,14 +89,14 @@ public class Post {
 	public void setText(String text) {
 		this.text = text;
 	}
-	/*public CountriesSight getCountriesSight() {
+	public CountriesSight getCountriesSight() {
 		return countriesSight;
 	}
 
 	public void setCountriesSight(CountriesSight countriesSight) {
 		this.countriesSight = countriesSight;
 	}
-	public Set<Comment> getPostComments() {
+	/*public Set<Comment> getPostComments() {
 		return postComments;
 	}
 	public void setPostComments(Set<Comment> postComments) {

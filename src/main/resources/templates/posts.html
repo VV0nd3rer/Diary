@@ -11,6 +11,48 @@
 <div th:replace="fragments/header">&nbsp;</div>
 
 <div class="container">
+
+    <div class="row">
+        <div class="col-md-13">
+            <div class="form-section">
+                <form role="form" name="searchForm" id="searchForm">
+                    <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
+                    <div class="row bottom-row-buffer">
+
+
+                        <!--<div th:if="${currentSight.sightId == 0}"
+                             th:include="fragments/searchPanel :: searchBySight"></div>-->
+                        <div
+                             th:include="fragments/searchPanel :: searchBySight"></div>
+
+                        <!--<div class="col-md-3" th:include="fragments/searchPanel :: searchByPostAuthor"></div>-->
+
+
+
+                        <div th:include="fragments/searchPanel :: searchInTextWithOnlyTitleCondition"></div>
+
+
+
+                        <!--<div th:if="${currentSight.sightId == 0}"
+                             th:include="fragments/searchPanel :: sortingSights"></div>-->
+
+
+                        <div class="col-md-1 top-row-buffer">
+                            <button type="submit" id="search-post-btn" class="btn btn-default btn-primary">
+                                <span class=" glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--<div class="row bottom-row-buffer">
+                    </div>
+                    <div class="row">
+                    </div>-->
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-8">
