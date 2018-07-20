@@ -1,14 +1,14 @@
 package com.kverchi.diary.controller;
 
-import com.kverchi.diary.model.Pagination;
 import com.kverchi.diary.model.PostSearchRequest;
 import com.kverchi.diary.model.entity.CountriesSight;
 import com.kverchi.diary.model.entity.Post;
+import com.kverchi.diary.model.entity.User;
 import com.kverchi.diary.service.CountriesSightService;
 import com.kverchi.diary.service.PostService;
+import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +24,8 @@ public class PostController {
     @Autowired
     PostService postService;
     @Autowired
+    UserService userService;
+    @Autowired
     CountriesSightService countriesSightService;
 
     @RequestMapping("/main")
@@ -37,7 +39,9 @@ public class PostController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView loadPostsPage() {
         ModelAndView mv = new ModelAndView(POSTS);
+        List<User> users = userService.findAll();
         List<CountriesSight> sights = countriesSightService.findAll();
+        mv.addObject("authors", users);
         mv.addObject("sights", sights);
         return mv;
     }

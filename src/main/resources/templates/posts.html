@@ -16,7 +16,7 @@
         <div class="col-md-13">
             <div class="form-section">
                 <form role="form" name="searchForm" id="searchForm">
-                    <p class="validateTips" hidden th:text="#{search.datalist.error}"></p>
+                    <p class="datalistValidationMessage" hidden th:text="#{search.datalist.error}"></p>
                     <div class="row bottom-row-buffer">
 
 
@@ -24,11 +24,7 @@
                              th:include="fragments/searchPanel :: searchBySight"></div>-->
                         <div
                              th:include="fragments/searchPanel :: searchBySight"></div>
-
-                        <!--<div class="col-md-3" th:include="fragments/searchPanel :: searchByPostAuthor"></div>-->
-
-
-
+                        <div class="col-md-3" th:include="fragments/searchPanel :: searchByPostAuthor"></div>
                         <div th:include="fragments/searchPanel :: searchInTextWithOnlyTitleCondition"></div>
 
 

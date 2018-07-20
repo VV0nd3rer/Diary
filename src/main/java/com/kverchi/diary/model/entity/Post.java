@@ -39,10 +39,10 @@ public class Post {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="sight_id")
 	private CountriesSight countriesSight;
-	/*@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
-	@OneToMany(fetch=FetchType.LAZY, orphanRemoval=true)
+	/*@OneToMany(fetch=FetchType.LAZY, orphanRemoval=true)
 	@JoinColumn(name="post_id")
 	private Set<Comment> postComments;*/
 
@@ -101,14 +101,14 @@ public class Post {
 	}
 	public void setPostComments(Set<Comment> postComments) {
 		this.postComments = postComments;
-	}
+	}*/
 	
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
-	}*/
+	}
 	@Override
 	public String toString(){
 		return "id="+ postId +", title="+title+", text="+text;

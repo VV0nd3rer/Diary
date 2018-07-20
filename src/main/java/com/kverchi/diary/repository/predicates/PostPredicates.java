@@ -19,6 +19,7 @@ public class PostPredicates {
         for (Map.Entry<PostSearchCriteria, Object> entry : searchAttributes.entrySet()) {
             switch (entry.getKey()) {
                 case BY_AUTHOR_ID:
+                    builder.and(post.user.userId.eq((Integer)entry.getValue()));
                     break;
                 case BY_SIGHT_ID:
                     builder.and(post.countriesSight.sightId.eq((Integer)entry.getValue()));

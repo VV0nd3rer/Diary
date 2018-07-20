@@ -12,16 +12,21 @@ $(document).ready(function () {
     initializePaginationPlagin(paginationElement, paginationUrl, paginationTextChangingBlock);
 
     $("#sightSuggestionInput").focusout(function () {
-        var input = $(this);
-        console.log("focusout: " + $(this).val());
-        checkDataListInput(input);
+        checkDataListInput($(this));
     });
-
+    $("#authorSuggestionInput").focusout(function () {
+        checkDataListInput($(this));
+    });
     $("#search-post-btn").click(function (e) {
         e.preventDefault();
-
+        if($(".datalistValidationMessage").is(':visible')) {
+            return;
+        }
         var sightSuggestionInput = $('#sightSuggestionInput');
         var sightSuggestionHidden = $('#' + sightSuggestionInput.attr('id') + '-hidden');
+
+        var authorSuggestionInput = $('#authorSuggestionInput');
+        var authorSuggestionHidden = $('#' + authorSuggestionInput.attr('id') + '-hidden');
 
         var searchInTextInput = $('#searchInTextInput');
         var searchInTitleOnlyConditionCheckBox = $('#searchInTitleOnlyCondition');
@@ -33,9 +38,9 @@ $(document).ready(function () {
         if (sightSuggestionInput.val() != '') {
             searchAttributes["BY_SIGHT_ID"] = parseInt(sightSuggestionHidden.val());
         }
-        /*if (authCorrectInput != null) {
-         searchAttributes["BY_USER_ID"] = parseInt(authSuggestHidden.val());
-         }*/
+        if (authorSuggestionInput.val() != '') {
+         searchAttributes["BY_AUTHOR_ID"] = parseInt(authorSuggestionHidden.val());
+         }
         if (searchInTextInput.val() != '') {
             /*searchInTitleOnlyCheckBox.is(":checked") ? searchAttributes["IN_TITLE_ONLY"] = searchText.val() :*/
             searchAttributes["BY_TEXT"] = searchInTextInput.val();
@@ -107,38 +112,34 @@ function desrtoyPaginationPlagin(paginationElement) {
     paginationElement.twbsPagination('destroy');
 }
 
-function checkDataListInput(obj) {
-    var val = obj.val();
-    var hiddenInput = $("#" + obj.attr("id") + '-hidden');
+function checkDataListInput(inputField) {
+    var inputVal = inputField.val();
+    var hiddenInput = $("#" + inputField.attr("id") + '-hidden');
     var res = false;
-    if (val === '') {
+    if (inputVal === '') {
         hiddenInput.val('');
         return res;
     }
     console.log("checking data list input...");
 
-    var listId = obj.attr('list');
-    var options = $('#' + listId + ' option');
+    var datalistField = inputField.attr('list');
+    var datalistOptions = $('#' + datalistField + ' option');
 
-    var hiddenInput = $("#" + obj.attr("id") + '-hidden');
-
-
-    tips = $(".validateTips");
-    res = isDataListInput(options, val, hiddenInput);
+    var validationMessage = $(".datalistValidationMessage");
+    res = checkDatalistInput(datalistOptions, inputVal, hiddenInput);
     if (res) {
-        tips.hide();
+        validationMessage.hide();
     }
     else {
-        tips.show();
+        validationMessage.show();
     }
     return res;
 }
-function isDataListInput(options, val, hiddenInput) {
+function checkDatalistInput(datalistOptions, inputVal, hiddenInput) {
     var res = false;
-
-    for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        if (option.innerText === val) {
+    for (var i = 0; i < datalistOptions.length; i++) {
+        var option = datalistOptions[i];
+        if (option.innerText === inputVal) {
             console.log("valid");
             var dataValAttr = option.getAttribute('data-value');
             if (dataValAttr != null) {
