@@ -42,8 +42,10 @@ $(document).ready(function () {
          searchAttributes["BY_AUTHOR_ID"] = parseInt(authorSuggestionHidden.val());
          }
         if (searchInTextInput.val() != '') {
-            /*searchInTitleOnlyCheckBox.is(":checked") ? searchAttributes["IN_TITLE_ONLY"] = searchText.val() :*/
-            searchAttributes["BY_TEXT"] = searchInTextInput.val();
+            var searchTextValue = searchInTextInput.val().trim();
+            searchInTitleOnlyConditionCheckBox.is(":checked") ?
+                searchAttributes["BY_TEXT_IN_TITLE_ONLY"] = searchTextValue :
+                searchAttributes["BY_TEXT"] = searchTextValue;
         }
         /*if (filterSightsDropBox.val() > 0) {
          filterSightsDropBox.val() == 1 ? postSortType = "BY_WISHES" : postSortType = "BY_VISITS";

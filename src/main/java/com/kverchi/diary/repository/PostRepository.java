@@ -11,6 +11,6 @@ import java.util.List;
  * Created by Kverchi on 28.6.2018.
  */
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post> {
+public interface PostRepository extends JpaRepository<Post, Integer>, QuerydslPredicateExecutor<Post> {
     List<Post> findByCountriesSightSightId(int sightId);
 }

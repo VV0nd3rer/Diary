@@ -9,8 +9,6 @@ import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.enums.PostSearchCriteria;
 import com.kverchi.diary.repository.PostRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +41,34 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Page<Post> searchPosts(PostSearchRequest postSearchRequest) {
-		Predicate predicate = searchPost(postSearchRequest.getSearchAttributes());
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		Map<PostSearchCriteria, Object> searchAttributes = postSearchRequest.getSearchAttributes();
+        for (Map.Entry<PostSearchCriteria, Object> entry : searchAttributes.entrySet()) {
+            switch (entry.getKey()) {
+                case BY_AUTHOR_ID:
+                    builder.and(searchByAuthorId((Integer)entry.getValue()));
+                    break;
+                case BY_SIGHT_ID:
+                    builder.and(searchBySightId((Integer)entry.getValue()));
+                    break;
+                case BY_TEXT:
+                    //TODO search in text, title and description
+                    builder.and(searchInPosts((String)entry.getValue()));
+                    break;
+				case BY_TEXT_IN_TITLE_ONLY:
+					builder.and(searchInTitleOnly((String)entry.getValue()));
+					break;
+            }
+        }
 		Pageable pageable = createPageableObject(postSearchRequest.getCurrentPage());
-		Page<Post> page = postRepository.findAll(predicate, pageable);
+		Page<Post> page = postRepository.findAll(builder, pageable);
 		return page;
 	}
 
 	@Override
 	public Post getPostById(int postId) {
-		return null;
+		return postRepository.getOne(postId);
 	}
 
 	@Override

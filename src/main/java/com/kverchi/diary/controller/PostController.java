@@ -19,8 +19,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("posts")
+@SessionAttributes("currentSight")
 public class PostController {
     private final static String POSTS = "posts";
+    private final static String SINGLE_POST = "single-post";
+
     @Autowired
     PostService postService;
     @Autowired
@@ -28,11 +31,16 @@ public class PostController {
     @Autowired
     CountriesSightService countriesSightService;
 
+    @ModelAttribute("currentSight")
+    public CountriesSight getCurrentSight () {
+        return new CountriesSight();
+    }
+
     @RequestMapping("/main")
     public ModelAndView showMain(
             @RequestParam(value="name", required=false, defaultValue="Guest") String name) {
         ModelAndView mv = new ModelAndView("main");
-        mv.addObject("message", "Welcome");
+        mv.addObject("message", "Welcome home!");
         mv.addObject("name", name);
         return mv;
     }
@@ -65,4 +73,24 @@ public class PostController {
         mv.addObject("totalPages", totalPages);
         return mv;
     }
+    @RequestMapping("/{postId}")
+    public ModelAndView showSinglePost(@PathVariable("postId") int postId,
+                                       @ModelAttribute("currentSight") CountriesSight currentSight) {
+        ModelAndView mv = new ModelAndView(SINGLE_POST);
+
+        Post post = postService.getPostById(postId);
+        //Set<Comment> comments = post.getPostComments();
+        mv.addObject("post", post);
+        mv.addObject("currentSight", currentSight);
+        //mv.addObject("comments", comments);
+        boolean isAuthor = false;
+        User currentUser = userService.getUserFromSession();
+        if(currentUser != null) {
+            isAuthor = currentUser.getUsername().equals(post.getUser().getUsername());
+        }
+        mv.addObject("isAuthor", isAuthor);
+
+        return mv;
+    }
+
 }

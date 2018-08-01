@@ -1,0 +1,121 @@
+<!-- Template is from https://startbootstrap.com/template-overviews/blog-post/ -->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <object th:include="fragments/resources" th:remove="tag"/>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=lk4x1sy9vlt5l5pld7wtxgem69i1gf0iokw9sb3gxj43aue1"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPhRmqIUd3Qx_CC_eWEVuf1Z2-V_MTJG8&callback=initMiniMap">
+    </script>
+    <script src="/static/js/src/map.js" th:src="@{/js/src/map.js}"></script>
+    <!--<meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+    <title th:text="#{post.text}">Impression</title>
+</head>
+<body>
+<div th:replace="fragments/header">&nbsp;</div>
+<div class="container">
+    <div class="row" th:if="${currentSight.label != null}">
+        <h2>
+            <span class="label label-warning">
+                <span th:text="#{posts.current.sight}" }></span> <span th:text="${currentSight.label}"></span>
+            </span>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="span8">
+                <h1 th:text="${post.title}">Title</h1>
+                <p id="post-text" th:utext="${post.text}">Some text...</p>
+                <div>
+					<span class="badge badge-success">
+						<span th:text="#{post.author}">Author</span>
+						<span th:text="${post.user.username}">someone</span>
+						<span th:text="${#temporals.format(post.postDatetime, 'dd-MMM-yyyy')}">Posted 2012-08-02 20:47:04</span>
+					</span>
+                    <div class="pull-right"><span th:text="#{sight}"></span>: <em
+                            th:text="${post.countriesSight.label}"></em></div>
+                    <span th:attr="data-map-coord-x=${post.countriesSight.mapCoordX}" id="map_coord_x"/>
+                    <span th:attr="data-map-coord-y=${post.countriesSight.mapCoordY}" id="map_coord_y"/>
+                </div>
+                <div class="btn-toolbar pull-right">
+                    <div class="btn-group">
+					<span th:if="${ isAuthor }">
+			    		<a class="btn pull-right btn-success" href="#"
+                           th:href="@{/posts/edit/{post_id}(post_id=${post.postId}) }" id="update-post-btn"><span
+                                th:text="#{post.update}">Update post</span></a>
+			    	</span>
+                    </div>
+                    <div class="btn-group">
+					<span th:if="${ isAuthor }">
+			    		<a class="btn pull-right btn-success" href="#"
+                           th:href="@{/posts/remove/{post_id}(post_id=${post.postId}) }" id="remove-post-btn"><span
+                                th:text="#{post.remove}">Remove post</span></a>
+			    	</span>
+                    </div>
+                    <div class="btn-group">
+                        <a th:text="#{return}" th:href="@{/posts/}"></a>
+                    </div>
+                </div>
+                <hr>
+
+            </div>
+
+            <!-- Blog Comments -->
+
+            <!-- Comments Form -->
+            <!--<div class="well" sec:authorize="isAuthenticated()">
+                <h4>Leave a Comment:</h4>
+                <form role="form">
+                    <p class="validateTips"></p>
+                    <div class="form-group">
+                        <input type="hidden" th:value="${post.postId}" id="post-id"/>
+                        <textarea class="form-control" id="text" rows="3" placeholder="Comment"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="add-comment">Add</button>
+                </form>
+            </div>
+
+            <hr>-->
+
+            <!-- Posted Comments -->
+           <!-- <div id="comment-section">
+                <div class="row" th:if="${not #lists.isEmpty(comments) and comments != null}"
+                     th:each="comment: ${comments}">
+                    <div class="col-sm-1">
+                        <div class="thumbnail">
+                            <img class="img-responsive user-photo"
+                                 src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                        </div>
+                        &lt;!&ndash; /thumbnail &ndash;&gt;
+                    </div>
+                    &lt;!&ndash; /col-sm-1 &ndash;&gt;
+
+                    <div class="col-sm-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong th:text="${comment.user.username}">myusername</strong>
+                                <p>
+                                    commented
+                                    <span class="text-muted" id="comment_date" th:text="${comment.commentDatetime}">5 days ago</span>
+                                </p>
+                            </div>
+                            <div class="panel-body" th:text="${comment.text}">Comment content</div>
+                            &lt;!&ndash; /panel-body &ndash;&gt;
+                        </div>
+                        &lt;!&ndash; /panel panel-default &ndash;&gt;
+                    </div>
+                    &lt;!&ndash; /col-sm-5 &ndash;&gt;
+
+
+                </div>
+            </div>-->
+        </div>
+        <div class="col-lg-4" id="mini-map"></div>
+</div>
+
+
+</body>
+</html>
