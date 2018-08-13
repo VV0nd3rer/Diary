@@ -92,5 +92,28 @@ public class PostController {
 
         return mv;
     }
+    @RequestMapping("/sight/{sightId}")
+    public ModelAndView showSightPosts(@PathVariable("sightId") int sightId,
+                                       @ModelAttribute("currentSight") CountriesSight currentSight) {
+        ModelAndView mv = new ModelAndView(POSTS);
+        /*CountriesSight sight = countriesSightService.getSightById(sight_id);
+        int wishCounter = counterService.getCounterValue(sight_id, Counter.WISHES);
+        int visitCounter = counterService.getCounterValue(sight_id, Counter.VISITS);
+        boolean isVisitedValueExists = false;
+        boolean isWishedValueExists = false;
+        User currentUser = userService.getUserFromSession();
+        if(currentUser != null) {
+            isVisitedValueExists = counterService.isCounterValueExists(sight_id, currentUser.getUserId(), Counter.VISITS);
+            isWishedValueExists = counterService.isCounterValueExists(sight_id, currentUser.getUserId(), Counter.WISHES);
+        }
+
+        mv.addObject("authors", userService.getAllUsers());
+        mv.addObject("currentSight", sight);
+        mv.addObject("wishCounter", wishCounter);
+        mv.addObject("visitCounter", visitCounter);
+        mv.addObject("isWishedValueExists", isWishedValueExists);
+        mv.addObject("isVisitedValueExists", isVisitedValueExists);*/
+        return mv;
+    }
 
 }

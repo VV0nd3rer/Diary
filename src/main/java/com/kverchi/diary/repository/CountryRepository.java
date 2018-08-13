@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Created by Kverchi on 3.7.2018.
  */
 @Repository
-public interface CountryRepository extends JpaRepository <Country, Long> {
+public interface CountryRepository extends JpaRepository <Country, String> {
 }

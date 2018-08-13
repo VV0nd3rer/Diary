@@ -11,7 +11,8 @@ import java.util.List;
  * Created by Kverchi on 3.7.2018.
  */
 @Repository
-public interface CountriesSightRepository extends JpaRepository <CountriesSight, Long>, QuerydslPredicateExecutor<CountriesSight> {
+public interface CountriesSightRepository extends JpaRepository <CountriesSight, Integer>,
+        QuerydslPredicateExecutor<CountriesSight> {
     List<CountriesSight> findByCountryCountryCode(String countryCode);
     CountriesSight findByMapCoordXAndMapCoordY(float mapCoordX, float mapCoordY);
 }

@@ -10,5 +10,9 @@ import java.util.List;
 public interface CountriesSightService {
     List<CountriesSight> findAll();
     List<CountriesSight> findByCountryCode(String countryCode);
+    CountriesSight findBySightId(int sightId);
+    CountriesSight updateSight(CountriesSight countriesSight);
+    CountriesSight addSight(CountriesSight countriesSight);
+    void delete(int sightId);
     CountriesSight findByMapCoordXAndMapCoordY(float mapCoordX, float mapCoordY);
 }

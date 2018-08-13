@@ -1,5 +1,8 @@
 $(document).ready(function () {
-
+    $("#modal-form-cancel-btn").click(function(event) {
+        event.preventDefault();
+        hideModalDialog();
+    });
 });
 function initMiniMap() {
     var x = parseFloat($('#map_coord_x').attr("data-map-coord-x"));
@@ -24,9 +27,9 @@ function initMap() {
     var infowindow = new google.maps.InfoWindow();
     var geocoder = new google.maps.Geocoder();
 
-    var sightBaseURL = "/posts/sight/";
+    var sightPostsURL = "/posts/sight/";
 
-    loadSights(map, infowindow, sightBaseURL);
+    loadSights(map, infowindow, sightPostsURL);
 
 
     $('#geocoding_form').submit(function (e) {
@@ -36,7 +39,7 @@ function initMap() {
 
     $("#modal-form-save-sight-btn").click(function (event) {
         event.preventDefault();
-        saveNewSight(map, sightBaseURL);
+        saveNewSight(map, sightPostsURL);
     });
 }
 
@@ -98,7 +101,7 @@ function geocodeAddress(geocoder, map, infowindow) {
 
             newMarker.addListener('click', function () {
                 prepareNewSightModalForm(results);
-                $("#modal-form").modal();
+                showModalDialog();
             });
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
@@ -161,11 +164,11 @@ function saveNewSight(map, sightBaseURL) {
     valid = valid && checkMinMaxLength(label, "label", 3, 80);
     valid = valid && checkMinMaxLength(description, "description", 3, 80);
 
-    var token = $("meta[name='_csrf']").attr("content");
+    /*var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
-    });
+    });*/
 
     var save_sight_url = "../sights/add-sight";
 
@@ -203,7 +206,7 @@ function updateSight(id) {
         $("#description").val(data.description);
         $("#lat").val(data.mapCoordX);
         $("#lng").val(data.mapCoordY);
-        $("#modal-form").modal();
+        showModalDialog();
     });
 }
 function addNewMarker(map, obj) {
