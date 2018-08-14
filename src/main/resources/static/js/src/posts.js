@@ -5,11 +5,20 @@
 $(document).ready(function () {
 
     var paginationElement = $('#post-pagination');
-    var paginationUrl = '/posts/paginated-posts';
+    var allPostsUrl = '/posts/paginated-posts';
+    var searchedPostsUrl = '/posts/search-paginated-posts';
+
     var paginationTextChangingBlock = 'posts-block';
     var searchAttributes;
 
-    initializePaginationPlagin(paginationElement, paginationUrl, paginationTextChangingBlock);
+    var sightIdVal = $("#sight-id").attr("data-current-sightid");
+    if(typeof sightIdVal != 'undefined') {
+        searchAttributes = {'BY_SIGHT_ID' : parseInt(sightIdVal)};
+        initializePaginationPlagin(paginationElement, searchedPostsUrl, paginationTextChangingBlock, searchAttributes);
+    }
+    else {
+        initializePaginationPlagin(paginationElement, allPostsUrl, paginationTextChangingBlock);
+    }
 
     $("#sightSuggestionInput").focusout(function () {
         checkDataListInput($(this));
@@ -51,10 +60,8 @@ $(document).ready(function () {
          filterSightsDropBox.val() == 1 ? postSortType = "BY_WISHES" : postSortType = "BY_VISITS";
          }*/
 
-        paginationUrl = "/posts/search-paginated-posts";
-
         desrtoyPaginationPlagin(paginationElement);
-        initializePaginationPlagin(paginationElement, paginationUrl, paginationTextChangingBlock, searchAttributes);
+        initializePaginationPlagin(paginationElement, searchedPostsUrl, paginationTextChangingBlock, searchAttributes);
     });
 });
 
