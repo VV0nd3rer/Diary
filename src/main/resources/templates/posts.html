@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <object th:include="fragments/resources" th:remove="tag"/>
+    <th:block th:include="fragments/resources"/>
     <script src="/webjars/twbs-pagination/1.4.1/jquery.twbsPagination.js"></script>
     <script src="/static/js/src/validation.js" th:src="@{/js/src/validation.js}"></script>
     <script src="/static/js/src/posts.js" th:src="@{/js/src/posts.js}"></script>
+    <!--<meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
     <title>Inspiration</title>
-
 </head>
 <body>
 <div th:replace="fragments/header">&nbsp;</div>
