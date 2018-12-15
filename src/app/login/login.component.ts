@@ -13,11 +13,8 @@ export class LoginComponent {
     constructor(private app: AppService, private http: HttpClient, private router: Router) {
     }
 
-    login() {
-        this.app.authenticate(this.credentials, () => {
-            this.router.navigateByUrl('/');
-        });
-        return false;
+    login(): void {
+        this.app.login(this.credentials).subscribe();
     }
 
 }
