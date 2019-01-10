@@ -72,6 +72,7 @@ public class User implements Serializable, UserDetails {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));

@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.kverchi.diary.model.entity.User;
-import com.kverchi.diary.model.ResponseStatus;
+import com.kverchi.diary.model.LoginStatus;
 
 
 import java.security.Principal;
@@ -18,6 +18,8 @@ import java.security.Principal;
 /**
  * Created by Liudmyla Melnychuk on 12.12.2018.
  */
+@Controller
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     AuthenticationProvider authenticationProvider;
@@ -27,9 +29,9 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     @ResponseBody
-    public ResponseStatus processLogin(@RequestBody User requestUser) {
+    public LoginStatus processLogin(@RequestBody User requestUser) {
         Authentication authentication = null;
         UsernamePasswordAuthenticationToken token = new
                 UsernamePasswordAuthenticationToken(requestUser.getUsername(), requestUser.getPassword());
@@ -38,12 +40,13 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = (User) authentication.getPrincipal();
             user.setPassword(null);
-            return new ResponseStatus(ServiceMessageResponse.OK.name().toString(),
+            return new LoginStatus(ServiceMessageResponse.OK.name().toString(),
                     ServiceMessageResponse.OK.toString());
 
         } catch (BadCredentialsException ex) {
-            return new ResponseStatus(ServiceMessageResponse.NO_USER_WITH_USERNAME.name().toString(),
+            return new LoginStatus(ServiceMessageResponse.NO_USER_WITH_USERNAME.name().toString(),
                     ServiceMessageResponse.NO_USER_WITH_USERNAME.toString());
         }
     }
+
 }
