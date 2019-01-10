@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.kverchi.diary.model.entity.User;
 import com.kverchi.diary.model.ResponseStatus;
@@ -17,7 +18,6 @@ import java.security.Principal;
 /**
  * Created by Liudmyla Melnychuk on 12.12.2018.
  */
-@RestController
 public class UserController {
     @Autowired
     AuthenticationProvider authenticationProvider;
@@ -27,7 +27,8 @@ public class UserController {
         return user;
     }
 
-    @PostMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseStatus processLogin(@RequestBody User requestUser) {
         Authentication authentication = null;
         UsernamePasswordAuthenticationToken token = new

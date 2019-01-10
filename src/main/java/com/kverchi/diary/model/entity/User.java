@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -104,6 +105,7 @@ public class User implements Serializable, UserDetails {
 		this.information = information;
 	}
 
+	@JsonIgnore
 	public ZonedDateTime getRegistrationDate() {
 		DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
 		String text = registrationDate.format(formatter);

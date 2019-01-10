@@ -1,7 +1,11 @@
 package com.kverchi.diary.controller;
 
+import com.kverchi.diary.model.entity.User;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@RestController	
+@Controller
 public class MainController {
 /*	@RequestMapping("/error")
 	public ModelAndView showErrorPage() {
@@ -17,11 +21,18 @@ public class MainController {
 		mv.addObject("result", "Error");
 		return mv;
 	}*/
-	@RequestMapping("/demo")
-	public Map<String,Object> home() {
-		Map<String,Object> model = new HashMap<String,Object>();
-		model.put("id", UUID.randomUUID().toString());
-		model.put("content", "Hello World");
+		@GetMapping(value = "/{path:[^\\.]*}")
+		public String redirect() {
+			return "redirect:/";
+		}
+
+
+	@GetMapping("/test")
+	@ResponseBody
+	public User test() {
+		User model = new User();
+		model.setUsername(UUID.randomUUID().toString());
+		model.setPassword("Hello World");
 		return model;
 	}
 	@RequestMapping("/transaction-error")
