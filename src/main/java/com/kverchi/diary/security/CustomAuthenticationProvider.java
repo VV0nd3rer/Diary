@@ -6,7 +6,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -23,9 +25,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
+        UserDetails user = null;
+        try {
+            user = userDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
 
-        if ("user".equals(username) && "password".equals(password)) {
-            return new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
+        }
+        if (user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         } else {
             throw new BadCredentialsException("Authentication failed");
         }
