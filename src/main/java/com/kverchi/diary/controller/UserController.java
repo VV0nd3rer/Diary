@@ -1,16 +1,11 @@
 package com.kverchi.diary.controller;
 
-import com.kverchi.diary.model.enums.ServiceMessageResponse;
+import com.kverchi.diary.model.ServiceResponse;
+import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.kverchi.diary.model.entity.User;
-import com.kverchi.diary.model.LoginStatus;
 
 
 import java.security.Principal;
@@ -22,7 +17,7 @@ import java.security.Principal;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    AuthenticationProvider authenticationProvider;
+    UserService userService;
 
     @RequestMapping("/user")
     public Principal user(Principal user) {
@@ -31,22 +26,9 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public LoginStatus processLogin(@RequestBody User requestUser) {
-        Authentication authentication = null;
-        UsernamePasswordAuthenticationToken token = new
-                UsernamePasswordAuthenticationToken(requestUser.getUsername(), requestUser.getPassword());
-        try {
-            authentication = this.authenticationProvider.authenticate(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            User user = (User) authentication.getPrincipal();
-            user.setPassword(null);
-            return new LoginStatus(ServiceMessageResponse.OK.name().toString(),
-                    ServiceMessageResponse.OK.toString());
-
-        } catch (BadCredentialsException ex) {
-            return new LoginStatus(ServiceMessageResponse.NO_USER_WITH_USERNAME.name().toString(),
-                    ServiceMessageResponse.NO_USER_WITH_USERNAME.toString());
-        }
+    public ServiceResponse processLogin(@RequestBody User requestUser) {
+        ServiceResponse response = userService.login(requestUser);
+        return response;
     }
 
 }

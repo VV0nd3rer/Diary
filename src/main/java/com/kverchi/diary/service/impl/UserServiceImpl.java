@@ -1,9 +1,17 @@
 package com.kverchi.diary.service.impl;
 
+import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.User;
+import com.kverchi.diary.model.enums.ServiceMessageResponse;
 import com.kverchi.diary.repository.UserRepository;
 import com.kverchi.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +24,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    AuthenticationProvider authenticationProvider;
+
     @Override
-    public User getUserByUsername(String username) {
-        return null;
+    public ServiceResponse login(User requestUser) {
+        Authentication authentication = null;
+        UsernamePasswordAuthenticationToken token = new
+                UsernamePasswordAuthenticationToken(requestUser.getUsername(), requestUser.getPassword());
+        try {
+            authentication = this.authenticationProvider.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            /*User user = (User) authentication.getPrincipal();
+            user.setPassword(null);*/
+
+            return new ServiceResponse(HttpStatus.OK, ServiceMessageResponse.OK);
+
+        } catch (BadCredentialsException ex) {
+            return new ServiceResponse(HttpStatus.BAD_REQUEST, ServiceMessageResponse.NO_USER_WITH_USERNAME);
+        }
     }
 
     @Override

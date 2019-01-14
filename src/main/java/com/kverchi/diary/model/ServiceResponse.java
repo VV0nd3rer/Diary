@@ -1,29 +1,35 @@
 package com.kverchi.diary.model;
 
+import com.kverchi.diary.model.enums.ServiceMessageResponse;
 import org.springframework.http.HttpStatus;
 
 public class ServiceResponse<T> {
 	
-	private HttpStatus respCode;
-	private String respMsg;
+	private HttpStatus responseCode;
+	private ServiceMessageResponse responseMessage;
 	private T responseObject;
 	
 	public ServiceResponse() {}
-	public ServiceResponse(HttpStatus code, String msg) {
-		this.respCode = code;
-		this.respMsg = msg;
+	public ServiceResponse(HttpStatus code, ServiceMessageResponse msg) {
+		this.responseCode = code;
+		this.responseMessage = msg;
 	}
-	public HttpStatus getRespCode() {
-		return respCode;
+	public ServiceResponse(HttpStatus code, ServiceMessageResponse msg, T responseObject) {
+		this.responseCode = code;
+		this.responseMessage = msg;
+		this.responseObject = responseObject;
 	}
-	public void setRespCode(HttpStatus respCode) {
-		this.respCode = respCode;
+	public HttpStatus getResponseCode() {
+		return responseCode;
 	}
-	public String getRespMsg() {
-		return respMsg;
+	public void setResponseCode(HttpStatus responseCode) {
+		this.responseCode = responseCode;
 	}
-	public void setRespMsg(String respMsg) {
-		this.respMsg = respMsg;
+	public ServiceMessageResponse getResponseMessage() {
+		return responseMessage;
+	}
+	public void setResponseMessage(ServiceMessageResponse responseMessage) {
+		this.responseMessage = responseMessage;
 	}
 	public T getResponseObject() {
 		return responseObject;

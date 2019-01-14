@@ -1,12 +1,13 @@
 package com.kverchi.diary.service;
 
 
+import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.User;
 
 import java.util.List;
 
 public interface UserService {
-	User getUserByUsername(String username);
+	ServiceResponse login(User requestUser);
 	List<User> findAll();
 	/*ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;*/
 	void activateAccount(User user);

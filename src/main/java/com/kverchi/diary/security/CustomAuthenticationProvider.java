@@ -9,9 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
 
 /**
  * Created by Liudmyla Melnychuk on 8.1.2019.
@@ -20,6 +19,8 @@ import java.util.Collections;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     UserDetailsService userDetailsService;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -31,7 +32,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         } catch (UsernameNotFoundException e) {
 
         }
-        if (user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
+        boolean isPassMatches = bCryptPasswordEncoder.matches(password, user.getPassword());
+        if (user != null && user.getUsername().equals(username) && isPassMatches) {
             return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         } else {
             throw new BadCredentialsException("Authentication failed");

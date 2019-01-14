@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
 import { User } from '../user';
 import {LoginStatus} from "../user";
+import {ServiceResponse} from "../service-response";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,10 +14,7 @@ export class LoginComponent implements OnInit {
     username: '',
     password: ''
   };
-  loginStatus: LoginStatus = {
-    code: '',
-    message: ''
-  };
+  serviceResponse: ServiceResponse<User>;
 
   error: boolean = false;
 
@@ -37,8 +35,8 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.user).subscribe(
       res => {
         console.log(res);
-        this.loginStatus = res;
-        this.loginStatus.code == "NO_USER_WITH_USERNAME" ? this.error = true :
+        this.serviceResponse = res;
+        this.serviceResponse.responseCode != "OK" ? this.error = true :
             this.router.navigateByUrl('/');
       },
       err => { this.error = true; }

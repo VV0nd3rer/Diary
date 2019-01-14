@@ -4,11 +4,7 @@ import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { User, LoginStatus } from './user';
 
-const httpOptions = {
-    headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-    })
-};
+
 
 @Injectable({
   providedIn: 'root'
@@ -33,14 +29,14 @@ export class LoginService {
     }
 
   login(user: User) : Observable<any> {
-      return this.http.post("user/login", user, httpOptions)
+      return this.http.post("user/login", user)
         .pipe(
             map(res => {
               return res;
             }),
             catchError((error: any) => {
                 console.error(error);
-                return of(new LoginStatus('FAILURE', 'Username or password is incorrect. Please try again!'));
+                return of(error);
             }));
   }
 
