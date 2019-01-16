@@ -3,11 +3,15 @@ package com.kverchi.diary.service;
 
 import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.User;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
 	ServiceResponse login(User requestUser);
+	ServiceResponse logout(HttpServletRequest request,
+						   HttpServletResponse response);
 	List<User> findAll();
 	/*ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;*/
 	void activateAccount(User user);

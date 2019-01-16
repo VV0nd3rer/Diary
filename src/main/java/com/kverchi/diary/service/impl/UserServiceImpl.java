@@ -5,6 +5,7 @@ import com.kverchi.diary.model.entity.User;
 import com.kverchi.diary.model.enums.ServiceMessageResponse;
 import com.kverchi.diary.repository.UserRepository;
 import com.kverchi.diary.service.UserService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,8 +13,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -43,6 +46,15 @@ public class UserServiceImpl implements UserService {
         } catch (BadCredentialsException ex) {
             return new ServiceResponse(HttpStatus.BAD_REQUEST, ServiceMessageResponse.NO_USER_WITH_USERNAME);
         }
+    }
+
+    @Override
+    public ServiceResponse logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return new ServiceResponse(HttpStatus.OK, ServiceMessageResponse.OK);
     }
 
     @Override
