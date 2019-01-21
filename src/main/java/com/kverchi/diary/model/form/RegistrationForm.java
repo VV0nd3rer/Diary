@@ -1,12 +1,18 @@
 package com.kverchi.diary.model.form;
 
+import com.kverchi.diary.model.entity.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegistrationForm {
 	private String username;
 	private String password;
 	private String matchingPassword;
 	private String email;
-	
+
+	public User toUser(PasswordEncoder passwordEncoder) {
+		return new User(username, passwordEncoder.encode(password), email);
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -31,6 +37,6 @@ public class RegistrationForm {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
+
 }

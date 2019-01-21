@@ -3,6 +3,7 @@ package com.kverchi.diary.service.impl;
 import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.User;
 import com.kverchi.diary.model.enums.ServiceMessageResponse;
+import com.kverchi.diary.model.form.RegistrationForm;
 import com.kverchi.diary.repository.UserRepository;
 import com.kverchi.diary.service.UserService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -13,8 +14,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public ServiceResponse login(User requestUser) {
@@ -60,6 +66,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public ServiceResponse register(RegistrationForm form) {
+        ServiceResponse response = new ServiceResponse();
+        if(!form.getPassword().equals(form.getMatchingPassword())) {
+            response.setResponseMessage(ServiceMessageResponse.NEW_PASSWORD_MISMATCHED);
+            response.setResponseCode(HttpStatus.BAD_REQUEST);
+            return response;
+        }
+        User user = form.toUser(bCryptPasswordEncoder);
+        try {
+            userRepository.save(user);
+            response.setSuccessResponse();
+        } catch (UnexpectedRollbackException e) {
+            e.printStackTrace();
+            response.setInternalServerErrorResponse();
+        } catch (Exception e) {
+            response.setInternalServerErrorResponse();
+        }
+        return response;
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.kverchi.diary.service;
 
 
 import com.kverchi.diary.model.ServiceResponse;
+import com.kverchi.diary.model.customexception.ServiceException;
 import com.kverchi.diary.model.entity.User;
+import com.kverchi.diary.model.form.RegistrationForm;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +15,7 @@ public interface UserService {
 	ServiceResponse logout(HttpServletRequest request,
 						   HttpServletResponse response);
 	List<User> findAll();
-	/*ServiceResponse registerAccount(RegistrationForm user) throws ServiceException;*/
+	ServiceResponse register(RegistrationForm form);
 	void activateAccount(User user);
 	boolean updatePassword(User user);
 	boolean createAndSendResetPasswordToken(String email);

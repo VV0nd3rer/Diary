@@ -4,9 +4,3 @@ export class User {
         public password: string
     ) {  }
 }
-export class LoginStatus {
-    constructor(
-        public code: string,
-        public message: string
-    ) { }
-}

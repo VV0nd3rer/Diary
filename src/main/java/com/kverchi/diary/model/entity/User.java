@@ -40,6 +40,11 @@ public class User implements Serializable, UserDetails {
     		)
     private Collection<Role> roles = new HashSet<Role>();
     public User() {}
+	public User(String username, String password, String email) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
 	public User(int userId) {
 		this.userId = userId;
 	}

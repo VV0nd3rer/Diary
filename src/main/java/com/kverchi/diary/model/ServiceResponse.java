@@ -37,4 +37,14 @@ public class ServiceResponse<T> {
 	public void setResponseObject(T responseObject) {
 		this.responseObject = responseObject;
 	}
+
+	public void setSuccessResponse() {
+		this.setResponseCode(HttpStatus.OK);
+		this.setResponseMessage(ServiceMessageResponse.OK);
+	}
+
+	public void setInternalServerErrorResponse() {
+		this.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR);
+		this.setResponseMessage(ServiceMessageResponse.TRANSACTION_PROBLEM);
+	}
 }

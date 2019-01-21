@@ -26,6 +26,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String XSRF_TOKEN_HEADER = "X-XSRF-TOKEN";
+
     private CsrfTokenRepository xsrfTokenRepository() {
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName(XSRF_TOKEN_HEADER);
