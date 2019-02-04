@@ -1,10 +1,12 @@
 package com.kverchi.diary.service.impl;
 
+import com.kverchi.diary.model.Email;
 import com.kverchi.diary.model.ServiceResponse;
 import com.kverchi.diary.model.entity.User;
 import com.kverchi.diary.model.enums.ServiceMessageResponse;
 import com.kverchi.diary.model.form.RegistrationForm;
 import com.kverchi.diary.repository.UserRepository;
+import com.kverchi.diary.service.EmailMessagingProducerService;
 import com.kverchi.diary.service.UserService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    EmailMessagingProducerService emailMessagingProducerService;
 
     @Override
     public ServiceResponse login(User requestUser) {
@@ -77,6 +82,7 @@ public class UserServiceImpl implements UserService {
             return response;
         }
         User user = form.toUser(bCryptPasswordEncoder);
+        emailMessagingProducerService.sendEmail(new Email("xyz@a.com", "hello", "test"));
         try {
             userRepository.save(user);
             response.setSuccessResponse();
