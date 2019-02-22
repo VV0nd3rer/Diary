@@ -4,24 +4,20 @@ package com.kverchi.diary.model.entity;
  * Created by Liudmyla Melnychuk on 18.2.2019.
  */
 
-import com.kverchi.diary.security.SecretsManager;
 import org.hibernate.annotations.ColumnTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="oauth_client_credentials")
 public class OauthClientCredentials {
-
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="credentials_id")
     private int credentialsId;
-
     @ColumnTransformer(
-            read =  "pgp_sym_decrypt(refresh_token::bytea, '" + SecretsManager.Constants.ENCODING_KEY + "')",
-            write = "pgp_sym_encrypt(?, '" + SecretsManager.Constants.ENCODING_KEY + "')"
+            read =  "pgp_sym_decrypt(refresh_token::bytea, current_setting('encrypt.key'))",
+            write = "pgp_sym_encrypt(?, current_setting('encrypt.key'))"
     )
     @Column(name="refresh_token")
     private String refreshToken;
@@ -30,22 +26,22 @@ public class OauthClientCredentials {
     private String tokenUrl;
 
     @ColumnTransformer(
-            read =  "pgp_sym_decrypt(oauth_client_id::bytea, '" + SecretsManager.Constants.ENCODING_KEY + "')",
-            write = "pgp_sym_encrypt(?, '" + SecretsManager.Constants.ENCODING_KEY + "')"
+            read =  "pgp_sym_decrypt(oauth_client_id::bytea, current_setting('encrypt.key'))",
+            write = "pgp_sym_encrypt(?, current_setting('encrypt.key'))"
     )
     @Column(name="oauth_client_id")
     private String oauthClientId;
 
     @ColumnTransformer(
-            read =  "pgp_sym_decrypt(oauth_secret::bytea, '" + SecretsManager.Constants.ENCODING_KEY + "')",
-            write = "pgp_sym_encrypt(?, '" + SecretsManager.Constants.ENCODING_KEY + "')"
+            read =  "pgp_sym_decrypt(oauth_secret::bytea, current_setting('encrypt.key'))",
+            write = "pgp_sym_encrypt(?, current_setting('encrypt.key'))"
     )
     @Column(name="oauth_secret")
     private String oauthSecret;
 
     @ColumnTransformer(
-            read =  "pgp_sym_decrypt(access_token::bytea, '" + SecretsManager.Constants.ENCODING_KEY + "')",
-            write = "pgp_sym_encrypt(?, '" + SecretsManager.Constants.ENCODING_KEY + "')"
+            read =  "pgp_sym_decrypt(access_token::bytea, current_setting('encrypt.key'))",
+            write = "pgp_sym_encrypt(?, current_setting('encrypt.key'))"
     )
     @Column(name="access_token")
     private String accessToken;
@@ -54,8 +50,8 @@ public class OauthClientCredentials {
     private long tokenExpires;
 
     @ColumnTransformer(
-            read =  "pgp_sym_decrypt(credentials_email::bytea, '" + SecretsManager.Constants.ENCODING_KEY + "')",
-            write = "pgp_sym_encrypt(?, '" + SecretsManager.Constants.ENCODING_KEY + "')"
+            read =  "pgp_sym_decrypt(credentials_email::bytea, current_setting('encrypt.key'))",
+            write = "pgp_sym_encrypt(?, current_setting('encrypt.key'))"
     )
     @Column(name="credentials_email")
     private String credentialsEmail;

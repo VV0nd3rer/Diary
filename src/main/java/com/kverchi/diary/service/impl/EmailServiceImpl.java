@@ -5,17 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kverchi.diary.model.Email;
 import com.kverchi.diary.model.entity.OauthClientCredentials;
 import com.kverchi.diary.repository.OauthClientCredentialsRepository;
-import com.kverchi.diary.security.SecretsManager;
 import com.kverchi.diary.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,8 +29,11 @@ import java.util.HashMap;
  */
 @Service
 public class EmailServiceImpl implements EmailService {
-
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
+
+    @Value( "${credentials.email}" )
+    private String credentialsEmail;
+
     @Autowired
     public OauthClientCredentialsRepository oauthClientCredentialsRepository;
 
@@ -41,8 +43,7 @@ public class EmailServiceImpl implements EmailService {
 
     private OauthClientCredentials getCredentials() {
         OauthClientCredentials oauthClientCredentials =
-                oauthClientCredentialsRepository.findByCredentialsEmail(
-                        SecretsManager.Constants.DIARY_EMAIL).get(0);
+                oauthClientCredentialsRepository.findByCredentialsEmail(credentialsEmail).get(0);
         return oauthClientCredentials;
     }
 
