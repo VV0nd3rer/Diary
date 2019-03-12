@@ -3,6 +3,6 @@ export class RegistrationForm {
         public username: string,
         public email: string,
         public password: string,
-        public matchingPassword: string
+        public confirmPassword: string
     ) {  }
 }

@@ -35,7 +35,6 @@ export class LoginService {
               return res;
             }),
             catchError((error: any) => {
-                console.error(error);
                 return of(error);
             }));
   }

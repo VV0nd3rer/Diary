@@ -1,17 +1,36 @@
-<div class="alert alert-danger" [hidden]="!error">
-  There was a problem logging in. Please try again.
-</div><br>
-<a href="#" (click)="test()">Test me! </a>
-<form role="form" (submit)="login()">
-  <div class="form-group">
-    <label for="username">Your <b>super name</b>:</label>
-    <input type="text"
-           class="form-control" id="username" name="username" [(ngModel)]="user.username"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Your <b>awesome password</b>:</label>
-    <input type="password"
-           class="form-control" id="password" name="password" [(ngModel)]="user.password"/>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+<div class="container">
+<form [formGroup]="loginForm" (submit)="login()" class="form">
+
+  <mat-card class="card">
+    <mat-card-header class="card-header">
+      <mat-card-title class="card-title">
+        <div mat-card-avatar><mat-icon class="card-title-icon">person</mat-icon></div>
+        <span>Login</span>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="alert-msg" [hidden]="!loginError">
+        There was a problem logging in. Please try again.
+      </div>
+      <mat-form-field class="item">
+        <input matInput placeholder="Username" formControlName="username" required>
+        <mat-error *ngIf="loginForm.controls.username.hasError('required')">
+          Please enter your login
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="item">
+        <input matInput placeholder="Password" formControlName="password" required>
+        <mat-error *ngIf="loginForm.controls.password.hasError('required')">
+          Please enter your password
+        </mat-error>
+      </mat-form-field>
+
+      <div class="submit-button">
+        <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </form>
+</div>

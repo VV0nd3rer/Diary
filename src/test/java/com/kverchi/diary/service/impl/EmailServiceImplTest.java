@@ -2,6 +2,7 @@ package com.kverchi.diary.service.impl;
 
 import com.kverchi.diary.model.Email;
 import com.kverchi.diary.service.EmailService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -26,7 +27,7 @@ public class EmailServiceImplTest {
     @Autowired
     public EmailService emailService;
 
-
+    @Ignore
     @Test
     public void testSendingEmail() {
         Email email = new Email("kverchi24@gmail.com", "Developing demo", "Developing stage: demo example.");

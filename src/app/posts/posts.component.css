@@ -1,0 +1,40 @@
+.img {
+    width: 100%;
+    margin-bottom: 18%;
+}
+.container {
+    /* min-height: 100%;*/
+    width: 100%;
+}
+.search-button {
+    height: 40%;
+}
+.search-form {
+    width: 90%;
+}
+.card-picture {
+    width: 23%;
+    margin-bottom: 2%;
+}
+
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}

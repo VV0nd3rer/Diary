@@ -78,7 +78,7 @@ profileApp.controller('UserMenuCtrl', function($scope){
 		var confirm_password = $("#confirm_password").val();
 		data['currentPassword'] = current_pass;
 		data['password'] = password;
-		data['matchingPassword'] = confirm_password;
+		data['confirmPassword'] = confirm_password;
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		$(document).ajaxSend(function(e, xhr, options) {

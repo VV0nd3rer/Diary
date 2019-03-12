@@ -10,18 +10,11 @@ import java.util.UUID;
 
 @Controller
 public class MainController {
-/*	@RequestMapping("/error")
-	public ModelAndView showErrorPage() {
-		ModelAndView mv = new ModelAndView("error");
-		mv.addObject("result", "Error");
-		return mv;
-	}*/
-		@GetMapping(value = "/{path:[^\\.]*}")
-		public String redirect() {
-			return "redirect:/";
-		}
 
-
+	@GetMapping(value = "/{path:[^\\.]*}")
+	public String redirect() {
+		return "redirect:/";
+	}
 
 	@GetMapping("/test")
 	@ResponseBody
