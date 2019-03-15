@@ -11,7 +11,17 @@ export class PostsService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPosts(): Observable<any> {
-    return this.http.get("./PeriodicTableJSON.json")
+  getPostsPage(currentPage: any): Observable<any> {
+    return this.http.get('posts/page/'+currentPage)
+        .pipe(
+            tap(val => console.log(`Calling getAllPosts method. The response: ${val}`)),
+            map(res => {
+              return res;
+            }),
+            catchError((error: any) => {
+              /*console.error(error);*/
+              return of(error);
+            })
+        );
   }
 }

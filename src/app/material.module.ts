@@ -4,8 +4,7 @@ import { CommonModule } from '@angular/common';
 /*The layout package provides utilities to build responsive UIs that react to screen-size changes.*/
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { FlexLayoutModule } from '@angular/flex-layout';/*
-import {MatPaginatorModule} from '@angular/material/paginator';*/
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
     MatToolbarModule,
     MatFormFieldModule,
@@ -15,7 +14,10 @@ import {
     MatButtonModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatListModule,
+    MatGridListModule
+
 
 } from '@angular/material';
 
@@ -34,7 +36,9 @@ import {
     MatButtonModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatListModule,
+    MatGridListModule
   ],
   exports: [
     CommonModule,
@@ -49,7 +53,9 @@ import {
     MatButtonModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatListModule,
+    MatGridListModule
   ]
 })
 export class MaterialModule { }

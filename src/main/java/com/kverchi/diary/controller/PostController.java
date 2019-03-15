@@ -36,6 +36,11 @@ public class PostController {
         return new CountriesSight();
     }
 
+    @GetMapping(value = "/{path:[^\\.]*}")
+    public String redirect() {
+        return "redirect:/";
+    }
+
     @RequestMapping("/main")
     public ModelAndView showMain(
             @RequestParam(value="name", required=false, defaultValue="Guest") String name) {
@@ -64,6 +69,13 @@ public class PostController {
         mv.addObject("posts", posts);
         mv.addObject("totalPages", totalPages);
         return mv;
+    }
+    @RequestMapping("/page/{currentPage}")
+    @ResponseBody
+    public List<Post> getPostsPage(@PathVariable("currentPage") int currentPage) {
+        Page<Post> paginatedPosts = postService.getAllPosts(currentPage);
+        List<Post> posts = paginatedPosts.getContent();
+        return posts;
     }
     @RequestMapping(value="/search-paginated-posts", method = RequestMethod.POST)
     public ModelAndView searchPaginatedPosts(@RequestBody PostSearchRequest postSearchRequest) {
