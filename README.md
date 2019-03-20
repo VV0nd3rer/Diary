@@ -19,7 +19,7 @@ If you are developer and wish to deploy this project on your local machine, read
 1.  Prepeare you local database:
      * Clone or download application database backup file form here https://github.com/kverchi/diary-db-backup.git
      * Create the database with name *diary*
-     * Restore postgresql backup file on your local Postgresql server for newly created database *diary*. [How to restore backup](https://www.postgresql.org/docs/9.6/backup-dump.html#BACKUP-DUMP-RESTORE) 
+     * Restore postgresql backup file *diary-v1.0.tar* on your local Postgresql server for newly created database *diary*. [How to restore backup](https://www.postgresql.org/docs/9.6/backup-dump.html#BACKUP-DUMP-RESTORE) 
      * Set Jasypt enctiption key as local environment variable DIARY_PASS_VAR
      * Encrypt JDBC_DATABASE_USERNAME and JDBC_DATABASE_PASSWORD credentials with your environment variable. [How to encrypt with Jasypt](https://apereo.atlassian.net/wiki/spaces/CASUM/pages/103261428/HOWTO+Use+Jasypt+to+encrypt+passwords+in+configuration+files)
      * Set encrypted values into application's */resources/properties/local/app.properties* file 
