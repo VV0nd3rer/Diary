@@ -36,7 +36,7 @@ If you are developer and wish to deploy this project on your local machine, read
      * Open *<path-to-app>/src/main/resources/properties/local/app.properties* and set your encrypted username and encrypted password to JDBC_DATABASE_USERNAME and JDBC_DATABASE_PASSWORD properties
      
 2. Build war file with Maven: open a terminal, go to the root of your local project and execute `mvn package`. [How to install Maven](https://maven.apache.org/install.html).
-3. Deploy war file at your local **Tomcat Root**. [How to deploy war file: Deployment on Tomcat startup](https://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html#Deployment_on_Tomcat_startup)
+3. Deploy war file at your local **Tomcat Root**. [How to deploy war file](http://www.jguru.com/faq/view.jsp?EID=123229)
     * To deploy war file at Tomcat Root:
        Set the context path of the application in the server.xml (which is located at $CATALINA_HOME\conf)
 ```
