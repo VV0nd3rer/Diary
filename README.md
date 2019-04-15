@@ -17,7 +17,9 @@ If you want to get sandbox account, please contact me.
 If you are developer and wish to deploy this project on your local machine, read next section
 
 ### How to deploy
-1.  Prepeare you local database:
+1.  Clone or download [Travel diary web application](https://github.com/kverchi/Diary.git). 
+     * Use your favorite IDE for development: [Spring Tool Suite for Eclipse](https://spring.io/tools), [IntelliJ IDEA](https://www.jetbrains.com/idea/), etc.
+2.  Prepeare you local database:
      * Download and install [PostgreSQL](https://www.postgresql.org/download/). Optionally, you can download and install [pgAdmin 4](https://www.pgadmin.org/download/) which is an administration and development platform for PostgreSQL.
      * Clone or download application database backup file form here https://github.com/kverchi/diary-db-backup.git
      * Create the database with name *diary*
@@ -35,8 +37,8 @@ If you are developer and wish to deploy this project on your local machine, read
      * Encrypt your database username and password with your environment variable. [How to encrypt with Jasypt](https://apereo.atlassian.net/wiki/spaces/CASUM/pages/103261428/HOWTO+Use+Jasypt+to+encrypt+passwords+in+configuration+files)
      * Open *<path-to-app>/src/main/resources/properties/local/app.properties* and set your encrypted username and encrypted password to JDBC_DATABASE_USERNAME and JDBC_DATABASE_PASSWORD properties
      
-2. Build war file with Maven: open a terminal, go to the root of your local project and execute `mvn package`. [How to install Maven](https://maven.apache.org/install.html).
-3. Deploy war file at your local **Tomcat Root**. [How to deploy war file](http://www.jguru.com/faq/view.jsp?EID=123229)
+3. Build war file with Maven: open a terminal, go to the root of your local project and execute `mvn package`. [How to install Maven](https://maven.apache.org/install.html).
+4. Deploy war file at your local **Tomcat Root**. [How to deploy war file](http://www.jguru.com/faq/view.jsp?EID=123229)
     * To deploy war file at Tomcat Root:
        Set the context path of the application in the server.xml (which is located at $CATALINA_HOME\conf)
 ```
